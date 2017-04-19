@@ -1,9 +1,9 @@
 def countCandy(n: Int, t: Int, outFlow: Seq[Int]): Int = {
   var restockedCandyCount = 0
   var candyLevel = n
-  for (i <- 0 until t) {
+  for (i <- 0 until t - 1) {
     candyLevel -= outFlow(i)
-    if (candyLevel < 5 && i < t - 1) {
+    if (candyLevel < 5) {
       restockedCandyCount += n - candyLevel
       candyLevel = n
     }

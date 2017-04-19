@@ -3,7 +3,9 @@ package hackerRank.weekOfCode31
 import java.io.{ByteArrayInputStream, IOException, PrintWriter}
 import java.util.InputMismatchException
 
+import scala.annotation.tailrec
 import scala.collection.generic.{CanBuildFrom, Growable}
+import scala.io.Source
 import scala.language.higherKinds
 
 /**
@@ -18,39 +20,127 @@ import scala.language.higherKinds
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 4/18/2017
   */
 object dSpanningTreeFraction {
-  private val INPUT = ""
+  //  private val INPUT = "10 20\n0 8 98 2\n0 1 99 1\n1 2 100 2\n0 9 99 1\n7 8 98 1\n2 8 100 2\n3 5 100 2\n3 3 97 2\n0 3 100 1\n1 4 98 1\n1 8 98 1\n7 9 97 1\n6 9 100 1\n4 5 100 2\n3 9 98 2\n7 8 99 2\n3 6 98 1\n0 5 100 2\n2 5 99 1\n5 7 99 1\n0"
+
+  private val source = Source.fromURL("https://hr-testcases-us-east-1.s3.amazonaws.com/36646/input11.txt?AWSAccessKeyId=AKIAJAMR4KJHHUS76CYQ&Expires=1492650408&Signature=g%2BH7aDNrJ4yCDZVv3ZFaIXBPsnQ%3D&response-content-type=text%2Fplain")
+  private val INPUT = source.getLines mkString "\n"
 
   //------------------------------------------------------------------------------------------//
   // SOLUTION
   //------------------------------------------------------------------------------------------//
+  var n = 0
+  var m = 0
+
   private def solve(): Unit = {
-    val n = nextInt()
-    val m = nextInt()
+    n = nextInt()
+    m = nextInt()
     val edges = nextSeq[Edge, Vector]({
-      val u = nextInt() - 1
-      val v = nextInt() - 1
-      val weight = nextInt()
-      Vector(Edge(u, v, weight), Edge(v, u, weight))
+      val u = nextInt()
+      val v = nextInt()
+      val a = nextInt()
+      val b = nextInt()
+      Vector(Edge(u, v, a, b), Edge(v, u, a, b))
     }, m)
-    out.println(kruskalMST(edges, UnionFind(n)).map(_.weight).sum.toInt)
+    val optimalMSTSum = fractionalLinearOptimization2(edges, 0, 10000001)
+    val divider = gcd(optimalMSTSum._1.toInt, optimalMSTSum._2.toInt)
+    out.println(optimalMSTSum._1.toInt / divider + "/" + optimalMSTSum._2.toInt / divider)
   }
 
-  case class Edge(u: Int, v: Int, weight: Double)
+  @tailrec
+  def gcd(a: Int, b: Int): Int = {
+    if (b == 0) a else gcd(b, a % b)
+  }
 
-  def kruskalMST[T <: Edge, Coll](edges: Coll, unionFind: UnionFind)
-                                 (implicit c2s: Coll => Seq[T],
-                                  cbf: CanBuildFrom[Coll, T, Coll]): Coll = {
-    val edgeList = edges.sortBy(_.weight)
-    val builder = cbf()
+  private def fractionalLinearOptimization(edges: Seq[Edge], left: Int, right: Int) = {
+    @tailrec
+    def _binarySearch(prev: Either[(Double, Double), (Double, Double)],
+                      left: Double,
+                      right: Double): (Double, Double) = {
+      val factor = (left + right) / 2.0
+      val current = improveTarget(edges, factor)
+      if (prev.isRight && current.isRight && prev.right.get == current.right.get) {
+        current.right.get
+      } else {
+        current match {
+          case Left(_) => _binarySearch(current, left, factor)
+          case Right(_) => _binarySearch(current, factor, right)
+        }
+      }
+    }
+
+    _binarySearch(Left((0.0, 0.0)), left, right)
+  }
+
+  private def fractionalLinearOptimization2(edges: Seq[Edge], left: Int, right: Int) = {
+
+    @tailrec
+    def _binarySearch(prevFactor: Double, left: Double, right: Double): (Double, Double) = {
+      val factor = (left + right) / 2.0
+      val target = improveTarget(edges, factor)
+
+      if (Math.abs(prevFactor - factor) < 0.0001) {
+        target.fold(identity, identity)
+      } else {
+        target match {
+          case Left(_) => _binarySearch(factor, left, factor)
+          case Right(_) => _binarySearch(factor, factor, right)
+        }
+      }
+    }
+
+    _binarySearch(0.0, left, right)
+  }
+
+
+  private def fractionalLinearOptimization3(targetFunction: => Either[(Double, Double), (Double, Double)],
+                                            epsilon: Double,
+                                            left: Int,
+                                            right: Int) = {
+    @tailrec
+    def _binarySearch(prevFactor: Double, left: Double, right: Double): (Double, Double) = {
+      val factor = (left + right) / 2.0
+      val target = targetFunction
+      if (Math.abs(prevFactor - factor) < 0.0001) {
+        target.fold(identity, identity)
+      } else {
+        target match {
+          case Left(_) => _binarySearch(factor, left, factor)
+          case Right(_) => _binarySearch(factor, factor, right)
+        }
+      }
+    }
+
+    _binarySearch(0.0, left, right)
+  }
+
+
+  private def improveTarget(edges: Seq[Edge], factor: Double) = {
+    val (aSum, bSum) = kruskalMST(edges, factor)
+    val improvement = aSum >= bSum * factor
+    if (improvement) Right((aSum, bSum)) else Left((aSum, bSum))
+  }
+
+  private def kruskalMST(edges: Seq[Edge], factor: Double) = {
+    val unionFind = UnionFind(n)
+    val edgeList = edges.sortBy(_.weight(factor))
+    var aSum = 0.0
+    var bSum = 0.0
     for (edge <- edgeList) {
       val u = edge.u
       val v = edge.v
       if (unionFind(u) != unionFind(v)) {
         unionFind.union(u, v)
-        builder += edge
+        aSum += edge.a
+        bSum += edge.b
       }
     }
-    builder.result()
+    (aSum, bSum)
+  }
+
+  case class Edge(u: Int, v: Int, a: Int, b: Int) {
+    def weight(factor: Double): Double = {
+      -(a - b * factor)
+    }
   }
 
   case class UnionFind(size: Int, lazyConstruct: Boolean = false)

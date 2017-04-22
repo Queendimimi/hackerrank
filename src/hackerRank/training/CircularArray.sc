@@ -8,7 +8,7 @@ implicit class IterableExt[A, Coll](xs: Coll)
   def rotateRight(i: Int): Coll = {
     val builder = cbf()
     val size = xs.size
-    builder ++= xs.view.drop(size - (i % size)) ++ xs.view.take(size - (i % size))
+    builder ++= xs.view.takeRight(i % size) ++ xs.view.dropRight(i % size)
     builder.result()
   }
 

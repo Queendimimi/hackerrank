@@ -4,7 +4,6 @@ import java.io.{ByteArrayInputStream, IOException, PrintWriter}
 import java.util.InputMismatchException
 
 import scala.collection.generic.CanBuildFrom
-import scala.collection.mutable
 import scala.language.higherKinds
 
 /**
@@ -19,13 +18,31 @@ import scala.language.higherKinds
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 4/22/2017
   */
 object Euler003LargestPrimeFactor {
-  private val INPUT = ""
+  private val INPUT = "2\n10\n17"
 
   //------------------------------------------------------------------------------------------//
   // Solution                                                                
   //------------------------------------------------------------------------------------------//
   private def solve(): Unit = {
+    val t = nextInt()
+    nextLong[Array](t).foreach(x => out.println(largestPrimeFactor(x)))
+  }
 
+  def largestPrimeFactor(number: Long): Long = {
+    var n = number
+    var result = 0L
+    var divisor = 2L
+    while ((divisor * divisor) <= n) {
+      while (n % divisor == 0) {
+        result = divisor
+        n = n / divisor
+      }
+      divisor += 1
+    }
+    if (n > 1) {
+      result = n
+    }
+    result
   }
 
   //------------------------------------------------------------------------------------------//
@@ -236,7 +253,7 @@ object Euler003LargestPrimeFactor {
   }
 
   private def nextLong(): Long = {
-    var num = 0
+    var num = 0L
     var b = 0
     var minus = false
     while ( {

@@ -1,10 +1,11 @@
-package hackerRank.training.arrays
+package hackerRank.training.sorting
 
 import java.io.{ByteArrayInputStream, IOException, PrintWriter}
 import java.util.InputMismatchException
 
+import scala.collection.SeqLike
 import scala.collection.generic.CanBuildFrom
-import scala.language.{higherKinds, reflectiveCalls}
+import scala.language.higherKinds
 
 /**
   * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
@@ -15,9 +16,9 @@ import scala.language.{higherKinds, reflectiveCalls}
   * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   * THE SOFTWARE.
   *
-  * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 4/22/2017
+  * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 4/23/2017
   */
-object ArrayLeftRotation {
+object QuickSort2 {
   private val INPUT = ""
 
   //------------------------------------------------------------------------------------------//
@@ -25,25 +26,34 @@ object ArrayLeftRotation {
   //------------------------------------------------------------------------------------------//
   private def solve(): Unit = {
     val n = nextInt()
-    val d = nextInt()
-    out.println(nextInt[Vector](n).rotateLeft(d).mkString(" "))
+    val array = nextInt[Vector](n)
+    quickSort(array)
   }
 
-  implicit class IterableExt[A, Coll](xs: Coll)
-                                     (implicit c2s: Coll => Seq[A],
-                                      cbf: CanBuildFrom[Coll, A, Coll]) {
-    def rotateRight(i: Int): Coll = {
-      val builder = cbf()
-      val size = xs.size
-      builder ++= xs.view.takeRight(i % size) ++ xs.view.dropRight(i % size)
-      builder.result()
-    }
+  def quickSort[T, Coll](xs: Coll)
+                        (implicit c2s: Coll <:< SeqLike[T, Coll],
+                         cbf: CanBuildFrom[Coll, T, Coll],
+                         ordering: Ordering[T]): Coll = {
+    import ordering._
+    if (xs.length <= 1) {
+      xs
+    } else {
+      def pivot(list: Coll): (Coll, T, Coll) = {
+        val (left, middle, right) = list.tail.foldLeft((cbf(), list.head, cbf())) {
+          (result, item) =>
+            val (left, pivot, right) = result
+            if (item < pivot) (left += item, pivot, right) else (left, pivot, right += item)
+        }
+        (left.result(), middle, right.result())
+      }
 
-    def rotateLeft(i: Int): Coll = {
+      val (left, middle, right) = pivot(xs)
       val builder = cbf()
-      val size = xs.size
-      builder ++= xs.view.drop(i % size) ++ xs.view.take(i % size)
-      builder.result()
+      builder.sizeHint(xs.size)
+      builder ++= quickSort(left) += middle ++= quickSort(right)
+      val result = builder.result()
+      out.println(result.mkString(" "))
+      result
     }
   }
 
@@ -183,6 +193,26 @@ object ArrayLeftRotation {
     builder.sizeHint(n)
     for (i <- 0 until n) {
       builder += ((nextLong(), i))
+    }
+    builder.result()
+  }
+
+  private def nextString[Coll[_]]
+  (n: Int)(implicit cbf: CanBuildFrom[Coll[String], String, Coll[String]]): Coll[String] = {
+    val builder = cbf()
+    builder.sizeHint(n)
+    for (_ <- 0 until n) {
+      builder += nextString()
+    }
+    builder.result()
+  }
+
+  private def nextStringWithIndex[Coll[_]]
+  (n: Int)(implicit cbf: CanBuildFrom[Coll[(String, Int)], (String, Int), Coll[(String, Int)]]): Coll[(String, Int)] = {
+    val builder = cbf()
+    builder.sizeHint(n)
+    for (i <- 0 until n) {
+      builder += ((nextString(), i))
     }
     builder.result()
   }

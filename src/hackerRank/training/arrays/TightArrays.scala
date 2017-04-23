@@ -1,10 +1,9 @@
-package projectEuler
+package hackerRank.training.arrays
 
 import java.io.{ByteArrayInputStream, IOException, PrintWriter}
 import java.util.InputMismatchException
 
 import scala.collection.generic.CanBuildFrom
-import scala.collection.mutable
 import scala.language.higherKinds
 
 /**
@@ -18,14 +17,27 @@ import scala.language.higherKinds
   *
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 4/22/2017
   */
-object Euler005ScmallestMultiple {
+object TightArrays {
   private val INPUT = ""
 
   //------------------------------------------------------------------------------------------//
   // Solution                                                                
   //------------------------------------------------------------------------------------------//
   private def solve(): Unit = {
+    val a = nextInt()
+    val b = nextInt()
+    val c = nextInt()
 
+    val result = if (a >= b && b >= c) {
+      a - c + 1
+    } else if (a <= b && b <= c) {
+      c - a + 1
+    } else if (b < a) {
+      a - b + (c - b) + 1
+    } else if (b > c) {
+      b - a + (b - c) + 1
+    }
+    out.println(result)
   }
 
   //------------------------------------------------------------------------------------------//
@@ -236,7 +248,7 @@ object Euler005ScmallestMultiple {
   }
 
   private def nextLong(): Long = {
-    var num = 0
+    var num = 0L
     var b = 0
     var minus = false
     while ( {

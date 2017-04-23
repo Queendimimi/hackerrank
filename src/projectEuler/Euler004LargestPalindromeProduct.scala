@@ -3,8 +3,8 @@ package projectEuler
 import java.io.{ByteArrayInputStream, IOException, PrintWriter}
 import java.util.InputMismatchException
 
+import scala.annotation.tailrec
 import scala.collection.generic.CanBuildFrom
-import scala.collection.mutable
 import scala.language.higherKinds
 
 /**
@@ -19,13 +19,57 @@ import scala.language.higherKinds
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 4/22/2017
   */
 object Euler004LargestPalindromeProduct {
-  private val INPUT = ""
+  private val INPUT = "2\n101110\n800000"
 
   //------------------------------------------------------------------------------------------//
   // Solution                                                                
   //------------------------------------------------------------------------------------------//
   private def solve(): Unit = {
+    val t = nextInt()
+    val palindromes = generate3DigitPalindromes().sorted
+    nextInt[Array](t).foreach(x => out.println(palindromes(
+      binarySearch(palindromes, x, 0, palindromes.length))
+    ))
+  }
 
+  @tailrec
+  def binarySearch(coll: Seq[Int], target: Int, left: Int, right: Int): Int = {
+
+    val idx = left + (right - left - 1) / 2
+    if (coll(idx) >= target && coll(idx - 1) < target) {
+      idx - 1
+    } else {
+      math.signum(Integer.compare(target, coll(idx))) match {
+        case -1 => binarySearch(coll, target, left, idx)
+        case 1 => binarySearch(coll, target, idx + 1, right)
+        case _ => idx
+      }
+    }
+  }
+
+  private def generate3DigitPalindromes() = {
+    val builder = Vector.newBuilder[Int]
+    var prod: Int = 0
+    var i: Int = 100
+    while (i <= 999) {
+      var j: Int = 100
+      while (j <= 999) {
+        prod = i * j
+        if (isPalindrome(prod)) {
+          builder += prod
+        }
+        j += 1
+        j - 1
+      }
+      i += 1
+      i - 1
+    }
+    builder.result()
+  }
+
+  private def isPalindrome(n: Int): Boolean = {
+    val pair = n.toString.splitAt(3)
+    pair._1 == pair._2.reverse
   }
 
   //------------------------------------------------------------------------------------------//
@@ -236,7 +280,7 @@ object Euler004LargestPalindromeProduct {
   }
 
   private def nextLong(): Long = {
-    var num = 0
+    var num = 0L
     var b = 0
     var minus = false
     while ( {

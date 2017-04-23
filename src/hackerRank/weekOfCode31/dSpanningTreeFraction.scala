@@ -20,7 +20,7 @@ import scala.language.higherKinds
   */
 object dSpanningTreeFraction {
   //  private val INPUT = "10 20\n0 8 98 2\n0 1 99 1\n1 2 100 2\n0 9 99 1\n7 8 98 1\n2 8 100 2\n3 5 100 2\n3 3 97 2\n0 3 100 1\n1 4 98 1\n1 8 98 1\n7 9 97 1\n6 9 100 1\n4 5 100 2\n3 9 98 2\n7 8 99 2\n3 6 98 1\n0 5 100 2\n2 5 99 1\n5 7 99 1\n0"
-  //
+
   private val INPUT = ""
 
   //------------------------------------------------------------------------------------------//
@@ -348,7 +348,7 @@ object dSpanningTreeFraction {
   }
 
   private def nextLong(): Long = {
-    var num = 0
+    var num = 0L
     var b = 0
     var minus = false
     while ( {

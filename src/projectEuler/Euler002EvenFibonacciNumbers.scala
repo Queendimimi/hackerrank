@@ -3,8 +3,9 @@ package projectEuler
 import java.io.{ByteArrayInputStream, IOException, PrintWriter}
 import java.util.InputMismatchException
 
+import scala.annotation.tailrec
 import scala.collection.generic.CanBuildFrom
-import scala.collection.mutable
+import scala.collection.mutable.ListBuffer
 import scala.language.higherKinds
 
 /**
@@ -25,7 +26,25 @@ object Euler002EvenFibonacciNumbers {
   // Solution                                                                
   //------------------------------------------------------------------------------------------//
   private def solve(): Unit = {
+    val n = nextInt()
+    nextLong[Array](n).foreach(x => out.println(evenFibonacci(x).sum))
+  }
 
+  def evenFibonacci(upperBound: Long): ListBuffer[BigInt] = {
+    val buffer = ListBuffer.empty[BigInt]
+    buffer += 2
+    evenFibonacciRecursion(2, 0)
+
+    @tailrec
+    def evenFibonacciRecursion(a: BigInt, b: BigInt): Unit = {
+      val next = 4 * a + b
+      if (next <= upperBound) {
+        buffer += next
+        evenFibonacciRecursion(next, a)
+      }
+    }
+
+    buffer
   }
 
   //------------------------------------------------------------------------------------------//
@@ -236,7 +255,7 @@ object Euler002EvenFibonacciNumbers {
   }
 
   private def nextLong(): Long = {
-    var num = 0
+    var num = 0L
     var b = 0
     var minus = false
     while ( {

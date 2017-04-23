@@ -4,7 +4,6 @@ import java.io.{ByteArrayInputStream, IOException, PrintWriter}
 import java.util.InputMismatchException
 
 import scala.collection.generic.CanBuildFrom
-import scala.collection.mutable
 import scala.language.higherKinds
 
 /**
@@ -25,7 +24,14 @@ object Euler006SumSquareDifference {
   // Solution                                                                
   //------------------------------------------------------------------------------------------//
   private def solve(): Unit = {
+    val t = nextInt()
+    nextLong[Array](t).foreach(x => out.println(difference(x)))
+  }
 
+  def difference(n: Long): Long = {
+    val sum = (n * (n + 1)) >> 1
+    val sumOfSquares = (n * (n + 1) * (2 * n + 1)) / 6
+    sum * sum - sumOfSquares
   }
 
   //------------------------------------------------------------------------------------------//
@@ -236,7 +242,7 @@ object Euler006SumSquareDifference {
   }
 
   private def nextLong(): Long = {
-    var num = 0
+    var num = 0L
     var b = 0
     var minus = false
     while ( {

@@ -1,11 +1,9 @@
-package hackerRank.training.search
+package projectEuler
 
 import java.io.{ByteArrayInputStream, IOException, PrintWriter}
 import java.util.InputMismatchException
 
-import scala.collection.Searching._
 import scala.collection.generic.CanBuildFrom
-import scala.io.Source
 import scala.language.higherKinds
 
 /**
@@ -17,63 +15,25 @@ import scala.language.higherKinds
   * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   * THE SOFTWARE.
   *
-  * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 4/20/2017
+  * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 4/22/2017
   */
-object CtciIceCreamParlor {
-  //  private val INPUT = ""
-  private val source = Source.fromURL("https://hr-testcases-us-east-1.s3.amazonaws.com/24108/input01.txt?AWSAccessKeyId=AKIAJAMR4KJHHUS76CYQ&Expires=1492682262&Signature=9OVgVTqrubx%2BTbFIpMFX9fCUYGw%3D&response-content-type=text%2Fplain")
-  private val INPUT = source.getLines mkString "\n"
+object Euler005SmallestMultiple {
+  private val INPUT = ""
 
   //------------------------------------------------------------------------------------------//
   // Solution                                                                
   //------------------------------------------------------------------------------------------//
   private def solve(): Unit = {
-    val t = nextInt()
-    for (_ <- 0 until t) {
-      val money = nextInt()
-      val n = nextInt()
-      val flavorCosts = nextInt[Array](n)
-      val flavors = findFlavors(flavorCosts.sorted, money).get
-      val a = linearSearch(flavorCosts, flavors._1).get
-      val b = linearSearch(flavorCosts, flavors._2, fromLeft = false).get
-      if (a < b) {
-        out.println(a + " " + b)
-      } else {
-        out.println(b + " " + a)
-      }
-    }
+    val n = nextInt()
+    nextInt[Array](n).foreach(testCase => out.println(solve(testCase)))
   }
 
-  private def findFlavors(flavorCosts: Seq[Int], money: Int) = {
-    split(money).find { case (a, b) =>
-      if (a != b) {
-        flavorCosts.search(a).isInstanceOf[Found] && flavorCosts.search(b).isInstanceOf[Found]
-      } else {
-        if (flavorCosts.count(_ == a) >= 2) true else false
-      }
+  def solve(largestDivisor: Int): Int = {
+    var result = largestDivisor
+    while ((1 to largestDivisor).exists(result % _ != 0)) {
+      result = result + largestDivisor
     }
-  }
-
-  private def split(n: Int) = {
-    val builder = Array.newBuilder[(Int, Int)]
-    for (i <- 1 to n / 2) {
-      builder += ((i, n - i))
-    }
-    builder.result()
-  }
-
-  private def linearSearch(coll: Seq[Int], elem: Int, fromLeft: Boolean = true): Option[Int] = {
-    if (fromLeft) {
-      for (i <- coll.indices) {
-        if (coll(i) == elem) return Some(i + 1)
-      }
-      None
-    } else {
-      for (i <- coll.indices.reverse) {
-        if (coll(i) == elem) return Some(i + 1)
-      }
-      None
-    }
+    result
   }
 
   //------------------------------------------------------------------------------------------//
@@ -95,40 +55,17 @@ object CtciIceCreamParlor {
     val s = System.currentTimeMillis
     solve()
     out.flush()
-    if (!INPUT.isEmpty) print(System.currentTimeMillis - s + "ms")
+    if (!INPUT.isEmpty) printCustom(System.currentTimeMillis - s + "ms")
   }
 
-  private val inputBuffer = new Array[Byte](1024)
-  var lenBuffer = 0
-  var ptrBuffer = 0
-
-  private def readByte(): Int = {
-    if (lenBuffer == -1) throw new InputMismatchException
-    if (ptrBuffer >= lenBuffer) {
-      ptrBuffer = 0
-      try {
-        lenBuffer = in.read(inputBuffer)
-      } catch {
-        case _: IOException =>
-          throw new InputMismatchException
-      }
-      if (lenBuffer <= 0) return -1
+  private def nextSeq[T, Coll[_]](reader: => Seq[T], n: Int)
+                                 (implicit cbf: CanBuildFrom[Coll[T], T, Coll[T]]): Coll[T] = {
+    val builder = cbf()
+    builder.sizeHint(n)
+    for (_ <- 0 until n) {
+      builder ++= reader
     }
-    inputBuffer({
-      ptrBuffer += 1
-      ptrBuffer - 1
-    })
-  }
-
-  private def isSpaceChar(c: Int) = !(c >= 33 && c <= 126)
-
-  private def skip = {
-    var b = 0
-    while ( {
-      b = readByte()
-      b != -1 && isSpaceChar(b)
-    }) {}
-    b
+    builder.result()
   }
 
   private def next[T, Coll[_]](reader: => T, n: Int)
@@ -141,12 +78,12 @@ object CtciIceCreamParlor {
     builder.result()
   }
 
-  private def nextSeq[T, Coll[_]](reader: => Seq[T], n: Int)
-                                 (implicit cbf: CanBuildFrom[Coll[T], T, Coll[T]]): Coll[T] = {
+  private def nextWithIndex[T, Coll[_]](reader: => T, n: Int)
+                                       (implicit cbf: CanBuildFrom[Coll[(T, Int)], (T, Int), Coll[(T, Int)]]): Coll[(T, Int)] = {
     val builder = cbf()
     builder.sizeHint(n)
-    for (_ <- 0 until n) {
-      builder ++= reader
+    for (i <- 0 until n) {
+      builder += ((reader, i))
     }
     builder.result()
   }
@@ -161,7 +98,17 @@ object CtciIceCreamParlor {
     builder.result()
   }
 
-  private def nextChar[Coll[Char]]
+  private def nextDoubleWithIndex[Coll[_]]
+  (n: Int)(implicit cbf: CanBuildFrom[Coll[(Double, Int)], (Double, Int), Coll[(Double, Int)]]): Coll[(Double, Int)] = {
+    val builder = cbf()
+    builder.sizeHint(n)
+    for (i <- 0 until n) {
+      builder += ((nextDouble(), i))
+    }
+    builder.result()
+  }
+
+  private def nextChar[Coll[_]]
   (n: Int)(implicit cbf: CanBuildFrom[Coll[Char], Char, Coll[Char]]): Coll[Char] = {
     val builder = cbf()
     builder.sizeHint(n)
@@ -171,6 +118,80 @@ object CtciIceCreamParlor {
       builder += b.toChar
       p += 1
       b = readByte()
+    }
+    builder.result()
+  }
+
+  private def nextCharWithIndex[Coll[_]]
+  (n: Int)(implicit cbf: CanBuildFrom[Coll[(Char, Int)], (Char, Int), Coll[(Char, Int)]]): Coll[(Char, Int)] = {
+    val builder = cbf()
+    builder.sizeHint(n)
+    var b = skip
+    var p = 0
+    while (p < n && !isSpaceChar(b)) {
+      builder += ((b.toChar, p))
+      p += 1
+      b = readByte()
+    }
+    builder.result()
+  }
+
+  private def nextInt[Coll[_]]
+  (n: Int)(implicit cbf: CanBuildFrom[Coll[Int], Int, Coll[Int]]): Coll[Int] = {
+    val builder = cbf()
+    builder.sizeHint(n)
+    for (_ <- 0 until n) {
+      builder += nextInt()
+    }
+    builder.result()
+  }
+
+  private def nextIntWithIndex[Coll[_]]
+  (n: Int)(implicit cbf: CanBuildFrom[Coll[(Int, Int)], (Int, Int), Coll[(Int, Int)]]): Coll[(Int, Int)] = {
+    val builder = cbf()
+    builder.sizeHint(n)
+    for (i <- 0 until n) {
+      builder += ((nextInt(), i))
+    }
+    builder.result()
+  }
+
+  private def nextLong[Coll[_]]
+  (n: Int)(implicit cbf: CanBuildFrom[Coll[Long], Long, Coll[Long]]): Coll[Long] = {
+    val builder = cbf()
+    builder.sizeHint(n)
+    for (_ <- 0 until n) {
+      builder += nextLong()
+    }
+    builder.result()
+  }
+
+  private def nextLongWithIndex[Coll[_]]
+  (n: Int)(implicit cbf: CanBuildFrom[Coll[(Long, Int)], (Long, Int), Coll[(Long, Int)]]): Coll[(Long, Int)] = {
+    val builder = cbf()
+    builder.sizeHint(n)
+    for (i <- 0 until n) {
+      builder += ((nextLong(), i))
+    }
+    builder.result()
+  }
+
+  private def nextString[Coll[_]]
+  (n: Int)(implicit cbf: CanBuildFrom[Coll[String], String, Coll[String]]): Coll[String] = {
+    val builder = cbf()
+    builder.sizeHint(n)
+    for (_ <- 0 until n) {
+      builder += nextString()
+    }
+    builder.result()
+  }
+
+  private def nextStringWithIndex[Coll[_]]
+  (n: Int)(implicit cbf: CanBuildFrom[Coll[(String, Int)], (String, Int), Coll[(String, Int)]]): Coll[(String, Int)] = {
+    val builder = cbf()
+    builder.sizeHint(n)
+    for (i <- 0 until n) {
+      builder += ((nextString(), i))
     }
     builder.result()
   }
@@ -185,31 +206,11 @@ object CtciIceCreamParlor {
     map
   }
 
-  private def nextInt[Coll[Int]]
-  (n: Int)(implicit cbf: CanBuildFrom[Coll[Int], Int, Coll[Int]]): Coll[Int] = {
-    val builder = cbf()
-    builder.sizeHint(n)
-    for (_ <- 0 until n) {
-      builder += nextInt()
-    }
-    builder.result()
-  }
+  private def nextDouble(): Double = nextString().toDouble
 
-  private def nextLong[Coll[Long]]
-  (n: Int)(implicit cbf: CanBuildFrom[Coll[Long], Long, Coll[Long]]): Coll[Long] = {
-    val builder = cbf()
-    builder.sizeHint(n)
-    for (_ <- 0 until n) {
-      builder += nextLong()
-    }
-    builder.result()
-  }
+  private def nextChar(): Char = skip.toChar
 
-  private def nextDouble(): Double = nextString.toDouble
-
-  private def nextChar: Char = skip.toChar
-
-  private def nextString: String = {
+  private def nextString(): String = {
     var b = skip
     val sb = new java.lang.StringBuilder
     while (!isSpaceChar(b)) {
@@ -265,7 +266,40 @@ object CtciIceCreamParlor {
     throw new IOException("Read Long")
   }
 
-  private def print(o: AnyRef*): Unit = {
+  private val inputBuffer = new Array[Byte](1024)
+  var lenBuffer = 0
+  var ptrBuffer = 0
+
+  private def readByte(): Int = {
+    if (lenBuffer == -1) throw new InputMismatchException
+    if (ptrBuffer >= lenBuffer) {
+      ptrBuffer = 0
+      try {
+        lenBuffer = in.read(inputBuffer)
+      } catch {
+        case _: IOException =>
+          throw new InputMismatchException
+      }
+      if (lenBuffer <= 0) return -1
+    }
+    inputBuffer({
+      ptrBuffer += 1
+      ptrBuffer - 1
+    })
+  }
+
+  private def isSpaceChar(c: Int) = !(c >= 33 && c <= 126)
+
+  private def skip = {
+    var b = 0
+    while ( {
+      b = readByte()
+      b != -1 && isSpaceChar(b)
+    }) {}
+    b
+  }
+
+  private def printCustom(o: AnyRef*): Unit = {
     System.out.println(java.util.Arrays.deepToString(o.toArray)
     )
   }

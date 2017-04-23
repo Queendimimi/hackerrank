@@ -1,10 +1,10 @@
-package hackerRank.training.arrays
+package hackerRank.training.sorting
 
 import java.io.{ByteArrayInputStream, IOException, PrintWriter}
 import java.util.InputMismatchException
 
 import scala.collection.generic.CanBuildFrom
-import scala.language.{higherKinds, reflectiveCalls}
+import scala.language.higherKinds
 
 /**
   * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
@@ -15,35 +15,50 @@ import scala.language.{higherKinds, reflectiveCalls}
   * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   * THE SOFTWARE.
   *
-  * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 4/22/2017
+  * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 4/23/2017
   */
-object ArrayLeftRotation {
+object InsertionSortInversions {
   private val INPUT = ""
 
   //------------------------------------------------------------------------------------------//
   // Solution                                                                
   //------------------------------------------------------------------------------------------//
   private def solve(): Unit = {
-    val n = nextInt()
-    val d = nextInt()
-    out.println(nextInt[Vector](n).rotateLeft(d).mkString(" "))
+    val t = nextInt()
+    for (_ <- 1 to t) {
+      val n = nextInt()
+      out.println(countInversions(nextInt[List](n)))
+    }
   }
 
-  implicit class IterableExt[A, Coll](xs: Coll)
-                                     (implicit c2s: Coll => Seq[A],
-                                      cbf: CanBuildFrom[Coll, A, Coll]) {
-    def rotateRight(i: Int): Coll = {
-      val builder = cbf()
-      val size = xs.size
-      builder ++= xs.view.takeRight(i % size) ++ xs.view.dropRight(i % size)
-      builder.result()
-    }
+  def countInversions(input: List[Int]): Long = {
+    sortAndCountInversion(input)._2
+  }
 
-    def rotateLeft(i: Int): Coll = {
-      val builder = cbf()
-      val size = xs.size
-      builder ++= xs.view.drop(i % size) ++ xs.view.take(i % size)
-      builder.result()
+  def sortAndCountInversion(list: List[Int], count: Long = 0): (List[Int], Long) = {
+    if (list.length <= 1) {
+      (list, 0)
+    } else {
+      val (rightList, leftList) = list.splitAt(list.length / 2)
+      val (sortedRightList, rightCount) = sortAndCountInversion(rightList, count)
+      val (sortedLeftList, leftCount) = sortAndCountInversion(leftList, count)
+      val (sortedMergedList, mergedCount) = merge(sortedRightList, sortedLeftList)
+      (sortedMergedList, rightCount + leftCount + mergedCount)
+    }
+  }
+
+  def merge(left: List[Int], right: List[Int], count: Long = 0): (List[Int], Long) = {
+    (left, right) match {
+      case (Nil, _) => (right, count)
+      case (_, Nil) => (left, count)
+      case (leftHead :: leftTail, rightHead :: rightTail) =>
+        if (leftHead > rightHead) {
+          val (list, rightCount) = merge(left, rightTail, count)
+          (rightHead :: list, count + left.length + rightCount)
+        } else {
+          val (list, leftCount) = merge(leftTail, right, count)
+          (leftHead :: list, count + leftCount)
+        }
     }
   }
 
@@ -183,6 +198,26 @@ object ArrayLeftRotation {
     builder.sizeHint(n)
     for (i <- 0 until n) {
       builder += ((nextLong(), i))
+    }
+    builder.result()
+  }
+
+  private def nextString[Coll[_]]
+  (n: Int)(implicit cbf: CanBuildFrom[Coll[String], String, Coll[String]]): Coll[String] = {
+    val builder = cbf()
+    builder.sizeHint(n)
+    for (_ <- 0 until n) {
+      builder += nextString()
+    }
+    builder.result()
+  }
+
+  private def nextStringWithIndex[Coll[_]]
+  (n: Int)(implicit cbf: CanBuildFrom[Coll[(String, Int)], (String, Int), Coll[(String, Int)]]): Coll[(String, Int)] = {
+    val builder = cbf()
+    builder.sizeHint(n)
+    for (i <- 0 until n) {
+      builder += ((nextString(), i))
     }
     builder.result()
   }

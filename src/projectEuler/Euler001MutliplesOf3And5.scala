@@ -4,7 +4,6 @@ import java.io.{ByteArrayInputStream, IOException, PrintWriter}
 import java.util.InputMismatchException
 
 import scala.collection.generic.CanBuildFrom
-import scala.collection.mutable
 import scala.language.higherKinds
 
 /**
@@ -22,14 +21,24 @@ object Euler001MutliplesOf3And5 {
   private val INPUT = ""
 
   //------------------------------------------------------------------------------------------//
-  // Solution                                                                
+  // Solution
   //------------------------------------------------------------------------------------------//
   private def solve(): Unit = {
+    val n = nextInt()
+    nextLong[Array](n).foreach(testCase => out.println(search(testCase)))
+  }
 
+  def search(upperBound: Long): Long = {
+    sumDivisibleBy(3, upperBound - 1) + sumDivisibleBy(5, upperBound - 1) - sumDivisibleBy(15, upperBound - 1)
+  }
+
+  def sumDivisibleBy(n: Long, upperBound: Long): Long = {
+    //geometric series (N*(N+1)/2); here with mutliples of n -> N = (number of mutiples of n < upperBound) % n == 0
+    n * (upperBound / n) * ((upperBound / n) + 1) >> 1
   }
 
   //------------------------------------------------------------------------------------------//
-  // Input-Output                                                                 
+  // Input-Output
   //------------------------------------------------------------------------------------------//
   var in: java.io.InputStream = _
   var out: java.io.PrintWriter = _
@@ -236,7 +245,7 @@ object Euler001MutliplesOf3And5 {
   }
 
   private def nextLong(): Long = {
-    var num = 0
+    var num = 0L
     var b = 0
     var minus = false
     while ( {

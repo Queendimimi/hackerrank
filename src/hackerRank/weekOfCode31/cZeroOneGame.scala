@@ -210,7 +210,7 @@ object cZeroOneGame {
   }
 
   private def nextLong(): Long = {
-    var num = 0
+    var num = 0L
     var b = 0
     var minus = false
     while ( {

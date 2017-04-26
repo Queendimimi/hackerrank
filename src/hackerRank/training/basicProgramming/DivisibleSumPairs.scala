@@ -1,31 +1,31 @@
-package hackerRank.training.basicProgramming
+package HackerRank.Training.BasicProgramming
 
 import java.io.{ByteArrayInputStream, IOException, PrintWriter}
 import java.util.InputMismatchException
 
 import scala.collection.generic.CanBuildFrom
-import scala.collection.mutable
 import scala.language.higherKinds
 
 /**
-  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-  * THE SOFTWARE.
+  * Copyright (c) 2017 A. Roberto Fischer
   *
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 4/25/2017
   */
 object DivisibleSumPairs {
-  private val INPUT = ""
+  private val INPUT = "6 3\n1 3 2 6 1 2"
 
   //------------------------------------------------------------------------------------------//
   // Solution                                                                
   //------------------------------------------------------------------------------------------//
   private def solve(): Unit = {
-
+    val n = nextInt()
+    val k = nextInt()
+    val input = nextInt[Array](n)
+    out.println(
+      (0 until n)
+        .combinations(2)
+        .count(list => (input(list.head) + input(list(1))) % k == 0)
+    )
   }
 
   //------------------------------------------------------------------------------------------//

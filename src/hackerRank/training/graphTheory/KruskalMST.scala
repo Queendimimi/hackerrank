@@ -1,24 +1,17 @@
-package hackerRank.training.graphTheory
+package HackerRank.Training.GraphTheory
 
 import java.io.{ByteArrayInputStream, IOException, PrintWriter}
 import java.util.InputMismatchException
 
 import scala.collection.generic.{CanBuildFrom, Growable}
-import scala.collection.mutable
 import scala.language.higherKinds
 
 /**
-  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-  * THE SOFTWARE.
+  * Copyright (c) 2017 A. Roberto Fischer
   *
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 4/26/2017
   */
-object dsf {
+object KruskalMST {
   private val INPUT = ""
 
   //------------------------------------------------------------------------------------------//
@@ -100,13 +93,13 @@ object dsf {
       (0 until size).groupBy(find)
     }
 
-    def normalUnion(a: Node, b: Node):Unit = {
-        parent(find(a)) = find(b)
+    def normalUnion(a: Node, b: Node): Unit = {
+      parent(find(a)) = find(b)
     }
 
-    def randomizedUnion(a: Node, b: Node):Unit = {
+    def randomizedUnion(a: Node, b: Node): Unit = {
       // Randomized linking is O(an) too: http://www.cis.upenn.edu/~sanjeev/papers/soda14_disjoint_set_union.pdf
-      if (scala.util.Random.nextBoolean()){
+      if (scala.util.Random.nextBoolean()) {
         parent(find(a)) = find(b)
       } else {
         parent(find(b)) = find(a)

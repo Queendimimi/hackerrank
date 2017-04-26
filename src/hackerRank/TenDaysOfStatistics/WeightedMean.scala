@@ -1,13 +1,13 @@
-package hackerRank.TenDaysOfStatistics
+package HackerRank.TenDaysOfStatistics
 
 import java.io.{ByteArrayInputStream, IOException, PrintWriter}
 import java.util.InputMismatchException
 
 import scala.collection.generic.CanBuildFrom
-import scala.collection.mutable
 import scala.language.higherKinds
 
 /**
+  * Copyright (c) 2017 A. Roberto Fischer
   *
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 4/26/2017
   */
@@ -18,7 +18,22 @@ object WeightedMean {
   // Solution                                                                
   //------------------------------------------------------------------------------------------//
   private def solve(): Unit = {
+    val n = nextInt()
 
+    val values = nextInt[Vector](n)
+    val weights = nextInt[Vector](n)
+
+    out.println(round(weightedMean(values, weights)))
+  }
+
+  def weightedMean(values: Vector[Int], weights: Vector[Int]): Double = {
+    val nominator = values.zip(weights).map(pair => pair._1 * pair._2).sum
+    val denominator = weights.sum
+    nominator / denominator.toDouble
+  }
+
+  def round(input: Double): Double = {
+    Math.round(input * 10.0) / 10.0
   }
 
   //------------------------------------------------------------------------------------------//

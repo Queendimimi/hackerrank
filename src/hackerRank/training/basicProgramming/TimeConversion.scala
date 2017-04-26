@@ -1,4 +1,4 @@
-package hackerRank.training.basicProgramming
+package HackerRank.Training.BasicProgramming
 
 import java.io.{ByteArrayInputStream, IOException, PrintWriter}
 import java.util.InputMismatchException
@@ -8,13 +8,7 @@ import scala.collection.mutable
 import scala.language.higherKinds
 
 /**
-  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-  * THE SOFTWARE.
+  * Copyright (c) 2017 A. Roberto Fischer
   *
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 4/26/2017
   */
@@ -25,7 +19,24 @@ object TimeConversion {
   // Solution                                                                
   //------------------------------------------------------------------------------------------//
   private def solve(): Unit = {
-
+    val time = nextString()
+    val pmOrAm = time takeRight 2
+    val hoursMinutesSeconds = time.dropRight(2).split(":").map(_.trim)
+    pmOrAm match {
+      case "AM" =>
+        val adjustedHours = hoursMinutesSeconds(0) match {
+          case "12" => "00"
+          case _ => hoursMinutesSeconds(0)
+        }
+        println(s"$adjustedHours:${hoursMinutesSeconds(1)}:${hoursMinutesSeconds(2)}")
+      case "PM" =>
+        val adjustedHours = hoursMinutesSeconds(0) match {
+          case "12" => "12"
+          case _ => hoursMinutesSeconds(0).toInt + 12
+        }
+        out.println(s"$adjustedHours:${hoursMinutesSeconds(1)}:${hoursMinutesSeconds(2)}")
+      case _ => out.println("Input format error")
+    }
   }
 
   //------------------------------------------------------------------------------------------//

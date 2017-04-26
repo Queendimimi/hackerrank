@@ -1,31 +1,36 @@
-package hackerRank.training.basicProgramming
+package HackerRank.Training.BasicProgramming
 
 import java.io.{ByteArrayInputStream, IOException, PrintWriter}
 import java.util.InputMismatchException
 
 import scala.collection.generic.CanBuildFrom
-import scala.collection.mutable
 import scala.language.higherKinds
 
 /**
-  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-  * THE SOFTWARE.
+  * Copyright (c) 2017 A. Roberto Fischer
   *
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 4/26/2017
   */
 object BirthdayCakeCandles {
-  private val INPUT = ""
+  private val INPUT = "4\n3 2 1 3"
 
   //------------------------------------------------------------------------------------------//
   // Solution                                                                
   //------------------------------------------------------------------------------------------//
   private def solve(): Unit = {
-
+    val n = nextInt()
+    var count = 0
+    var tallest = 1
+    for (_ <- 0 until n) {
+      val current = nextInt()
+      if (current == tallest) {
+        count += 1
+      } else if (current > tallest) {
+        tallest = current
+        count = 1
+      }
+    }
+    out.println(count)
   }
 
   //------------------------------------------------------------------------------------------//

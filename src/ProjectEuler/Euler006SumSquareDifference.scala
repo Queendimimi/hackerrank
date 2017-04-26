@@ -1,4 +1,4 @@
-package HackerRank.Training.Sorting
+package ProjectEuler
 
 import java.io.{ByteArrayInputStream, IOException, PrintWriter}
 import java.util.InputMismatchException
@@ -11,32 +11,21 @@ import scala.language.higherKinds
   *
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 4/22/2017
   */
-object BigSorting {
+object Euler006SumSquareDifference {
   private val INPUT = ""
 
   //------------------------------------------------------------------------------------------//
   // Solution                                                                
   //------------------------------------------------------------------------------------------//
   private def solve(): Unit = {
-    val n = nextInt()
-    out.println(next[String, Array](nextString(), n).sortWith(isSmaller).mkString("\n"))
+    val t = nextInt()
+    nextLong[Array](t).foreach(x => out.println(difference(x)))
   }
 
-  //true == a < b
-  def isSmaller(a: String, b: String): Boolean = {
-    if (a.length != b.length) {
-      a.length < b.length
-    } else {
-      val firstTwoDifferentDigits = a.toStream.zip(b.toStream)
-        .map(x => (x._1.asDigit, x._2.asDigit))
-        .find(x => x._1 != x._2)
-        .getOrElse((-1, -1))
-      if(firstTwoDifferentDigits._1 < firstTwoDifferentDigits._2) {
-        true
-      } else {
-        false
-      }
-    }
+  def difference(n: Long): Long = {
+    val sum = (n * (n + 1)) >> 1
+    val sumOfSquares = (n * (n + 1) * (2 * n + 1)) / 6
+    sum * sum - sumOfSquares
   }
 
   //------------------------------------------------------------------------------------------//
@@ -175,6 +164,26 @@ object BigSorting {
     builder.sizeHint(n)
     for (i <- 0 until n) {
       builder += ((nextLong(), i))
+    }
+    builder.result()
+  }
+
+  private def nextString[Coll[_]]
+  (n: Int)(implicit cbf: CanBuildFrom[Coll[String], String, Coll[String]]): Coll[String] = {
+    val builder = cbf()
+    builder.sizeHint(n)
+    for (_ <- 0 until n) {
+      builder += nextString()
+    }
+    builder.result()
+  }
+
+  private def nextStringWithIndex[Coll[_]]
+  (n: Int)(implicit cbf: CanBuildFrom[Coll[(String, Int)], (String, Int), Coll[(String, Int)]]): Coll[(String, Int)] = {
+    val builder = cbf()
+    builder.sizeHint(n)
+    for (i <- 0 until n) {
+      builder += ((nextString(), i))
     }
     builder.result()
   }

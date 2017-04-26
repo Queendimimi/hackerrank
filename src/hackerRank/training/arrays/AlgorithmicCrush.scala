@@ -1,9 +1,10 @@
-package projectEuler
+package hackerRank.training.arrays
 
 import java.io.{ByteArrayInputStream, IOException, PrintWriter}
 import java.util.InputMismatchException
 
 import scala.collection.generic.CanBuildFrom
+import scala.collection.mutable
 import scala.language.higherKinds
 
 /**
@@ -15,25 +16,16 @@ import scala.language.higherKinds
   * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   * THE SOFTWARE.
   *
-  * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 4/22/2017
+  * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 4/24/2017
   */
-object Euler005SmallestMultiple {
+object AlgorithmicCrush {
   private val INPUT = ""
 
   //------------------------------------------------------------------------------------------//
   // Solution                                                                
   //------------------------------------------------------------------------------------------//
   private def solve(): Unit = {
-    val n = nextInt()
-    nextInt[Array](n).foreach(testCase => out.println(solve(testCase)))
-  }
 
-  def solve(largestDivisor: Int): Int = {
-    var result = largestDivisor
-    while ((1 to largestDivisor).exists(result % _ != 0)) {
-      result = result + largestDivisor
-    }
-    result
   }
 
   //------------------------------------------------------------------------------------------//

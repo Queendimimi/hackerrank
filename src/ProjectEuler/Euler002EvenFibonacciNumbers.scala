@@ -1,75 +1,44 @@
-package projectEuler
+package ProjectEuler
 
 import java.io.{ByteArrayInputStream, IOException, PrintWriter}
 import java.util.InputMismatchException
 
 import scala.annotation.tailrec
 import scala.collection.generic.CanBuildFrom
+import scala.collection.mutable.ListBuffer
 import scala.language.higherKinds
 
 /**
-  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-  * THE SOFTWARE.
+  * Copyright (c) 2017 A. Roberto Fischer
   *
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 4/22/2017
   */
-object Euler004LargestPalindromeProduct {
-  private val INPUT = "2\n101110\n800000"
+object Euler002EvenFibonacciNumbers {
+  private val INPUT = ""
 
   //------------------------------------------------------------------------------------------//
   // Solution                                                                
   //------------------------------------------------------------------------------------------//
   private def solve(): Unit = {
-    val t = nextInt()
-    val palindromes = generate3DigitPalindromes().sorted
-    nextInt[Array](t).foreach(x => out.println(palindromes(
-      binarySearch(palindromes, x, 0, palindromes.length))
-    ))
+    val n = nextInt()
+    nextLong[Array](n).foreach(x => out.println(evenFibonacci(x).sum))
   }
 
-  @tailrec
-  def binarySearch(coll: Seq[Int], target: Int, left: Int, right: Int): Int = {
+  def evenFibonacci(upperBound: Long): ListBuffer[BigInt] = {
+    val buffer = ListBuffer.empty[BigInt]
+    buffer += 2
+    evenFibonacciRecursion(2, 0)
 
-    val idx = left + (right - left - 1) / 2
-    if (coll(idx) >= target && coll(idx - 1) < target) {
-      idx - 1
-    } else {
-      math.signum(Integer.compare(target, coll(idx))) match {
-        case -1 => binarySearch(coll, target, left, idx)
-        case 1 => binarySearch(coll, target, idx + 1, right)
-        case _ => idx
+    @tailrec
+    def evenFibonacciRecursion(a: BigInt, b: BigInt): Unit = {
+      val next = 4 * a + b
+      if (next <= upperBound) {
+        buffer += next
+        evenFibonacciRecursion(next, a)
       }
     }
-  }
 
-  private def generate3DigitPalindromes() = {
-    val builder = Vector.newBuilder[Int]
-    var prod: Int = 0
-    var i: Int = 100
-    while (i <= 999) {
-      var j: Int = 100
-      while (j <= 999) {
-        prod = i * j
-        if (isPalindrome(prod)) {
-          builder += prod
-        }
-        j += 1
-        j - 1
-      }
-      i += 1
-      i - 1
-    }
-    builder.result()
-  }
-
-  private def isPalindrome(n: Int): Boolean = {
-    val pair = n.toString.splitAt(3)
-    pair._1 == pair._2.reverse
+    buffer
   }
 
   //------------------------------------------------------------------------------------------//

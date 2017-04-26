@@ -1,50 +1,29 @@
-package projectEuler
+package ProjectEuler
 
 import java.io.{ByteArrayInputStream, IOException, PrintWriter}
 import java.util.InputMismatchException
 
-import scala.annotation.tailrec
 import scala.collection.generic.CanBuildFrom
-import scala.collection.mutable.ListBuffer
 import scala.language.higherKinds
 
 /**
-  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-  * THE SOFTWARE.
+  * Copyright (c) 2017 A. Roberto Fischer
   *
-  * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 4/22/2017
+  * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 4/21/2017
   */
-object Euler002EvenFibonacciNumbers {
-  private val INPUT = ""
+object Euler008LargestProductInASeries {
+  private val INPUT = "1\n1000\n13\n7316717653133062491922511967442657474235534919493496983520312774506326239578318016984801869478851843858615607891129494954595017379583319528532088055111254069874715852386305071569329096329522744304355766896648950445244523161731856403098711121722383113622298934233803081353362766142828064444866452387493035890729629049156044077239071381051585930796086670172427121883998797908792274921901699720888093776657273330010533678812202354218097512545405947522435258490771167055601360483958644670632441572215539753697817977846174064955149290862569321978468622482839722413756570560574902614079729686524145351004748216637048440319989000889524345065854122758866688116427171479924442928230863465674813919123162824586178664583591245665294765456828489128831426076900422421902267105562632111110937054421750694165896040807198403850962455444362981230987879927244284909188845801561660979191338754992005240636899125607176060588611646710940507754100225698315520005593572972571636269561882670428252483600823257530420752963450"
 
   //------------------------------------------------------------------------------------------//
   // Solution                                                                
   //------------------------------------------------------------------------------------------//
   private def solve(): Unit = {
-    val n = nextInt()
-    nextLong[Array](n).foreach(x => out.println(evenFibonacci(x).sum))
-  }
-
-  def evenFibonacci(upperBound: Long): ListBuffer[BigInt] = {
-    val buffer = ListBuffer.empty[BigInt]
-    buffer += 2
-    evenFibonacciRecursion(2, 0)
-
-    @tailrec
-    def evenFibonacciRecursion(a: BigInt, b: BigInt): Unit = {
-      val next = 4 * a + b
-      if (next <= upperBound) {
-        buffer += next
-        evenFibonacciRecursion(next, a)
-      }
+    val t = nextInt()
+    for (i <- 0 until t) {
+      val n = nextInt()
+      val k = nextInt()
+      out.println(nextString().view.map(_.asDigit.toLong).sliding(k).map(_.product).max)
     }
-
-    buffer
   }
 
   //------------------------------------------------------------------------------------------//
@@ -183,26 +162,6 @@ object Euler002EvenFibonacciNumbers {
     builder.sizeHint(n)
     for (i <- 0 until n) {
       builder += ((nextLong(), i))
-    }
-    builder.result()
-  }
-
-  private def nextString[Coll[_]]
-  (n: Int)(implicit cbf: CanBuildFrom[Coll[String], String, Coll[String]]): Coll[String] = {
-    val builder = cbf()
-    builder.sizeHint(n)
-    for (_ <- 0 until n) {
-      builder += nextString()
-    }
-    builder.result()
-  }
-
-  private def nextStringWithIndex[Coll[_]]
-  (n: Int)(implicit cbf: CanBuildFrom[Coll[(String, Int)], (String, Int), Coll[(String, Int)]]): Coll[(String, Int)] = {
-    val builder = cbf()
-    builder.sizeHint(n)
-    for (i <- 0 until n) {
-      builder += ((nextString(), i))
     }
     builder.result()
   }

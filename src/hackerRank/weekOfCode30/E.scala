@@ -1,4 +1,4 @@
-package hackerRank.weekOfCode30
+package HackerRank.WeekOfCode30
 
 /**
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 3/17/2017

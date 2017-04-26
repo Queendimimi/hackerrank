@@ -1,8 +1,9 @@
-package HackerRank.Training.Sorting
+package ProjectEuler
 
 import java.io.{ByteArrayInputStream, IOException, PrintWriter}
 import java.util.InputMismatchException
 
+import scala.annotation.tailrec
 import scala.collection.generic.CanBuildFrom
 import scala.language.higherKinds
 
@@ -11,32 +12,58 @@ import scala.language.higherKinds
   *
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 4/22/2017
   */
-object BigSorting {
-  private val INPUT = ""
+object Euler004LargestPalindromeProduct {
+  private val INPUT = "2\n101110\n800000"
 
   //------------------------------------------------------------------------------------------//
   // Solution                                                                
   //------------------------------------------------------------------------------------------//
   private def solve(): Unit = {
-    val n = nextInt()
-    out.println(next[String, Array](nextString(), n).sortWith(isSmaller).mkString("\n"))
+    val t = nextInt()
+    val palindromes = generate3DigitPalindromes().sorted
+    nextInt[Array](t).foreach(x => out.println(palindromes(
+      binarySearch(palindromes, x, 0, palindromes.length))
+    ))
   }
 
-  //true == a < b
-  def isSmaller(a: String, b: String): Boolean = {
-    if (a.length != b.length) {
-      a.length < b.length
+  @tailrec
+  def binarySearch(coll: Seq[Int], target: Int, left: Int, right: Int): Int = {
+
+    val idx = left + (right - left - 1) / 2
+    if (coll(idx) >= target && coll(idx - 1) < target) {
+      idx - 1
     } else {
-      val firstTwoDifferentDigits = a.toStream.zip(b.toStream)
-        .map(x => (x._1.asDigit, x._2.asDigit))
-        .find(x => x._1 != x._2)
-        .getOrElse((-1, -1))
-      if(firstTwoDifferentDigits._1 < firstTwoDifferentDigits._2) {
-        true
-      } else {
-        false
+      math.signum(Integer.compare(target, coll(idx))) match {
+        case -1 => binarySearch(coll, target, left, idx)
+        case 1 => binarySearch(coll, target, idx + 1, right)
+        case _ => idx
       }
     }
+  }
+
+  private def generate3DigitPalindromes() = {
+    val builder = Vector.newBuilder[Int]
+    var prod: Int = 0
+    var i: Int = 100
+    while (i <= 999) {
+      var j: Int = 100
+      while (j <= 999) {
+        prod = i * j
+        if (isPalindrome(prod)) {
+          builder += prod
+        }
+        j += 1
+        j - 1
+      }
+      i += 1
+      i - 1
+    }
+    builder.result()
+  }
+
+  private def isPalindrome(n: Int): Boolean = {
+    val pair = n.toString.splitAt(3)
+    pair._1 == pair._2.reverse
   }
 
   //------------------------------------------------------------------------------------------//
@@ -175,6 +202,26 @@ object BigSorting {
     builder.sizeHint(n)
     for (i <- 0 until n) {
       builder += ((nextLong(), i))
+    }
+    builder.result()
+  }
+
+  private def nextString[Coll[_]]
+  (n: Int)(implicit cbf: CanBuildFrom[Coll[String], String, Coll[String]]): Coll[String] = {
+    val builder = cbf()
+    builder.sizeHint(n)
+    for (_ <- 0 until n) {
+      builder += nextString()
+    }
+    builder.result()
+  }
+
+  private def nextStringWithIndex[Coll[_]]
+  (n: Int)(implicit cbf: CanBuildFrom[Coll[(String, Int)], (String, Int), Coll[(String, Int)]]): Coll[(String, Int)] = {
+    val builder = cbf()
+    builder.sizeHint(n)
+    for (i <- 0 until n) {
+      builder += ((nextString(), i))
     }
     builder.result()
   }

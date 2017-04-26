@@ -1,17 +1,24 @@
-package HackerRank.Training.Sorting
+package hackerRank.training.graphTheory
 
 import java.io.{ByteArrayInputStream, IOException, PrintWriter}
 import java.util.InputMismatchException
 
-import scala.collection.generic.CanBuildFrom
+import scala.collection.generic.{CanBuildFrom, Growable}
+import scala.collection.mutable
 import scala.language.higherKinds
 
 /**
-  * Copyright (c) 2017 A. Roberto Fischer
+  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+  * THE SOFTWARE.
   *
-  * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 4/22/2017
+  * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 4/26/2017
   */
-object BigSorting {
+object dsf {
   private val INPUT = ""
 
   //------------------------------------------------------------------------------------------//
@@ -19,25 +26,112 @@ object BigSorting {
   //------------------------------------------------------------------------------------------//
   private def solve(): Unit = {
     val n = nextInt()
-    out.println(next[String, Array](nextString(), n).sortWith(isSmaller).mkString("\n"))
+    val m = nextInt()
+    val edges = nextSeq[Edge, Vector]({
+      val u = nextInt() - 1
+      val v = nextInt() - 1
+      val weight = nextInt()
+      Vector(Edge(u, v, weight), Edge(v, u, weight))
+    }, m)
+    out.println(kruskalMST(edges, UnionFind(n)))
   }
 
-  //true == a < b
-  def isSmaller(a: String, b: String): Boolean = {
-    if (a.length != b.length) {
-      a.length < b.length
-    } else {
-      val firstTwoDifferentDigits = a.toStream.zip(b.toStream)
-        .map(x => (x._1.asDigit, x._2.asDigit))
-        .find(x => x._1 != x._2)
-        .getOrElse((-1, -1))
-      if(firstTwoDifferentDigits._1 < firstTwoDifferentDigits._2) {
-        true
+  case class Edge(u: Int, v: Int, weight: Double)
+
+  def kruskalMST[T <: Edge, Coll](edges: Coll, unionFind: UnionFind)
+                                 (implicit c2s: Coll => Seq[T],
+                                  cbf: CanBuildFrom[Coll, T, Coll]): Int = {
+    val edgeList = edges.sortBy(_.weight)
+    val builder = cbf()
+    var sum = 0.0
+    for (edge <- edgeList) {
+      val u = edge.u
+      val v = edge.v
+      if (unionFind(u) != unionFind(v)) {
+        unionFind.union(u, v)
+        sum += edge.weight
+      }
+    }
+    sum.toInt
+  }
+
+  case class UnionFind(size: Int, lazyConstruct: Boolean = false)
+    extends PartialFunction[Int, Int] with Growable[Int] {
+    private[this] type Rank = Int
+    private[this] type Node = Int
+    private[this] type Root = Int
+
+    private[this] var parent = new Array[Node](size)
+    private[this] var rank = new Array[Rank](size)
+
+    if (!lazyConstruct) {
+      for (i <- 0 until size) {
+        +=(i)
+      }
+    }
+
+    override def apply(x: Node): Root = {
+      find(x)
+    }
+
+    override def clear(): Unit = {
+      parent = new Array[Node](size)
+      rank = new Array[Rank](size)
+    }
+
+    override def isDefinedAt(x: Int): Boolean = x < parent.length && 0 <= x
+
+    override def +=(v: Node): UnionFind.this.type = {
+      parent(v) = v
+      rank(v) = 0
+      this
+    }
+
+    private[this] def find(v: Node): Root = {
+      if (v == parent(v)) {
+        v
       } else {
-        false
+        parent(v) = find(parent(v))
+        parent(v)
+      }
+    }
+
+    def sets: Map[Int, Iterable[Int]] = {
+      (0 until size).groupBy(find)
+    }
+
+    def normalUnion(a: Node, b: Node):Unit = {
+        parent(find(a)) = find(b)
+    }
+
+    def randomizedUnion(a: Node, b: Node):Unit = {
+      // Randomized linking is O(an) too: http://www.cis.upenn.edu/~sanjeev/papers/soda14_disjoint_set_union.pdf
+      if (scala.util.Random.nextBoolean()){
+        parent(find(a)) = find(b)
+      } else {
+        parent(find(b)) = find(a)
+      }
+    }
+
+    //Union with path compression by rank
+    def union(a: Node, b: Node): Unit = {
+      var aRoot = find(a)
+      var bRoot = find(b)
+
+      if (aRoot != bRoot) {
+        if (rank(aRoot) < rank(bRoot)) {
+          val temp = aRoot
+          aRoot = bRoot
+          bRoot = temp
+        }
+        parent(bRoot) = aRoot
+        if (rank(aRoot) == rank(bRoot)) {
+          rank(aRoot) = rank(aRoot) + 1
+        }
       }
     }
   }
+
 
   //------------------------------------------------------------------------------------------//
   // Input-Output                                                                 
@@ -175,6 +269,26 @@ object BigSorting {
     builder.sizeHint(n)
     for (i <- 0 until n) {
       builder += ((nextLong(), i))
+    }
+    builder.result()
+  }
+
+  private def nextString[Coll[_]]
+  (n: Int)(implicit cbf: CanBuildFrom[Coll[String], String, Coll[String]]): Coll[String] = {
+    val builder = cbf()
+    builder.sizeHint(n)
+    for (_ <- 0 until n) {
+      builder += nextString()
+    }
+    builder.result()
+  }
+
+  private def nextStringWithIndex[Coll[_]]
+  (n: Int)(implicit cbf: CanBuildFrom[Coll[(String, Int)], (String, Int), Coll[(String, Int)]]): Coll[(String, Int)] = {
+    val builder = cbf()
+    builder.sizeHint(n)
+    for (i <- 0 until n) {
+      builder += ((nextString(), i))
     }
     builder.result()
   }

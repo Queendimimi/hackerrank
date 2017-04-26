@@ -1,4 +1,4 @@
-package hackerRank.training
+package HackerRank.Training
 
 /**
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 3/23/2017

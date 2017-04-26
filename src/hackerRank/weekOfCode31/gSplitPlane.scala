@@ -1,4 +1,4 @@
-package hackerRank.weekOfCode31
+package HackerRank.WeekOfCode31
 
 import java.io.{ByteArrayInputStream, IOException, PrintWriter}
 import java.util

@@ -1,108 +1,29 @@
-package projectEuler
+package hackerRank.TenDaysOfStatistics
 
 import java.io.{ByteArrayInputStream, IOException, PrintWriter}
 import java.util.InputMismatchException
 
 import scala.collection.generic.CanBuildFrom
+import scala.collection.mutable
 import scala.language.higherKinds
 
 /**
-  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-  * THE SOFTWARE.
+  * Copyright (c) 2017 A. Roberto Fischer
   *
-  * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 4/23/2017
+  * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 4/26/2017
   */
-object Euler007BigPrimes {
-  private val INPUT = "1\n10001"
+object MeanMedianAndMode {
+  private val INPUT = ""
 
   //------------------------------------------------------------------------------------------//
   // Solution                                                                
   //------------------------------------------------------------------------------------------//
   private def solve(): Unit = {
-    val n = nextInt()
-    nextInt[Array](n).foreach(x => out.println(nthPrime(x)))
-  }
 
-  // Count number of set bits in an int
-  private def popCount(number: Int): Int = {
-    var n = number
-    n -= (n >>> 1) & 0x55555555
-    n = ((n >>> 2) & 0x33333333) + (n & 0x33333333)
-    n = ((n >> 4) & 0x0F0F0F0F) + (n & 0x0F0F0F0F)
-    (n * 0x01010101) >> 24
-  }
-
-  private def nthPrime(n: Int): Int = {
-    if (n < 2) return 2
-    if (n == 2) return 3
-    if (n == 3) return 5
-    var limit = 0
-    var root = 0
-    var count = 2
-    limit = (n * (Math.log(n) + Math.log(Math.log(n)))).toInt + 3
-    root = Math.sqrt(limit).toInt
-    limit % 6 match {
-      case 0 => limit = 2 * (limit / 6) - 1
-      case 5 => limit = 2 * (limit / 6) + 1
-      case _ => limit = 2 * (limit / 6)
-    }
-    root % 6 match {
-      case 0 => root = 2 * (root / 6) - 1
-      case 5 => root = 2 * (root / 6) + 1
-      case _ => root = 2 * (root / 6)
-    }
-    val dim = (limit + 31) >> 5
-    val sieve = new Array[Int](dim)
-    var i = 0
-    while (i < root) {
-      if ((sieve(i >> 5) & (1 << (i & 31))) == 0) {
-        var start = 0
-        var s1 = 0
-        var s2 = 0
-        if ((i & 1) == 1) {
-          start = i * (3 * i + 8) + 4
-          s1 = 4 * i + 5
-          s2 = 2 * i + 3
-        } else {
-          start = i * (3 * i + 10) + 7
-          s1 = 2 * i + 3
-          s2 = 4 * i + 7
-        }
-        var j = start
-        while (j < limit) {
-          sieve(j >> 5) |= 1 << (j & 31)
-          j += s1
-          if (j >= limit) {} else {
-            sieve(j >> 5) |= 1 << (j & 31)
-            j += s2
-          }
-        }
-      }
-      i += 1
-    }
-    i = 0
-    while (count < n) {
-      count += popCount(~sieve(i))
-      i += 1
-    }
-    i -= 1
-    val mask = ~sieve(i)
-    var p = 0
-    p = 31
-    while (count >= n) {
-      count -= (mask >> p) & 1
-      p -= 1
-    }
-    3 * (p + (i << 5)) + 7 + (p & 1)
   }
 
   //------------------------------------------------------------------------------------------//
-  // Input-Output
+  // Input-Output                                                                 
   //------------------------------------------------------------------------------------------//
   var in: java.io.InputStream = _
   var out: java.io.PrintWriter = _

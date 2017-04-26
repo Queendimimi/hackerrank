@@ -1,9 +1,10 @@
-package projectEuler
+package hackerRank.training.basicProgramming
 
 import java.io.{ByteArrayInputStream, IOException, PrintWriter}
 import java.util.InputMismatchException
 
 import scala.collection.generic.CanBuildFrom
+import scala.collection.mutable
 import scala.language.higherKinds
 
 /**
@@ -15,35 +16,16 @@ import scala.language.higherKinds
   * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   * THE SOFTWARE.
   *
-  * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 4/23/2017
+  * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 4/26/2017
   */
-object Euler009SpecialPythagoreanTriplet {
-  private val INPUT = "1\n1000"
+object BirthdayCakeCandles {
+  private val INPUT = ""
 
   //------------------------------------------------------------------------------------------//
   // Solution                                                                
   //------------------------------------------------------------------------------------------//
   private def solve(): Unit = {
-    val n = nextInt()
-    nextInt[Array](n).foreach(x => out.println(findTriplet(x)))
-  }
 
-  private def findTriplet(n: Int) = {
-    //    c * n + a * b = n * n / 2
-    var max = Int.MinValue
-    for (a <- 1 to n) {
-      for (b <- a + 1 to n) {
-        val c = n - a - b
-        if (isTriplet(a, b, c) && a * b * c > max) {
-          max = a * b * c
-        }
-      }
-    }
-    if (max == Int.MinValue) -1 else max
-  }
-
-  private def isTriplet(a: Int, b: Int, c: Int) = {
-    a * a + b * b == c * c
   }
 
   //------------------------------------------------------------------------------------------//

@@ -1,4 +1,4 @@
-package ProjectEuler
+package HackerRank.ProjectEuler
 
 import java.io.{ByteArrayInputStream, IOException, PrintWriter}
 import java.util.InputMismatchException

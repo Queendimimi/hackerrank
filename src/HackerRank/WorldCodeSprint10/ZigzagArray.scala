@@ -1,73 +1,36 @@
-package ProjectEuler
+package HackerRank.WorldCodeSprint10
 
 import java.io.{ByteArrayInputStream, IOException, PrintWriter}
 import java.util.InputMismatchException
 
-import scala.annotation.tailrec
 import scala.collection.generic.CanBuildFrom
 import scala.language.higherKinds
 
 /**
   * Copyright (c) 2017 A. Roberto Fischer
   *
-  * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 4/22/2017
+  * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 4/28/2017
   */
-object Euler004LargestPalindromeProduct {
-  private val INPUT = "2\n101110\n800000"
+object ZigzagArray {
+  private val INPUT = "2\n48 37"
 
   //------------------------------------------------------------------------------------------//
   // Solution                                                                
   //------------------------------------------------------------------------------------------//
   private def solve(): Unit = {
-    val t = nextInt()
-    val palindromes = generate3DigitPalindromes().sorted
-    nextInt[Array](t).foreach(x => out.println(palindromes(
-      binarySearch(palindromes, x, 0, palindromes.length))
-    ))
-  }
-
-  @tailrec
-  def binarySearch(coll: Seq[Int], target: Int, left: Int, right: Int): Int = {
-
-    val idx = left + (right - left - 1) / 2
-    if (coll(idx) >= target && coll(idx - 1) < target) {
-      idx - 1
-    } else {
-      math.signum(Integer.compare(target, coll(idx))) match {
-        case -1 => binarySearch(coll, target, left, idx)
-        case 1 => binarySearch(coll, target, idx + 1, right)
-        case _ => idx
+    val n = nextInt()
+    val input = nextInt[Array](n)
+    val count = if (input.length > 2) {
+      input.sliding(3).count { window =>
+        !(window(0) > window(1) && window(1) < window(2)) && !(window(0) < window(1) && window(1) > window(2))
       }
-    }
+    } else 0
+    out.println(count)
   }
 
-  private def generate3DigitPalindromes() = {
-    val builder = Vector.newBuilder[Int]
-    var prod: Int = 0
-    var i: Int = 100
-    while (i <= 999) {
-      var j: Int = 100
-      while (j <= 999) {
-        prod = i * j
-        if (isPalindrome(prod)) {
-          builder += prod
-        }
-        j += 1
-        j - 1
-      }
-      i += 1
-      i - 1
-    }
-    builder.result()
-  }
-
-  private def isPalindrome(n: Int): Boolean = {
-    val pair = n.toString.splitAt(3)
-    pair._1 == pair._2.reverse
-  }
 
   //------------------------------------------------------------------------------------------//
-  // Input-Output                                                                 
+  // Input-Output
   //------------------------------------------------------------------------------------------//
   var in: java.io.InputStream = _
   var out: java.io.PrintWriter = _
@@ -89,7 +52,9 @@ object Euler004LargestPalindromeProduct {
   }
 
   private def nextSeq[T, Coll[_]](reader: => Seq[T], n: Int)
-                                 (implicit cbf: CanBuildFrom[Coll[T], T, Coll[T]]): Coll[T] = {
+                                 (implicit cbf: CanBuildFrom[Coll[T], T, Coll[T]]): Coll[T]
+
+  = {
     val builder = cbf()
     builder.sizeHint(n)
     for (_ <- 0 until n) {
@@ -99,7 +64,9 @@ object Euler004LargestPalindromeProduct {
   }
 
   private def next[T, Coll[_]](reader: => T, n: Int)
-                              (implicit cbf: CanBuildFrom[Coll[T], T, Coll[T]]): Coll[T] = {
+                              (implicit cbf: CanBuildFrom[Coll[T], T, Coll[T]]): Coll[T]
+
+  = {
     val builder = cbf()
     builder.sizeHint(n)
     for (_ <- 0 until n) {
@@ -109,7 +76,9 @@ object Euler004LargestPalindromeProduct {
   }
 
   private def nextWithIndex[T, Coll[_]](reader: => T, n: Int)
-                                       (implicit cbf: CanBuildFrom[Coll[(T, Int)], (T, Int), Coll[(T, Int)]]): Coll[(T, Int)] = {
+                                       (implicit cbf: CanBuildFrom[Coll[(T, Int)], (T, Int), Coll[(T, Int)]]): Coll[(T, Int)]
+
+  = {
     val builder = cbf()
     builder.sizeHint(n)
     for (i <- 0 until n) {
@@ -119,7 +88,9 @@ object Euler004LargestPalindromeProduct {
   }
 
   private def nextDouble[Coll[Double]]
-  (n: Int)(implicit cbf: CanBuildFrom[Coll[Double], Double, Coll[Double]]): Coll[Double] = {
+  (n: Int)(implicit cbf: CanBuildFrom[Coll[Double], Double, Coll[Double]]): Coll[Double]
+
+  = {
     val builder = cbf()
     builder.sizeHint(n)
     for (_ <- 0 until n) {
@@ -129,7 +100,9 @@ object Euler004LargestPalindromeProduct {
   }
 
   private def nextDoubleWithIndex[Coll[_]]
-  (n: Int)(implicit cbf: CanBuildFrom[Coll[(Double, Int)], (Double, Int), Coll[(Double, Int)]]): Coll[(Double, Int)] = {
+  (n: Int)(implicit cbf: CanBuildFrom[Coll[(Double, Int)], (Double, Int), Coll[(Double, Int)]]): Coll[(Double, Int)]
+
+  = {
     val builder = cbf()
     builder.sizeHint(n)
     for (i <- 0 until n) {
@@ -139,7 +112,9 @@ object Euler004LargestPalindromeProduct {
   }
 
   private def nextChar[Coll[_]]
-  (n: Int)(implicit cbf: CanBuildFrom[Coll[Char], Char, Coll[Char]]): Coll[Char] = {
+  (n: Int)(implicit cbf: CanBuildFrom[Coll[Char], Char, Coll[Char]]): Coll[Char]
+
+  = {
     val builder = cbf()
     builder.sizeHint(n)
     var b = skip
@@ -153,7 +128,9 @@ object Euler004LargestPalindromeProduct {
   }
 
   private def nextCharWithIndex[Coll[_]]
-  (n: Int)(implicit cbf: CanBuildFrom[Coll[(Char, Int)], (Char, Int), Coll[(Char, Int)]]): Coll[(Char, Int)] = {
+  (n: Int)(implicit cbf: CanBuildFrom[Coll[(Char, Int)], (Char, Int), Coll[(Char, Int)]]): Coll[(Char, Int)]
+
+  = {
     val builder = cbf()
     builder.sizeHint(n)
     var b = skip
@@ -167,7 +144,9 @@ object Euler004LargestPalindromeProduct {
   }
 
   private def nextInt[Coll[_]]
-  (n: Int)(implicit cbf: CanBuildFrom[Coll[Int], Int, Coll[Int]]): Coll[Int] = {
+  (n: Int)(implicit cbf: CanBuildFrom[Coll[Int], Int, Coll[Int]]): Coll[Int]
+
+  = {
     val builder = cbf()
     builder.sizeHint(n)
     for (_ <- 0 until n) {
@@ -177,7 +156,9 @@ object Euler004LargestPalindromeProduct {
   }
 
   private def nextIntWithIndex[Coll[_]]
-  (n: Int)(implicit cbf: CanBuildFrom[Coll[(Int, Int)], (Int, Int), Coll[(Int, Int)]]): Coll[(Int, Int)] = {
+  (n: Int)(implicit cbf: CanBuildFrom[Coll[(Int, Int)], (Int, Int), Coll[(Int, Int)]]): Coll[(Int, Int)]
+
+  = {
     val builder = cbf()
     builder.sizeHint(n)
     for (i <- 0 until n) {
@@ -187,7 +168,9 @@ object Euler004LargestPalindromeProduct {
   }
 
   private def nextLong[Coll[_]]
-  (n: Int)(implicit cbf: CanBuildFrom[Coll[Long], Long, Coll[Long]]): Coll[Long] = {
+  (n: Int)(implicit cbf: CanBuildFrom[Coll[Long], Long, Coll[Long]]): Coll[Long]
+
+  = {
     val builder = cbf()
     builder.sizeHint(n)
     for (_ <- 0 until n) {
@@ -197,7 +180,9 @@ object Euler004LargestPalindromeProduct {
   }
 
   private def nextLongWithIndex[Coll[_]]
-  (n: Int)(implicit cbf: CanBuildFrom[Coll[(Long, Int)], (Long, Int), Coll[(Long, Int)]]): Coll[(Long, Int)] = {
+  (n: Int)(implicit cbf: CanBuildFrom[Coll[(Long, Int)], (Long, Int), Coll[(Long, Int)]]): Coll[(Long, Int)]
+
+  = {
     val builder = cbf()
     builder.sizeHint(n)
     for (i <- 0 until n) {
@@ -207,7 +192,9 @@ object Euler004LargestPalindromeProduct {
   }
 
   private def nextString[Coll[_]]
-  (n: Int)(implicit cbf: CanBuildFrom[Coll[String], String, Coll[String]]): Coll[String] = {
+  (n: Int)(implicit cbf: CanBuildFrom[Coll[String], String, Coll[String]]): Coll[String]
+
+  = {
     val builder = cbf()
     builder.sizeHint(n)
     for (_ <- 0 until n) {
@@ -217,7 +204,9 @@ object Euler004LargestPalindromeProduct {
   }
 
   private def nextStringWithIndex[Coll[_]]
-  (n: Int)(implicit cbf: CanBuildFrom[Coll[(String, Int)], (String, Int), Coll[(String, Int)]]): Coll[(String, Int)] = {
+  (n: Int)(implicit cbf: CanBuildFrom[Coll[(String, Int)], (String, Int), Coll[(String, Int)]]): Coll[(String, Int)]
+
+  = {
     val builder = cbf()
     builder.sizeHint(n)
     for (i <- 0 until n) {
@@ -226,7 +215,9 @@ object Euler004LargestPalindromeProduct {
     builder.result()
   }
 
-  private def nextMultiLine(n: Int, m: Int): Array[Array[Char]] = {
+  private def nextMultiLine(n: Int, m: Int): Array[Array[Char]]
+
+  = {
     val map = new Array[Array[Char]](n)
     var i = 0
     while (i < n) {
@@ -236,11 +227,17 @@ object Euler004LargestPalindromeProduct {
     map
   }
 
-  private def nextDouble(): Double = nextString().toDouble
+  private def nextDouble(): Double
 
-  private def nextChar(): Char = skip.toChar
+  = nextString().toDouble
 
-  private def nextString(): String = {
+  private def nextChar(): Char
+
+  = skip.toChar
+
+  private def nextString(): String
+
+  = {
     var b = skip
     val sb = new java.lang.StringBuilder
     while (!isSpaceChar(b)) {
@@ -250,7 +247,9 @@ object Euler004LargestPalindromeProduct {
     sb.toString
   }
 
-  private def nextInt(): Int = {
+  private def nextInt(): Int
+
+  = {
     var num = 0
     var b = 0
     var minus = false
@@ -273,7 +272,9 @@ object Euler004LargestPalindromeProduct {
     throw new IOException("Read Int")
   }
 
-  private def nextLong(): Long = {
+  private def nextLong(): Long
+
+  = {
     var num = 0L
     var b = 0
     var minus = false
@@ -296,11 +297,14 @@ object Euler004LargestPalindromeProduct {
     throw new IOException("Read Long")
   }
 
-  private val inputBuffer = new Array[Byte](1024)
+  private val inputBuffer =
+    new Array[Byte](1024)
   var lenBuffer = 0
   var ptrBuffer = 0
 
-  private def readByte(): Int = {
+  private def readByte(): Int
+
+  = {
     if (lenBuffer == -1) throw new InputMismatchException
     if (ptrBuffer >= lenBuffer) {
       ptrBuffer = 0
@@ -318,9 +322,13 @@ object Euler004LargestPalindromeProduct {
     })
   }
 
-  private def isSpaceChar(c: Int) = !(c >= 33 && c <= 126)
+  private def isSpaceChar(c: Int)
 
-  private def skip = {
+  = !(c >= 33 && c <= 126)
+
+  private def skip
+
+  = {
     var b = 0
     while ( {
       b = readByte()
@@ -329,7 +337,9 @@ object Euler004LargestPalindromeProduct {
     b
   }
 
-  private def printCustom(o: AnyRef*): Unit = {
+  private def printCustom(o: AnyRef*): Unit
+
+  = {
     System.out.println(java.util.Arrays.deepToString(o.toArray)
     )
   }

@@ -1,4 +1,4 @@
-package HackerRank.TenDaysOfStatistics
+package HackerRank.Training.BasicProgramming
 
 import java.io.{ByteArrayInputStream, IOException, PrintWriter}
 import java.util.InputMismatchException
@@ -9,9 +9,9 @@ import scala.language.higherKinds
 /**
   * Copyright (c) 2017 A. Roberto Fischer
   *
-  * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 4/26/2017
+  * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 4/27/2017
   */
-object WeightedMean {
+object TaumAndBday {
   private val INPUT = ""
 
   //------------------------------------------------------------------------------------------//
@@ -19,21 +19,25 @@ object WeightedMean {
   //------------------------------------------------------------------------------------------//
   private def solve(): Unit = {
     val n = nextInt()
-
-    val values = nextInt[Vector](n)
-    val weights = nextInt[Vector](n)
-
-    out.println(round(weightedMean(values, weights)))
+    for (_ <- 0 until n) {
+      out.println(
+        minimalUnits(
+          nextLong(),
+          nextLong(),
+          nextLong(),
+          nextLong(),
+          nextLong()
+        )
+      )
+    }
   }
 
-  def weightedMean(values: Vector[Int], weights: Vector[Int]): Double = {
-    val nominator = values.zip(weights).map(pair => pair._1 * pair._2).sum
-    val denominator = weights.sum
-    nominator / denominator.toDouble
-  }
-
-  def round(input: Double): Double = {
-    Math.round(input * 10.0) / 10.0
+  def minimalUnits(b: Long, w: Long, x: Long, y: Long, z: Long): Long = {
+    if (x <= y) {
+      b * x + w * Math.min(y, x + z)
+    } else {
+      b * Math.min(x, y + z) + w * y
+    }
   }
 
   //------------------------------------------------------------------------------------------//

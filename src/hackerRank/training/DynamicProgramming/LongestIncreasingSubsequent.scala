@@ -1,4 +1,4 @@
-package ProjectEuler
+package HackerRank.Training.DynamicProgramming
 
 import java.io.{ByteArrayInputStream, IOException, PrintWriter}
 import java.util.InputMismatchException
@@ -9,24 +9,56 @@ import scala.language.higherKinds
 /**
   * Copyright (c) 2017 A. Roberto Fischer
   *
-  * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 4/22/2017
+  * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 4/29/2017
   */
-object Euler006SumSquareDifference {
+object LongestIncreasingSubsequent {
   private val INPUT = ""
 
   //------------------------------------------------------------------------------------------//
   // Solution                                                                
   //------------------------------------------------------------------------------------------//
   private def solve(): Unit = {
-    val t = nextInt()
-    nextLong[Array](t).foreach(x => out.println(difference(x)))
+    val n = nextInt()
+    val input = nextInt[Array](n)
+    val tailIndices = new Array[Int](n)
+    tailIndices(0) = input(0)
+    var length = 1
+    for (i <- 1 until n) {
+      if (tailIndices(0) > input(i)) {
+        // new smallest
+        tailIndices(0) = input(i)
+      } else if (tailIndices(length - 1) < input(i)) {
+        // input(i) extends longest sub sequence
+        tailIndices(length) = input(i)
+        length += 1
+      } else {
+        // input(i) is potential candidate in later sub sequence
+        tailIndices(binarySearch(tailIndices, input(i), length) + 1) = input(i)
+        //        tailIndices(binarySearch(tailIndices, input(i), 0, length - 1) + 1) = input(i)
+      }
+    }
+    out.println(length)
   }
 
-  def difference(n: Long): Long = {
-    val sum = (n * (n + 1)) >> 1
-    val sumOfSquares = (n * (n + 1) * (2 * n + 1)) / 6
-    sum * sum - sumOfSquares
+  private def binarySearch(coll: Seq[Int], target: Int, len: Int): Int = {
+    var right = len - 1
+    var left = 0
+    var mid = 0
+    var result = -1
+    while (left <= right) {
+      mid = left + (right - left - 1) / 2
+      if (coll(mid) < target) {
+        left = mid + 1
+        result = mid
+      } else if (coll(mid) == target) {
+        return len - 1
+      } else {
+        right = mid - 1
+      }
+    }
+    result
   }
+
 
   //------------------------------------------------------------------------------------------//
   // Input-Output                                                                 

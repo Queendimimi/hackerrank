@@ -1,4 +1,4 @@
-package ProjectEuler
+package HackerRank.ProjectEuler
 
 import java.io.{ByteArrayInputStream, IOException, PrintWriter}
 import java.util.InputMismatchException
@@ -11,36 +11,28 @@ import scala.language.higherKinds
   *
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 4/22/2017
   */
-object Euler003LargestPrimeFactor {
-  private val INPUT = "2\n10\n17"
+object Euler001MutliplesOf3And5 {
+  private val INPUT = ""
 
   //------------------------------------------------------------------------------------------//
-  // Solution                                                                
+  // Solution
   //------------------------------------------------------------------------------------------//
   private def solve(): Unit = {
-    val t = nextInt()
-    nextLong[Array](t).foreach(x => out.println(largestPrimeFactor(x)))
+    val n = nextInt()
+    nextLong[Array](n).foreach(testCase => out.println(search(testCase)))
   }
 
-  def largestPrimeFactor(number: Long): Long = {
-    var n = number
-    var result = 0L
-    var divisor = 2L
-    while ((divisor * divisor) <= n) {
-      while (n % divisor == 0) {
-        result = divisor
-        n = n / divisor
-      }
-      divisor += 1
-    }
-    if (n > 1) {
-      result = n
-    }
-    result
+  def search(upperBound: Long): Long = {
+    sumDivisibleBy(3, upperBound - 1) + sumDivisibleBy(5, upperBound - 1) - sumDivisibleBy(15, upperBound - 1)
+  }
+
+  def sumDivisibleBy(n: Long, upperBound: Long): Long = {
+    //geometric series (N*(N+1)/2); here with mutliples of n -> N = (number of mutiples of n < upperBound) % n == 0
+    n * (upperBound / n) * ((upperBound / n) + 1) >> 1
   }
 
   //------------------------------------------------------------------------------------------//
-  // Input-Output                                                                 
+  // Input-Output
   //------------------------------------------------------------------------------------------//
   var in: java.io.InputStream = _
   var out: java.io.PrintWriter = _

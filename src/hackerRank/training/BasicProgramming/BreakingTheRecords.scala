@@ -11,7 +11,7 @@ import scala.language.higherKinds
   *
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 5/7/2017
   */
-object BreakingBestAndWorstRecords {
+object BreakingTheRecords {
   private val INPUT = "9\n10 5 20 20 4 5 2 25 1"
 
   //------------------------------------------------------------------------------------------//

@@ -26,7 +26,7 @@ object ClimbingTheLeaderboard {
     val aliceScores = nextInt[Vector](m)
 
     aliceScores.map(score => leaderBoard.search(score)).map {
-      //Funfact: on hackerrank remove the one idk why the implementation is different
+      //Funfact: on hackerrank remove the 1 idk why the implementation is different
       case InsertionPoint(index) => leaderBoard.size - index + 1
       case Found(index) => leaderBoard.size - index
     }.foreach(out.println)

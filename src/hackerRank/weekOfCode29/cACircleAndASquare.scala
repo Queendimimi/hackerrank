@@ -18,12 +18,8 @@ object cACircleAndASquare {
     val circleX = nextInt()
     val circleY = nextInt()
     val r = nextInt()
-    val x1 = nextInt()
-    val y1 = nextInt()
-    val x3 = nextInt()
-    val y3 = nextInt()
     val a = Canvas(w, h)
-    val square = Vector((x1, y1), (x3, y3)).sortBy(_._1)
+    val square = Vector((nextInt(), nextInt()), (nextInt(), nextInt())).sortBy(_._1)
     a.drawCircle((circleX, circleY), r)
     a.drawSquare(square(0), square(1))
     out.println(a)
@@ -98,7 +94,6 @@ object cACircleAndASquare {
     def distanceSquared(a: (Int, Int), b: (Int, Int)): Int = {
       (a._1 - b._1) * (a._1 - b._1) + (a._2 - b._2) * (a._2 - b._2)
     }
-
 
     override def toString: String = {
       val result = StringBuilder.newBuilder

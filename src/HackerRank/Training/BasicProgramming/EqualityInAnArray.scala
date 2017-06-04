@@ -1,46 +1,39 @@
-package HackerRank.Training.FunctionalProgramming.IntroductionCallenges
+package HackerRank.Training.BasicProgramming
 
 import java.io.{ByteArrayInputStream, IOException, PrintWriter}
 import java.util.InputMismatchException
 
 import scala.collection.generic.CanBuildFrom
+import scala.collection.mutable
 import scala.language.higherKinds
 
 /**
   * Copyright (c) 2017 A. Roberto Fischer
   *
-  * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 6/2/2017
+  * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 6/3/2017
   */
-object ComputeTheAreaOfAPolygon {
-  private val INPUT = ""
+object EqualityInAnArray {
+  private val INPUT = "8\n96 96 45 52 73 44 51 96"
 
   //------------------------------------------------------------------------------------------//
   // Solution                                                                
   //------------------------------------------------------------------------------------------//
   private def solve(): Unit = {
     val n = nextInt()
-    val polygon = Polygon(next[Point, Vector](Point(nextInt(), nextInt()), n))
-    out.println((polygon.area * 100).toInt / 100.0)
+    val countMap = countIntOccurrence(n)
+    out.println(n - countMap.maxBy(_._2)._2)
   }
 
-
-  case class Point(x: Int, y: Int)
-
-  case class Polygon(orderedPoints: Seq[Point]) {
-    def area: Double = {
-      if (orderedPoints.length <= 1) 0 else {
-
-        val areaSquared = (orderedPoints.last +: orderedPoints)
-          .sliding(2)
-          .map { it =>
-            val (a, b) = (it.head, it.last)
-            (a.x - b.x) * (a.y + b.y)
-          }
-          .sum
-
-        Math.abs(areaSquared) / 2.0
+  private def countIntOccurrence(n: Int) = {
+    var map = mutable.Map.empty[Int, Int]
+    for (_ <- 0 until n) {
+      val current = nextInt()
+      map = map.get(current) match {
+        case Some(count) => map + (current -> (count + 1))
+        case None => map + (current -> 1)
       }
     }
+    map.toMap
   }
 
   //------------------------------------------------------------------------------------------//

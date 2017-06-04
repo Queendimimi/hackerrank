@@ -1,4 +1,4 @@
-package HackerRank.Training.FunctionalProgramming.IntroductionCallenges
+package HackerRank.Training.BasicProgramming
 
 import java.io.{ByteArrayInputStream, IOException, PrintWriter}
 import java.util.InputMismatchException
@@ -9,9 +9,9 @@ import scala.language.higherKinds
 /**
   * Copyright (c) 2017 A. Roberto Fischer
   *
-  * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 6/2/2017
+  * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 6/3/2017
   */
-object ComputeTheAreaOfAPolygon {
+object JumpingOnTheClouds {
   private val INPUT = ""
 
   //------------------------------------------------------------------------------------------//
@@ -19,29 +19,21 @@ object ComputeTheAreaOfAPolygon {
   //------------------------------------------------------------------------------------------//
   private def solve(): Unit = {
     val n = nextInt()
-    val polygon = Polygon(next[Point, Vector](Point(nextInt(), nextInt()), n))
-    out.println((polygon.area * 100).toInt / 100.0)
-  }
-
-
-  case class Point(x: Int, y: Int)
-
-  case class Polygon(orderedPoints: Seq[Point]) {
-    def area: Double = {
-      if (orderedPoints.length <= 1) 0 else {
-
-        val areaSquared = (orderedPoints.last +: orderedPoints)
-          .sliding(2)
-          .map { it =>
-            val (a, b) = (it.head, it.last)
-            (a.x - b.x) * (a.y + b.y)
-          }
-          .sum
-
-        Math.abs(areaSquared) / 2.0
+    val isThunderCloud = nextInt[Vector](n).map(x => if (x == 0) false else true) :+ true :+ true
+    var nextValidVal = 0
+    var sum = 0
+    for (i <- 0 until n - 1; if i >= nextValidVal) {
+      sum += 1
+      if (isThunderCloud(i + 2)) {
+        nextValidVal += 1
+      } else {
+        nextValidVal += 2
       }
     }
+
+    out.println(sum)
   }
+
 
   //------------------------------------------------------------------------------------------//
   // Input-Output                                                                 

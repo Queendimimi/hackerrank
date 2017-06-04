@@ -1,4 +1,4 @@
-package HackerRank.Training.FunctionalProgramming.IntroductionCallenges
+package HackerRank.Training.BasicProgramming
 
 import java.io.{ByteArrayInputStream, IOException, PrintWriter}
 import java.util.InputMismatchException
@@ -9,38 +9,22 @@ import scala.language.higherKinds
 /**
   * Copyright (c) 2017 A. Roberto Fischer
   *
-  * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 6/2/2017
+  * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 6/4/2017
   */
-object ComputeTheAreaOfAPolygon {
-  private val INPUT = ""
+object DesignerPdfViewer {
+  private val INPUT = "6 5 7 3 6 7 3 4 4 2 3 7 1 3 7 4 6 1 2 4 3 3 1 1 3 5\nzbkkfhwplj"
 
   //------------------------------------------------------------------------------------------//
   // Solution                                                                
   //------------------------------------------------------------------------------------------//
   private def solve(): Unit = {
-    val n = nextInt()
-    val polygon = Polygon(next[Point, Vector](Point(nextInt(), nextInt()), n))
-    out.println((polygon.area * 100).toInt / 100.0)
-  }
+    val char = 'a'
+    val alphabet = nextIntWithIndex[Vector](26)
+      .map { case (height, index) => (char + index).toChar -> height }.toMap
 
+    val word = nextString()
 
-  case class Point(x: Int, y: Int)
-
-  case class Polygon(orderedPoints: Seq[Point]) {
-    def area: Double = {
-      if (orderedPoints.length <= 1) 0 else {
-
-        val areaSquared = (orderedPoints.last +: orderedPoints)
-          .sliding(2)
-          .map { it =>
-            val (a, b) = (it.head, it.last)
-            (a.x - b.x) * (a.y + b.y)
-          }
-          .sum
-
-        Math.abs(areaSquared) / 2.0
-      }
-    }
+    out.println(word.map(alphabet).max * word.length)
   }
 
   //------------------------------------------------------------------------------------------//

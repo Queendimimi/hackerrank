@@ -9,23 +9,29 @@ import scala.language.higherKinds
 /**
   * Copyright (c) 2017 A. Roberto Fischer
   *
-  * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 4/25/2017
+  * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 6/7/2017
   */
-object DivisibleSumPairs {
-  private val INPUT = "6 3\n1 3 2 6 1 2"
+object AppendAndDelete {
+  private val INPUT = ""
 
   //------------------------------------------------------------------------------------------//
   // Solution                                                                
   //------------------------------------------------------------------------------------------//
   private def solve(): Unit = {
-    val n = nextInt()
+    val s = nextString()
+    val t = nextString()
     val k = nextInt()
-    val input = nextInt[Vector](n)
-    out.println(
-      (0 until n)
-        .combinations(2)
-        .count(list => (input(list.head) + input(list(1))) % k == 0)
-    )
+    val commonLength = s.zipAll(t, ' ', ' ').takeWhile { case (a, b) => a == b }.length
+
+    val result =
+      if ((s.length + t.length - 2 * commonLength) > k) "No" else {
+        if ((s.length + t.length - 2 * commonLength) % 2 == k % 2) "Yes" else {
+          if ((s.length + t.length - k) < 0) "Yes" else {
+            "No"
+          }
+        }
+      }
+    out.println(result)
   }
 
   //------------------------------------------------------------------------------------------//

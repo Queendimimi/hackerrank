@@ -1,4 +1,4 @@
-package HackerRank.Training.BasicProgramming
+package HackerRank.Training.ConstructiveAlgorithms
 
 import java.io.{ByteArrayInputStream, IOException, PrintWriter}
 import java.util.InputMismatchException
@@ -9,23 +9,36 @@ import scala.language.higherKinds
 /**
   * Copyright (c) 2017 A. Roberto Fischer
   *
-  * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 4/25/2017
+  * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 6/7/2017
   */
-object DivisibleSumPairs {
-  private val INPUT = "6 3\n1 3 2 6 1 2"
+object FlippingTheMatrix {
+  private val INPUT = ""
 
   //------------------------------------------------------------------------------------------//
   // Solution                                                                
   //------------------------------------------------------------------------------------------//
   private def solve(): Unit = {
-    val n = nextInt()
-    val k = nextInt()
-    val input = nextInt[Vector](n)
-    out.println(
-      (0 until n)
-        .combinations(2)
-        .count(list => (input(list.head) + input(list(1))) % k == 0)
-    )
+    val q = nextInt()
+
+    val input = next[(Int, Vector[Vector[Int]]), Vector]({
+      val n = nextInt()
+      val array = next[Vector[Int], Vector](nextInt[Vector](2 * n), 2 * n)
+      (n, array)
+    },
+      q)
+
+    input
+      .map { case (n, matrix) => maxFlippedMatrix(n, matrix) }
+      .foreach(out.println)
+  }
+
+  private def maxFlippedMatrix(n: Int, matrix: Vector[Vector[Int]]) = {
+    (for {
+      i <- 0 until n
+      j <- 0 until n
+    } yield Vector(
+      matrix(i)(j), matrix(i)(2 * n - 1 - j), matrix(2 * n - 1 - i)(j), matrix(2 * n - 1 - i)(2 * n - 1 - j)
+    ).max).sum
   }
 
   //------------------------------------------------------------------------------------------//

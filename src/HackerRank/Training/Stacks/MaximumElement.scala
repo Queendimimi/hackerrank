@@ -1,31 +1,44 @@
-package HackerRank.Training.BasicProgramming
+package HackerRank.Training.Stacks
 
 import java.io.{ByteArrayInputStream, IOException, PrintWriter}
 import java.util.InputMismatchException
 
 import scala.collection.generic.CanBuildFrom
+import scala.collection.mutable
 import scala.language.higherKinds
 
 /**
   * Copyright (c) 2017 A. Roberto Fischer
   *
-  * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 4/25/2017
+  * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 6/7/2017
   */
-object DivisibleSumPairs {
-  private val INPUT = "6 3\n1 3 2 6 1 2"
+object MaximumElement {
+  private val INPUT = ""
 
   //------------------------------------------------------------------------------------------//
   // Solution                                                                
   //------------------------------------------------------------------------------------------//
   private def solve(): Unit = {
     val n = nextInt()
-    val k = nextInt()
-    val input = nextInt[Vector](n)
-    out.println(
-      (0 until n)
-        .combinations(2)
-        .count(list => (input(list.head) + input(list(1))) % k == 0)
-    )
+    val queries = next[(Int, Int), Vector]({
+      val q = nextInt()
+      val v = if (q == 1) nextInt() else -1
+      (q, v)
+    }, n)
+    val stack = mutable.Stack[(Int, Int)]()
+
+    var max = Int.MinValue
+    queries.foreach {
+      case (1, value) =>
+        max = Math.max(value, max)
+        stack.push((value, max))
+      case (2, _) =>
+        if (stack.nonEmpty) stack.pop()
+        if (stack.isEmpty) max = Int.MinValue else max = stack.head._2
+      case (3, _) =>
+        stack.headOption.foreach { case (_, maximum) => out.println(maximum) }
+      case _ => throw new RuntimeException
+    }
   }
 
   //------------------------------------------------------------------------------------------//

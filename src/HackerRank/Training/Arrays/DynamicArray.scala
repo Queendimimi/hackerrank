@@ -1,31 +1,37 @@
-package HackerRank.Training.BasicProgramming
+package HackerRank.Training.Arrays
 
 import java.io.{ByteArrayInputStream, IOException, PrintWriter}
 import java.util.InputMismatchException
 
 import scala.collection.generic.CanBuildFrom
+import scala.collection.mutable.ListBuffer
 import scala.language.higherKinds
 
 /**
   * Copyright (c) 2017 A. Roberto Fischer
   *
-  * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 4/25/2017
+  * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 6/7/2017
   */
-object DivisibleSumPairs {
-  private val INPUT = "6 3\n1 3 2 6 1 2"
+object DynamicArray {
+  private val INPUT = ""
 
   //------------------------------------------------------------------------------------------//
   // Solution                                                                
   //------------------------------------------------------------------------------------------//
   private def solve(): Unit = {
     val n = nextInt()
-    val k = nextInt()
-    val input = nextInt[Vector](n)
-    out.println(
-      (0 until n)
-        .combinations(2)
-        .count(list => (input(list.head) + input(list(1))) % k == 0)
-    )
+    val q = nextInt()
+    val seqList = Array.fill(n)(ListBuffer.empty[Int])
+    val queries = next[(Int, Int, Int), Vector]((nextInt(), nextInt(), nextInt()), q)
+    var lastAnswer = 0
+    queries.foreach {
+      case (1, x, y) =>
+        seqList((x ^ lastAnswer) % n) = seqList((x ^ lastAnswer) % n) += y
+      case (2, x, y) =>
+        lastAnswer = seqList((x ^ lastAnswer) % n)(y % seqList((x ^ lastAnswer) % n).size)
+        out.println(lastAnswer)
+      case _ => throw new RuntimeException
+    }
   }
 
   //------------------------------------------------------------------------------------------//

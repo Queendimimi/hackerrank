@@ -9,23 +9,30 @@ import scala.language.higherKinds
 /**
   * Copyright (c) 2017 A. Roberto Fischer
   *
-  * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 4/25/2017
+  * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 6/7/2017
   */
-object DivisibleSumPairs {
-  private val INPUT = "6 3\n1 3 2 6 1 2"
+object PickingNumbers {
+  private val INPUT = ""
 
   //------------------------------------------------------------------------------------------//
   // Solution                                                                
   //------------------------------------------------------------------------------------------//
   private def solve(): Unit = {
     val n = nextInt()
-    val k = nextInt()
-    val input = nextInt[Vector](n)
-    out.println(
-      (0 until n)
-        .combinations(2)
-        .count(list => (input(list.head) + input(list(1))) % k == 0)
-    )
+    val input = nextInt[Vector](n).sorted
+
+    val count = input.groupBy(identity).mapValues(_.size)
+
+    val singleMax = count.maxBy(_._2)._2
+
+    val multiMax = input
+      .sliding(2)
+      .map(x => (x.head, x.last))
+      .collect { case (a, b) if b - a == 1 => count(a) + count(b) }.toVector
+
+    val result = (multiMax :+ singleMax).max
+
+    out.println(result)
   }
 
   //------------------------------------------------------------------------------------------//

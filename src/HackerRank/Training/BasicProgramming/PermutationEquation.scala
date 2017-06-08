@@ -1,10 +1,9 @@
-package HackerRank.Training.Stacks
+package HackerRank.Training.BasicProgramming
 
 import java.io.{ByteArrayInputStream, IOException, PrintWriter}
 import java.util.InputMismatchException
 
 import scala.collection.generic.CanBuildFrom
-import scala.collection.mutable
 import scala.language.higherKinds
 
 /**
@@ -12,7 +11,7 @@ import scala.language.higherKinds
   *
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 6/7/2017
   */
-object MaximumElement {
+object PermutationEquation {
   private val INPUT = ""
 
   //------------------------------------------------------------------------------------------//
@@ -20,25 +19,8 @@ object MaximumElement {
   //------------------------------------------------------------------------------------------//
   private def solve(): Unit = {
     val n = nextInt()
-    val queries = next[(Int, Int), Vector]({
-      val q = nextInt()
-      val v = if (q == 1) nextInt() else -1
-      (q, v)
-    }, n)
-    val stack = mutable.ArrayStack[(Int, Int)]()
-
-    var max = Int.MinValue
-    queries.foreach {
-      case (1, value) =>
-        max = Math.max(value, max)
-        stack.push((value, max))
-      case (2, _) =>
-        if (stack.nonEmpty) stack.pop()
-        if (stack.isEmpty) max = Int.MinValue else max = stack.head._2
-      case (3, _) =>
-        stack.headOption.foreach { case (_, maximum) => out.println(maximum) }
-      case _ => throw new RuntimeException
-    }
+    val sequence = nextIntWithIndex[Vector](n).map { case (v, index) => (v, index + 1) }.toMap
+    (1 to n).map(i => sequence(sequence(i))).foreach(println)
   }
 
   //------------------------------------------------------------------------------------------//

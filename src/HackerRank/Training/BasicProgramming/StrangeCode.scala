@@ -1,43 +1,35 @@
-package HackerRank.Training.Stacks
+package HackerRank.Training.BasicProgramming
 
 import java.io.{ByteArrayInputStream, IOException, PrintWriter}
 import java.util.InputMismatchException
 
+import scala.annotation.tailrec
 import scala.collection.generic.CanBuildFrom
-import scala.collection.mutable
 import scala.language.higherKinds
 
 /**
   * Copyright (c) 2017 A. Roberto Fischer
   *
-  * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 6/7/2017
+  * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 6/8/2017
   */
-object MaximumElement {
-  private val INPUT = ""
+object StrangeCode {
+  private val INPUT = "100000000000000"
 
   //------------------------------------------------------------------------------------------//
   // Solution                                                                
   //------------------------------------------------------------------------------------------//
   private def solve(): Unit = {
-    val n = nextInt()
-    val queries = next[(Int, Int), Vector]({
-      val q = nextInt()
-      val v = if (q == 1) nextInt() else -1
-      (q, v)
-    }, n)
-    val stack = mutable.ArrayStack[(Int, Int)]()
+    val t = nextLong()
+    //    out.println(((3 * Math.pow(2, (Math.log((t + 2) / 3) / Math.log(2)).toLong) - 1) * 2 - t).toLong)
+    out.println(strangeCounter(t, 3))
+  }
 
-    var max = Int.MinValue
-    queries.foreach {
-      case (1, value) =>
-        max = Math.max(value, max)
-        stack.push((value, max))
-      case (2, _) =>
-        if (stack.nonEmpty) stack.pop()
-        if (stack.isEmpty) max = Int.MinValue else max = stack.head._2
-      case (3, _) =>
-        stack.headOption.foreach { case (_, maximum) => out.println(maximum) }
-      case _ => throw new RuntimeException
+  @tailrec
+  private def strangeCounter(time: Long, startValue: Long): Long = {
+    if (time > startValue) {
+      strangeCounter(time - startValue, 2 * startValue)
+    } else {
+      startValue - time + 1
     }
   }
 

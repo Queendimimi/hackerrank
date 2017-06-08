@@ -1,4 +1,4 @@
-package HackerRank.Training.Stacks
+package HackerRank.Training.BasicProgramming
 
 import java.io.{ByteArrayInputStream, IOException, PrintWriter}
 import java.util.InputMismatchException
@@ -12,33 +12,33 @@ import scala.language.higherKinds
   *
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 6/7/2017
   */
-object MaximumElement {
+object FindDigits {
   private val INPUT = ""
 
   //------------------------------------------------------------------------------------------//
   // Solution                                                                
   //------------------------------------------------------------------------------------------//
   private def solve(): Unit = {
-    val n = nextInt()
-    val queries = next[(Int, Int), Vector]({
-      val q = nextInt()
-      val v = if (q == 1) nextInt() else -1
-      (q, v)
-    }, n)
-    val stack = mutable.ArrayStack[(Int, Int)]()
+    val t = nextInt()
+    nextInt[Vector](t)
+      .map(n => (n, numberToDigits(n)))
+      .map { case (number, digits) =>
+        digits.count(digit => if (digit == 0) false else number % digit == 0)
+      }
+      .foreach(println)
+  }
 
-    var max = Int.MinValue
-    queries.foreach {
-      case (1, value) =>
-        max = Math.max(value, max)
-        stack.push((value, max))
-      case (2, _) =>
-        if (stack.nonEmpty) stack.pop()
-        if (stack.isEmpty) max = Int.MinValue else max = stack.head._2
-      case (3, _) =>
-        stack.headOption.foreach { case (_, maximum) => out.println(maximum) }
-      case _ => throw new RuntimeException
+  private def numberToDigits(n: Int) = {
+    def _numberToDigits(number: Int, digits: mutable.Builder[Int, Vector[Int]]): Vector[Int] = {
+      if (number != 0) {
+        digits += number % 10
+        _numberToDigits(number / 10, digits)
+      } else {
+        digits.result()
+      }
     }
+
+    _numberToDigits(n, Vector.newBuilder[Int])
   }
 
   //------------------------------------------------------------------------------------------//

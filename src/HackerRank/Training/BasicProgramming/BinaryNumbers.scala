@@ -1,8 +1,9 @@
-package HackerRank.Training.Stacks
+package HackerRank.Training.BasicProgramming
 
 import java.io.{ByteArrayInputStream, IOException, PrintWriter}
 import java.util.InputMismatchException
 
+import scala.annotation.tailrec
 import scala.collection.generic.CanBuildFrom
 import scala.collection.mutable
 import scala.language.higherKinds
@@ -12,7 +13,7 @@ import scala.language.higherKinds
   *
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 6/7/2017
   */
-object MaximumElement {
+object BinaryNumbers {
   private val INPUT = ""
 
   //------------------------------------------------------------------------------------------//
@@ -20,26 +21,32 @@ object MaximumElement {
   //------------------------------------------------------------------------------------------//
   private def solve(): Unit = {
     val n = nextInt()
-    val queries = next[(Int, Int), Vector]({
-      val q = nextInt()
-      val v = if (q == 1) nextInt() else -1
-      (q, v)
-    }, n)
-    val stack = mutable.ArrayStack[(Int, Int)]()
-
-    var max = Int.MinValue
-    queries.foreach {
-      case (1, value) =>
-        max = Math.max(value, max)
-        stack.push((value, max))
-      case (2, _) =>
-        if (stack.nonEmpty) stack.pop()
-        if (stack.isEmpty) max = Int.MinValue else max = stack.head._2
-      case (3, _) =>
-        stack.headOption.foreach { case (_, maximum) => out.println(maximum) }
-      case _ => throw new RuntimeException
-    }
+    out.println(consecutiveSegments(n.toBinaryString).maxBy(_.length).length)
   }
+
+  private def consecutiveSegments(binary: String) = {
+    @tailrec
+    def _consecutiveSegments(binary: String,
+                             segments: mutable.Builder[String, Vector[String]]): Vector[String] = {
+      if (binary != "") {
+        val (segment, remainder) = binary.headOption match {
+          case Some('0') =>
+            (binary.takeWhile(_ == '0'), binary.dropWhile(_ == '0'))
+          case Some('1') =>
+            (binary.takeWhile(_ == '1'), binary.dropWhile(_ == '1'))
+          case _ =>
+            ("", "")
+        }
+
+        _consecutiveSegments(remainder, segments += segment)
+      } else {
+        segments.result()
+      }
+    }
+
+    _consecutiveSegments(binary, Vector.newBuilder[String])
+  }
+
 
   //------------------------------------------------------------------------------------------//
   // Input-Output                                                                 

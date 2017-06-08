@@ -12,32 +12,35 @@ import scala.language.higherKinds
   *
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 6/7/2017
   */
-object MaximumElement {
+object BalancedBrackets {
   private val INPUT = ""
 
   //------------------------------------------------------------------------------------------//
   // Solution                                                                
   //------------------------------------------------------------------------------------------//
   private def solve(): Unit = {
+    val alphabet = Map('}' -> '{', ']' -> '[', ')' -> '(')
     val n = nextInt()
-    val queries = next[(Int, Int), Vector]({
-      val q = nextInt()
-      val v = if (q == 1) nextInt() else -1
-      (q, v)
-    }, n)
-    val stack = mutable.ArrayStack[(Int, Int)]()
+    val input = nextString[Vector](n)
+    input.foreach(x => out.println(if (isBalanced(x, alphabet)) "YES" else "NO"))
+  }
 
-    var max = Int.MinValue
-    queries.foreach {
-      case (1, value) =>
-        max = Math.max(value, max)
-        stack.push((value, max))
-      case (2, _) =>
-        if (stack.nonEmpty) stack.pop()
-        if (stack.isEmpty) max = Int.MinValue else max = stack.head._2
-      case (3, _) =>
-        stack.headOption.foreach { case (_, maximum) => out.println(maximum) }
-      case _ => throw new RuntimeException
+  private def isBalanced(input: String, alphabet: Map[Char, Char]): Boolean = {
+    if (input.length % 2 != 0) {
+      false
+    } else {
+      val stack = mutable.ArrayStack[Char]()
+      val balanced = input.takeWhile {
+        case char if alphabet.values.toSet.contains(char) =>
+          stack.push(char)
+          true
+        case char if alphabet.keySet.contains(char) =>
+          stack.headOption.fold(false)(_ =>
+            stack.pop() == alphabet(char)
+          )
+        case _ => false
+      }
+      balanced == input && stack.isEmpty
     }
   }
 

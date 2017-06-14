@@ -21,7 +21,7 @@ object MarcsCakewalk {
   private def solve(): Unit = {
     val n = nextInt()
     val cakes = nextLong[Vector](n)
-    out.println(mustWalk(cakes))
+    println(mustWalk(cakes))
   }
 
   private def mustWalk(cakes: Seq[Long]) = {
@@ -47,8 +47,10 @@ object MarcsCakewalk {
   //------------------------------------------------------------------------------------------//
   // Input-Output
   //------------------------------------------------------------------------------------------//
-  var in: java.io.InputStream = _
-  var out: java.io.PrintWriter = _
+  private var in: java.io.InputStream = _
+  private var out: java.io.PrintWriter = _
+
+  private def println(x: Any) = out.println(x)
 
   @throws[Exception]
   def main(args: Array[String]): Unit = {
@@ -88,82 +90,6 @@ object MarcsCakewalk {
     })
   }
 
-  private def isSpaceChar(c: Int) = !(c >= 33 && c <= 126)
-
-  private def skip = {
-    var b = 0
-    while ( {
-      b = readByte()
-      b != -1 && isSpaceChar(b)
-    }) {
-    }
-    b
-  }
-
-  private def next[T, Coll[_]](reader: => T, n: Int)
-                              (implicit cbf: CanBuildFrom[Coll[T], T, Coll[T]]): Coll[T] = {
-    val builder = cbf()
-    builder.sizeHint(n)
-    for (_ <- 0 until n) {
-      builder += reader
-    }
-    builder.result()
-  }
-
-  private def nextSeq[T, Coll[_]](reader: => Seq[T], n: Int)
-                                 (implicit cbf: CanBuildFrom[Coll[T], T, Coll[T]]): Coll[T] = {
-    val builder = cbf()
-    builder.sizeHint(n)
-    for (_ <- 0 until n) {
-      builder ++= reader
-    }
-    builder.result()
-  }
-
-  private def nextDouble[Coll[Double]]
-  (n: Int)(implicit cbf: CanBuildFrom[Coll[Double], Double, Coll[Double]]): Coll[Double] = {
-    val builder = cbf()
-    builder.sizeHint(n)
-    for (_ <- 0 until n) {
-      builder += nextDouble()
-    }
-    builder.result()
-  }
-
-  private def nextChar[Coll[Char]]
-  (n: Int)(implicit cbf: CanBuildFrom[Coll[Char], Char, Coll[Char]]): Coll[Char] = {
-    val builder = cbf()
-    builder.sizeHint(n)
-    var b = skip
-    var p = 0
-    while (p < n && !isSpaceChar(b)) {
-      builder += b.toChar
-      p += 1
-      b = readByte()
-    }
-    builder.result()
-  }
-
-  private def nextMultiLine(n: Int, m: Int): Array[Array[Char]] = {
-    val map = new Array[Array[Char]](n)
-    var i = 0
-    while (i < n) {
-      map(i) = nextChar[Array](m)
-      i += 1
-    }
-    map
-  }
-
-  private def nextInt[Coll[Int]]
-  (n: Int)(implicit cbf: CanBuildFrom[Coll[Int], Int, Coll[Int]]): Coll[Int] = {
-    val builder = cbf()
-    builder.sizeHint(n)
-    for (_ <- 0 until n) {
-      builder += nextInt()
-    }
-    builder.result()
-  }
-
   private def nextLong[Coll[Long]]
   (n: Int)(implicit cbf: CanBuildFrom[Coll[Long], Long, Coll[Long]]): Coll[Long] = {
     val builder = cbf()
@@ -172,20 +98,6 @@ object MarcsCakewalk {
       builder += nextLong()
     }
     builder.result()
-  }
-
-  private def nextDouble(): Double = nextString.toDouble
-
-  private def nextChar: Char = skip.toChar
-
-  private def nextString: String = {
-    var b = skip
-    val sb = new java.lang.StringBuilder
-    while (!isSpaceChar(b)) {
-      sb.appendCodePoint(b)
-      b = readByte()
-    }
-    sb.toString
   }
 
   private def nextInt(): Int = {
@@ -237,7 +149,6 @@ object MarcsCakewalk {
   }
 
   private def print(o: AnyRef*): Unit = {
-    System.out.println(java.util.Arrays.deepToString(o.toArray)
-    )
+    println(java.util.Arrays.deepToString(o.toArray))
   }
 }

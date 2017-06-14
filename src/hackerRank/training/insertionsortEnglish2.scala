@@ -45,9 +45,9 @@ object insertionsortEnglish2 {
     val sc = new Scanner(new URL("https://hr-testcases-us-east-1.s3.amazonaws.com/49/input13.txt?AWSAccessKeyId=AKIAJAMR4KJHHUS76CYQ&Expires=1490286699&Signature=NpgJXMLJZ3RVqOEtSAjr6QQfo%2F8%3D&response-content-type=text%2Fplain").openStream)
     val builder = List.newBuilder[Int]
     val t = sc.nextInt
-    for (testcase <- 1 to t) {
+    for (_ <- 1 to t) {
       val n = sc.nextInt
-      for (arr_i <- 0 until n) {
+      for (_ <- 0 until n) {
         builder += sc.nextInt
       }
       println(countInversions(builder.result))

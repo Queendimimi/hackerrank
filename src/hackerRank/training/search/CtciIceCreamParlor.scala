@@ -31,9 +31,9 @@ object CtciIceCreamParlor {
       val a = linearSearch(flavorCosts, flavors._1).get
       val b = linearSearch(flavorCosts, flavors._2, fromLeft = false).get
       if (a < b) {
-        out.println(a + " " + b)
+        println(a + " " + b)
       } else {
-        out.println(b + " " + a)
+        println(b + " " + a)
       }
     }
   }
@@ -73,8 +73,10 @@ object CtciIceCreamParlor {
   //------------------------------------------------------------------------------------------//
   // Input-Output                                                                 
   //------------------------------------------------------------------------------------------//
-  var in: java.io.InputStream = _
-  var out: java.io.PrintWriter = _
+  private var in: java.io.InputStream = _
+  private var out: java.io.PrintWriter = _
+
+  private def println(x: Any) = out.println(x)
 
   @throws[Exception]
   def main(args: Array[String]): Unit = {
@@ -114,71 +116,6 @@ object CtciIceCreamParlor {
     })
   }
 
-  private def isSpaceChar(c: Int) = !(c >= 33 && c <= 126)
-
-  private def skip = {
-    var b = 0
-    while ( {
-      b = readByte()
-      b != -1 && isSpaceChar(b)
-    }) {}
-    b
-  }
-
-  private def next[T, Coll[_]](reader: => T, n: Int)
-                              (implicit cbf: CanBuildFrom[Coll[T], T, Coll[T]]): Coll[T] = {
-    val builder = cbf()
-    builder.sizeHint(n)
-    for (_ <- 0 until n) {
-      builder += reader
-    }
-    builder.result()
-  }
-
-  private def nextSeq[T, Coll[_]](reader: => Seq[T], n: Int)
-                                 (implicit cbf: CanBuildFrom[Coll[T], T, Coll[T]]): Coll[T] = {
-    val builder = cbf()
-    builder.sizeHint(n)
-    for (_ <- 0 until n) {
-      builder ++= reader
-    }
-    builder.result()
-  }
-
-  private def nextDouble[Coll[Double]]
-  (n: Int)(implicit cbf: CanBuildFrom[Coll[Double], Double, Coll[Double]]): Coll[Double] = {
-    val builder = cbf()
-    builder.sizeHint(n)
-    for (_ <- 0 until n) {
-      builder += nextDouble()
-    }
-    builder.result()
-  }
-
-  private def nextChar[Coll[Char]]
-  (n: Int)(implicit cbf: CanBuildFrom[Coll[Char], Char, Coll[Char]]): Coll[Char] = {
-    val builder = cbf()
-    builder.sizeHint(n)
-    var b = skip
-    var p = 0
-    while (p < n && !isSpaceChar(b)) {
-      builder += b.toChar
-      p += 1
-      b = readByte()
-    }
-    builder.result()
-  }
-
-  private def nextMultiLine(n: Int, m: Int): Array[Array[Char]] = {
-    val map = new Array[Array[Char]](n)
-    var i = 0
-    while (i < n) {
-      map(i) = nextChar[Array](m)
-      i += 1
-    }
-    map
-  }
-
   private def nextInt[Coll[Int]]
   (n: Int)(implicit cbf: CanBuildFrom[Coll[Int], Int, Coll[Int]]): Coll[Int] = {
     val builder = cbf()
@@ -187,30 +124,6 @@ object CtciIceCreamParlor {
       builder += nextInt()
     }
     builder.result()
-  }
-
-  private def nextLong[Coll[Long]]
-  (n: Int)(implicit cbf: CanBuildFrom[Coll[Long], Long, Coll[Long]]): Coll[Long] = {
-    val builder = cbf()
-    builder.sizeHint(n)
-    for (_ <- 0 until n) {
-      builder += nextLong()
-    }
-    builder.result()
-  }
-
-  private def nextDouble(): Double = nextString.toDouble
-
-  private def nextChar: Char = skip.toChar
-
-  private def nextString: String = {
-    var b = skip
-    val sb = new java.lang.StringBuilder
-    while (!isSpaceChar(b)) {
-      sb.appendCodePoint(b)
-      b = readByte()
-    }
-    sb.toString
   }
 
   private def nextInt(): Int = {
@@ -236,31 +149,7 @@ object CtciIceCreamParlor {
     throw new IOException("Read Int")
   }
 
-  private def nextLong(): Long = {
-    var num = 0L
-    var b = 0
-    var minus = false
-    while ( {
-      b = readByte()
-      b != -1 && !((b >= '0' && b <= '9') || b == '-')
-    }) {}
-    if (b == '-') {
-      minus = true
-      b = readByte()
-    }
-    while (true) {
-      if (b >= '0' && b <= '9') {
-        num = num * 10 + (b - '0')
-      } else {
-        if (minus) return -num else return num
-      }
-      b = readByte()
-    }
-    throw new IOException("Read Long")
-  }
-
   private def print(o: AnyRef*): Unit = {
-    System.out.println(java.util.Arrays.deepToString(o.toArray)
-    )
+    println(java.util.Arrays.deepToString(o.toArray))
   }
 }

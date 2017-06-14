@@ -1,45 +1,48 @@
-package HackerRank.ProjectEuler
+package HackerRank.Training.FunctionalProgramming.DPChallenges
 
 import java.io.{ByteArrayInputStream, IOException, PrintWriter}
 import java.util.InputMismatchException
 
-import scala.annotation.tailrec
 import scala.collection.generic.CanBuildFrom
-import scala.collection.mutable.ListBuffer
+import scala.collection.mutable
 import scala.language.higherKinds
 
 /**
   * Copyright (c) 2017 A. Roberto Fischer
   *
-  * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 4/22/2017
+  * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 6/14/2017
   */
-object Euler002EvenFibonacciNumbers {
+private object NumberOfBinarySearchTree {
   private val INPUT = ""
 
   //------------------------------------------------------------------------------------------//
   // Solution                                                                
   //------------------------------------------------------------------------------------------//
   private def solve(): Unit = {
-    val n = nextInt()
-    nextLong[Array](n).foreach(x => println(evenFibonacci(x).sum))
+    val t = nextInt()
+    nextInt[Vector](t).foreach(x => println(countPossibleBST(x) % BigInt(100000007)))
   }
 
-  def evenFibonacci(upperBound: Long): ListBuffer[BigInt] = {
-    val buffer = ListBuffer.empty[BigInt]
-    buffer += 2
-    evenFibonacciRecursion(2, 0)
-
-    @tailrec
-    def evenFibonacciRecursion(a: BigInt, b: BigInt): Unit = {
-      val next = 4 * a + b
-      if (next <= upperBound) {
-        buffer += next
-        evenFibonacciRecursion(next, a)
+  lazy val countPossibleBST: Int ==> BigInt = Memo {
+    case 0 | 1 => 1
+    case n if n > 1 =>
+      (1 to n).foldLeft(BigInt(0)) { case (accumulator, root) =>
+        val left = countPossibleBST(root - 1)
+        val right = countPossibleBST(n - root)
+        accumulator + left * right
       }
-    }
-
-    buffer
   }
+
+  final case class Memo[I, K, O](f: I => O)(implicit ev$1: I => K) extends (I => O) {
+    type Input = I
+    type Key = K
+    type Output = O
+    val cache: mutable.Map[K, O] = mutable.Map.empty[K, O]
+
+    override def apply(x: I): O = cache getOrElseUpdate(x, f(x))
+  }
+
+  type ==>[I, O] = Memo[I, I, O]
 
   //------------------------------------------------------------------------------------------//
   // Input-Output                                                                 
@@ -55,7 +58,7 @@ object Euler002EvenFibonacciNumbers {
   }
 
   @throws[Exception]
-  def run(): Unit = {
+  private def run(): Unit = {
     in = if (INPUT.isEmpty) System.in else new ByteArrayInputStream(INPUT.getBytes)
     out = new PrintWriter(System.out)
 
@@ -65,12 +68,12 @@ object Euler002EvenFibonacciNumbers {
     if (!INPUT.isEmpty) printCustom(System.currentTimeMillis - s + "ms")
   }
 
-  private def nextLong[Coll[_]]
-  (n: Int)(implicit cbf: CanBuildFrom[Coll[Long], Long, Coll[Long]]): Coll[Long] = {
+  private def nextInt[Coll[_]]
+  (n: Int)(implicit cbf: CanBuildFrom[Coll[Int], Int, Coll[Int]]): Coll[Int] = {
     val builder = cbf()
     builder.sizeHint(n)
     for (_ <- 0 until n) {
-      builder += nextLong()
+      builder += nextInt()
     }
     builder.result()
   }
@@ -98,32 +101,9 @@ object Euler002EvenFibonacciNumbers {
     throw new IOException("Read Int")
   }
 
-  private def nextLong(): Long = {
-    var num = 0L
-    var b = 0
-    var minus = false
-    while ( {
-      b = readByte()
-      b != -1 && !((b >= '0' && b <= '9') || b == '-')
-    }) {}
-    if (b == '-') {
-      minus = true
-      b = readByte()
-    }
-    while (true) {
-      if (b >= '0' && b <= '9') {
-        num = num * 10 + (b - '0')
-      } else {
-        if (minus) return -num else return num
-      }
-      b = readByte()
-    }
-    throw new IOException("Read Long")
-  }
-
   private val inputBuffer = new Array[Byte](1024)
-  var lenBuffer = 0
-  var ptrBuffer = 0
+  private var lenBuffer = 0
+  private var ptrBuffer = 0
 
   private def readByte(): Int = {
     if (lenBuffer == -1) throw new InputMismatchException

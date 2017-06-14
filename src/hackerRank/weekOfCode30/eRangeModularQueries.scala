@@ -26,7 +26,7 @@ object eRangeModularQueries {
       for (i <- left to right) {
         if (a(i) % x == y) result += 1
       }
-      out.println(result)
+      println(result)
       a0 += 1
     }
   }
@@ -35,8 +35,10 @@ object eRangeModularQueries {
   //------------------------------------------------------------------------------------------//
   // Input-Output
   //------------------------------------------------------------------------------------------//
-  var in: java.io.InputStream = _
-  var out: java.io.PrintWriter = _
+  private var in: java.io.InputStream = _
+  private var out: java.io.PrintWriter = _
+
+  private def println(x: Any) = out.println(x)
 
   @throws[Exception]
   def main(args: Array[String]): Unit = {
@@ -76,67 +78,10 @@ object eRangeModularQueries {
     })
   }
 
-  private def isSpaceChar(c: Int) = !(c >= 33 && c <= 126)
-
-  private def skip = {
-    var b = 0
-    while ( {
-      b = readByte()
-      b != -1 && isSpaceChar(b)
-    }) {}
-    b
-  }
-
-  private def nextDouble: Double = nextString.toDouble
-
-  private def nextChar: Char = skip.toChar
-
-  private def nextString: String = {
-    var b = skip
-    val sb = new java.lang.StringBuilder
-    while (!isSpaceChar(b)) { // when nextLine, (isSpaceChar(b) && b != ' ')
-      sb.appendCodePoint(b)
-      b = readByte()
-    }
-    sb.toString
-  }
-
-  private def nextString(n: Int): Array[Char] = {
-    val buf = new Array[Char](n)
-    var b = skip
-    var p = 0
-    while (p < n && !isSpaceChar(b)) {
-      buf({
-        p += 1
-        p - 1
-      }) = b.toChar
-      b = readByte()
-    }
-    if (n == p) buf else util.Arrays.copyOf(buf, p)
-  }
-
-  private def nextMultiLine(n: Int, m: Int): Array[Array[Char]] = {
-    val map = new Array[Array[Char]](n)
-    var i = 0
-    while (i < n) {
-      map(i) = nextString(m)
-      i += 1
-    }
-    map
-  }
-
   private def nextIntArray(n: Int): Array[Int] = {
     val a = new Array[Int](n)
     for (i <- 0 until n) {
       a(i) = nextInt()
-    }
-    a
-  }
-
-  private def nextLongArray(n: Int): Array[Long] = {
-    val a = new Array[Long](n)
-    for (i <- 0 until n) {
-      a(i) = nextLong()
     }
     a
   }
@@ -164,31 +109,7 @@ object eRangeModularQueries {
     throw new IOException("Read Int")
   }
 
-  private def nextLong(): Long = {
-    var num = 0L
-    var b = 0L
-    var minus = false
-    while ( {
-      b = readByte()
-      b != -1 && !((b >= '0' && b <= '9') || b == '-')
-    }) {}
-    if (b == '-') {
-      minus = true
-      b = readByte()
-    }
-    while (true) {
-      if (b >= '0' && b <= '9') {
-        num = num * 10 + (b - '0')
-      } else {
-        if (minus) return -num else return num
-      }
-      b = readByte()
-    }
-    throw new IOException("Read Long")
-  }
-
   private def print(o: AnyRef*): Unit = {
-    System.out.println(java.util.Arrays.deepToString(o.toArray)
-    )
+    println(java.util.Arrays.deepToString(o.toArray))
   }
 }

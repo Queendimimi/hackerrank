@@ -35,6 +35,7 @@ def generateMelodiousPasswords(n: Int): Unit = {
 
   def append(current: Vector[String], newChars: Vector[Char], k: Int): Vector[String] = {
     val builder = new VectorBuilder[String]
+    //noinspection ScalaUselessExpression
     builder.sizeHint(current.length * newChars.length)
 
     for (i <- current.indices; j <- newChars.indices) {

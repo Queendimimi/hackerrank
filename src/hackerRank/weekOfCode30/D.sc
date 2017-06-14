@@ -29,16 +29,16 @@ def minimalCost(poles: Vector[(Int, Int)], numberOfBuckets: Int): Int = {
     val poleSplits = mutable.ListBuffer[(Vector[(Int, Int)], Int)]()
     val stacks = mutable.ListBuffer[Int](0)
 
-    val (lowerCost, upperCost, index) = findOptimalBucket(poles)
+    val (_, _, index) = findOptimalBucket(poles)
     stacks += index
     val (lower, upper) = poles.splitAt(index)
     poleSplits += ((lower, 0))
     poleSplits += ((upper, lower.size))
 
-    for (i <- 2 until numberOfBuckets) {
+    for (_ <- 2 until numberOfBuckets) {
       val candidates = mutable.ListBuffer[(Vector[Int], Int)]()
       for ((list, shift) <- poleSplits) {
-        val (lowerCost, upperCost, index) = findOptimalBucket(list)
+        val (_, _, index) = findOptimalBucket(list)
         candidates += ((stacks.result.toVector :+ (index + shift), index + shift))
       }
       if (candidates.nonEmpty) {

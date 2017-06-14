@@ -26,7 +26,7 @@ def kragerMinCut(graph: mutable.Map[Int, Array[Int]]): Int = {
     mutableGraph.remove(vertexB)
     mutableGraph.remove(vertexA)
     mutableGraph += vertexA -> mergedEdges
-    mutableGraph.foreach { case (vertex, edges) =>
+    mutableGraph.foreach { case (_, edges) =>
       while (edges.contains(vertexB)) {
         edges -= vertexB
         edges += vertexA

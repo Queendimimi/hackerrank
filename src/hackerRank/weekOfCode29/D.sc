@@ -116,7 +116,7 @@ def sievePrimses(lb: Int, ub: Int): ArrayBuffer[Int] = {
     nn = n * n
     knn = nn
     breakable {
-      for (k <- 1 to ub) {
+      for (_ <- 1 to ub) {
         if (knn > ub) break
         sieve(knn) = false
         knn += nn

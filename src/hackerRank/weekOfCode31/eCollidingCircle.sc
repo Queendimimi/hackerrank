@@ -6,7 +6,6 @@ def solve(array: Array[Int], k: Int): Double = {
   } else if (k == 0) {
     array.map(i => i * i * Math.PI).sum / k
   } else {
-    val factor = getNumberOfCombination(array.length, k)
     array.combinations(k + 1).map { combination =>
       val remainingCircles = array diff combination
       //      remainingCircles foreach println

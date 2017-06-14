@@ -1,4 +1,4 @@
-import scala.io.Source
+
 
 def shortTermMovingAvg(prices: Array[Int]) = {
   prices.sliding(60).map(_.sum / 60.0)

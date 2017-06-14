@@ -1,7 +1,6 @@
 package HackerRank.WeekOfCode29
 
 import java.io.{ByteArrayInputStream, IOException, PrintWriter}
-import java.util
 import java.util.InputMismatchException
 
 /**

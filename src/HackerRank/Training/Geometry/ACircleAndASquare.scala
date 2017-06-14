@@ -3,7 +3,6 @@ package HackerRank.Training.Geometry
 import java.io.{ByteArrayInputStream, IOException, PrintWriter}
 import java.util.InputMismatchException
 
-import scala.collection.generic.CanBuildFrom
 import scala.language.higherKinds
 
 /**

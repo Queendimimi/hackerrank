@@ -4,7 +4,6 @@ import java.io.{ByteArrayInputStream, IOException, PrintWriter}
 import java.util.InputMismatchException
 
 import scala.annotation.tailrec
-import scala.collection.generic.CanBuildFrom
 import scala.language.higherKinds
 
 /**

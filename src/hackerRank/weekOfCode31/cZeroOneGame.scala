@@ -1,10 +1,8 @@
 package HackerRank.WeekOfCode31
 
 import java.io.{ByteArrayInputStream, IOException, PrintWriter}
-import java.util
 import java.util.InputMismatchException
 
-import scala.collection.generic.{CanBuildFrom, GenericCompanion}
 import scala.collection.mutable
 import scala.collection.mutable.ArrayBuffer
 import scala.language.higherKinds

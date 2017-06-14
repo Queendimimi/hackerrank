@@ -1,50 +1,94 @@
-package HackerRank.Training.BasicProgramming
+package HackerRank.Training.FunctionalProgramming.RecursionChallenges
 
 import java.io.{ByteArrayInputStream, IOException, PrintWriter}
 import java.util.InputMismatchException
 
-import scala.annotation.tailrec
 import scala.collection.generic.CanBuildFrom
+import scala.collection.mutable
 import scala.language.higherKinds
 
 /**
   * Copyright (c) 2017 A. Roberto Fischer
   *
-  * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 6/12/2017
+  * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 6/13/2017
   */
-object ManasaAndStones {
-  private val INPUT = "2\n6\n4\n8\n11\n3\n10"
+object ConcavePolygon {
+  private val INPUT = ""
 
   //------------------------------------------------------------------------------------------//
   // Solution                                                                
   //------------------------------------------------------------------------------------------//
   private def solve(): Unit = {
-    val t = nextInt()
-    val input = next[(Int, Int, Int), Vector]((nextInt(), nextInt(), nextInt()), t)
-    input.foreach { case (n, a, b) =>
-      out.println(lastStones(a, b, n).mkString(" "))
+    val n = nextInt()
+    val points = next[Point, Set](Point(nextInt(), nextInt()), n)
+    out.println(if (isConcavePolygon(points)) "YES" else "NO")
+  }
+
+  private def isConcavePolygon(points: Set[Point]) = {
+    val convexHullPoints = convexHull(points)
+    convexHullPoints.hashCode() != points.hashCode()
+  }
+
+  final case class Point(x: Int, y: Int) {
+    def <(b: Point): Boolean = {
+      (x < b.x) || ((b.x >= x) && (y < b.y))
+    }
+
+    def distance(b: Point): Double = {
+      Math.sqrt((x - b.x) * (x - b.x) + (y - b.y) * (y - b.y))
     }
   }
 
-  private def lastStones(a: Int, b: Int, n: Int) = {
-    val builder = Set.newBuilder[Int]
+  private def clockWise(a: Point, b: Point, c: Point) = {
+    zCrossProduct(a, b, c) <= 0
+  }
 
-    @tailrec
-    def nextStones(previousStones: Set[Int], depth: Int): Unit = {
-      val next = previousStones.foldLeft(Set.newBuilder[Int]) { case (acm, value) =>
-        acm += value + a
-        acm += value + b
+  private def counterClockWise(a: Point, b: Point, c: Point) = {
+    zCrossProduct(a, b, c) >= 0
+  }
+
+  //3D z component
+  private def zCrossProduct(a: Point, b: Point, c: Point) = {
+    a.x * (b.y - c.y) + b.x * (c.y - a.y) + c.x * (a.y - b.y)
+  }
+
+  private def convexHull(input: Set[Point]) = {
+    if (input.size < 4) {
+      input
+    } else {
+      val points = input.toVector.sortWith(_ < _)
+      val upperHull = mutable.ArrayBuffer.empty[Point] += points.head
+      val lowerHull = mutable.ArrayBuffer.empty[Point] += points.head
+
+      for (point <- points.iterator.drop(1)) {
+        computeHalfHull(point, points, clockWise, upperHull)
+        computeHalfHull(point, points, counterClockWise, lowerHull)
       }
 
-      if (n - 1 == depth) {
-        builder ++= next.result()
-      } else {
-        nextStones(next.result(), depth + 1)
-      }
+      val resultBuilder = Set.newBuilder[Point]
+      resultBuilder ++= upperHull.iterator.drop(1)
+      resultBuilder ++= lowerHull.reverseIterator.drop(1)
+
+      resultBuilder.result()
     }
+  }
 
-    nextStones(Set(0), 1)
-    builder.result().toVector.sorted
+  private def computeHalfHull(currentPoint: Point,
+                              points: Vector[Point],
+                              orientation: (Point, Point, Point) => Boolean,
+                              builder: mutable.ArrayBuffer[Point]) = {
+    if (currentPoint == points(points.size - 1) ||
+      orientation(points.head, currentPoint, points.last)) {
+
+      while (builder.size >= 2 && !orientation(
+        builder(builder.size - 2),
+        builder(builder.size - 1),
+        currentPoint)
+      ) {
+        builder.remove(builder.size - 1)
+      }
+      builder += currentPoint
+    }
   }
 
   //------------------------------------------------------------------------------------------//

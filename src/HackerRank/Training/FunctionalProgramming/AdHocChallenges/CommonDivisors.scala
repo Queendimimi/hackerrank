@@ -1,4 +1,4 @@
-package HackerRank.Training.BasicProgramming
+package HackerRank.Training.FunctionalProgramming.AdHocChallenges
 
 import java.io.{ByteArrayInputStream, IOException, PrintWriter}
 import java.util.InputMismatchException
@@ -10,41 +10,36 @@ import scala.language.higherKinds
 /**
   * Copyright (c) 2017 A. Roberto Fischer
   *
-  * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 6/12/2017
+  * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 6/14/2017
   */
-object ManasaAndStones {
-  private val INPUT = "2\n6\n4\n8\n11\n3\n10"
+object CommonDivisors {
+  private val INPUT = "3\n10 4\n1 100\n288 240"
 
   //------------------------------------------------------------------------------------------//
   // Solution                                                                
   //------------------------------------------------------------------------------------------//
   private def solve(): Unit = {
     val t = nextInt()
-    val input = next[(Int, Int, Int), Vector]((nextInt(), nextInt(), nextInt()), t)
-    input.foreach { case (n, a, b) =>
-      out.println(lastStones(a, b, n).mkString(" "))
+    for (_ <- 0 until t) {
+      out.println(countCommonDivisors(nextInt(), nextInt()))
     }
   }
 
-  private def lastStones(a: Int, b: Int, n: Int) = {
-    val builder = Set.newBuilder[Int]
+  @tailrec
+  private def gcd(a: Int, b: Int): Int = {
+    if (b == 0) a else gcd(b, a % b)
+  }
 
-    @tailrec
-    def nextStones(previousStones: Set[Int], depth: Int): Unit = {
-      val next = previousStones.foldLeft(Set.newBuilder[Int]) { case (acm, value) =>
-        acm += value + a
-        acm += value + b
-      }
+  private def countCommonDivisors(a: Int, b: Int) = {
+    val n = gcd(a, b)
 
-      if (n - 1 == depth) {
-        builder ++= next.result()
+    (1 to Math.sqrt(n).toInt).foldLeft(0) { case (sum, i) =>
+      if (n % i == 0) {
+        if (n / i == i) sum + 1 else sum + 2
       } else {
-        nextStones(next.result(), depth + 1)
+        sum
       }
     }
-
-    nextStones(Set(0), 1)
-    builder.result().toVector.sorted
   }
 
   //------------------------------------------------------------------------------------------//

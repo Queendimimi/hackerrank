@@ -1,51 +1,63 @@
-package HackerRank.Training.BasicProgramming
+package HackerRank.Training.DynamicProgramming
 
 import java.io.{ByteArrayInputStream, IOException, PrintWriter}
 import java.util.InputMismatchException
 
-import scala.annotation.tailrec
 import scala.collection.generic.CanBuildFrom
 import scala.language.higherKinds
 
 /**
   * Copyright (c) 2017 A. Roberto Fischer
   *
-  * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 6/12/2017
+  * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 4/29/2017
   */
-object ManasaAndStones {
-  private val INPUT = "2\n6\n4\n8\n11\n3\n10"
+object LongestIncreasingSubsequence {
+  private val INPUT = ""
 
   //------------------------------------------------------------------------------------------//
   // Solution                                                                
   //------------------------------------------------------------------------------------------//
   private def solve(): Unit = {
-    val t = nextInt()
-    val input = next[(Int, Int, Int), Vector]((nextInt(), nextInt(), nextInt()), t)
-    input.foreach { case (n, a, b) =>
-      out.println(lastStones(a, b, n).mkString(" "))
-    }
-  }
-
-  private def lastStones(a: Int, b: Int, n: Int) = {
-    val builder = Set.newBuilder[Int]
-
-    @tailrec
-    def nextStones(previousStones: Set[Int], depth: Int): Unit = {
-      val next = previousStones.foldLeft(Set.newBuilder[Int]) { case (acm, value) =>
-        acm += value + a
-        acm += value + b
-      }
-
-      if (n - 1 == depth) {
-        builder ++= next.result()
+    val n = nextInt()
+    val input = nextInt[Array](n)
+    val tailIndices = new Array[Int](n)
+    tailIndices(0) = input(0)
+    var length = 1
+    for (i <- 1 until n) {
+      if (tailIndices(0) > input(i)) {
+        // new smallest
+        tailIndices(0) = input(i)
+      } else if (tailIndices(length - 1) < input(i)) {
+        // input(i) extends longest sub sequence
+        tailIndices(length) = input(i)
+        length += 1
       } else {
-        nextStones(next.result(), depth + 1)
+        // input(i) is potential candidate in later sub sequence
+        tailIndices(binarySearch(tailIndices, input(i), length) + 1) = input(i)
       }
     }
-
-    nextStones(Set(0), 1)
-    builder.result().toVector.sorted
+    out.println(length)
   }
+
+  private def binarySearch(coll: Seq[Int], target: Int, len: Int): Int = {
+    var right = len - 1
+    var left = 0
+    var mid = 0
+    var result = -1
+    while (left <= right) {
+      mid = left + (right - left - 1) / 2
+      if (coll(mid) < target) {
+        left = mid + 1
+        result = mid
+      } else if (coll(mid) == target) {
+        return len - 1
+      } else {
+        right = mid - 1
+      }
+    }
+    result
+  }
+
 
   //------------------------------------------------------------------------------------------//
   // Input-Output                                                                 

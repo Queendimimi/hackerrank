@@ -1,50 +1,48 @@
-package HackerRank.Training.BasicProgramming
+package HackerRank.Training.FunctionalProgramming.DPChallenges
 
 import java.io.{ByteArrayInputStream, IOException, PrintWriter}
 import java.util.InputMismatchException
 
-import scala.annotation.tailrec
 import scala.collection.generic.CanBuildFrom
+import scala.collection.mutable
 import scala.language.higherKinds
 
 /**
   * Copyright (c) 2017 A. Roberto Fischer
   *
-  * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 6/12/2017
+  * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 6/14/2017
   */
-object ManasaAndStones {
-  private val INPUT = "2\n6\n4\n8\n11\n3\n10"
+object PentagonalNumbers {
+  private val INPUT = ""
 
   //------------------------------------------------------------------------------------------//
   // Solution                                                                
   //------------------------------------------------------------------------------------------//
   private def solve(): Unit = {
     val t = nextInt()
-    val input = next[(Int, Int, Int), Vector]((nextInt(), nextInt(), nextInt()), t)
-    input.foreach { case (n, a, b) =>
-      out.println(lastStones(a, b, n).mkString(" "))
+    for (_ <- 0 until t) {
+      val n = nextInt()
+      out.println(n * (3 * n - 1) / 2)
+      //      out.println(pentagonalNumber(nextInt()))
     }
   }
 
-  private def lastStones(a: Int, b: Int, n: Int) = {
-    val builder = Set.newBuilder[Int]
+  lazy val pentagonalNumber: Int ==> BigInt = Memo {
+    case 1 => 1
+    case 2 => 5
+    case n if n > 2 =>
+      pentagonalNumber(n - 1) - 2 * (n - 1) + 1 + 5 * n - 5
+  }
 
-    @tailrec
-    def nextStones(previousStones: Set[Int], depth: Int): Unit = {
-      val next = previousStones.foldLeft(Set.newBuilder[Int]) { case (acm, value) =>
-        acm += value + a
-        acm += value + b
-      }
+  type ==>[I, O] = Memo[I, I, O]
 
-      if (n - 1 == depth) {
-        builder ++= next.result()
-      } else {
-        nextStones(next.result(), depth + 1)
-      }
-    }
+  case class Memo[I, K, O](f: I => O)(implicit ev$1: I => K) extends (I => O) {
+    type Input = I
+    type Key = K
+    type Output = O
+    val cache: mutable.Map[K, O] = mutable.Map.empty[K, O]
 
-    nextStones(Set(0), 1)
-    builder.result().toVector.sorted
+    override def apply(x: I): O = cache getOrElseUpdate(x, f(x))
   }
 
   //------------------------------------------------------------------------------------------//

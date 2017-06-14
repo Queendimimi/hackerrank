@@ -26,6 +26,7 @@ def main(args: Array[String]) {
   verticesByDecreasingDegree.foreach(println)
 }
 
+//noinspection AccessorLikeMethodIsUnit
 def getTriangles(graph: Array[Array[Int]], verticesByDecreasingDegree: Array[Int]) = {
   def degreeOf(vertex: Int) = {
     verticesByDecreasingDegree.indexOf(vertex)

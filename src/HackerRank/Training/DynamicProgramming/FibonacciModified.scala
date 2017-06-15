@@ -3,54 +3,47 @@ package HackerRank.Training.DynamicProgramming
 import java.io.{ByteArrayInputStream, IOException, PrintWriter}
 import java.util.InputMismatchException
 
-import scala.annotation.tailrec
-import scala.collection.Searching._
-import scala.collection.generic.CanBuildFrom
+import scala.collection.mutable
 import scala.language.higherKinds
 
 /**
   * Copyright (c) 2017 A. Roberto Fischer
   *
-  * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 4/29/2017
+  * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 6/14/2017
   */
-object LongestIncreasingSubsequence {
+private object FibonacciModified {
   private val INPUT = ""
 
   //------------------------------------------------------------------------------------------//
   // Solution                                                                
   //------------------------------------------------------------------------------------------//
   private def solve(): Unit = {
+    val t1 = nextInt()
+    val t2 = nextInt()
     val n = nextInt()
-    val input = nextInt[Vector](n)
 
-    println(lengthOfLongestIncreasingSubsequence(input))
+    println(modifiedFibonacci(t1, t2)(n))
   }
 
-  private def lengthOfLongestIncreasingSubsequence(input: Vector[Int]): Int = {
-    if (input.isEmpty) {
-      0
-    } else {
-      val tailIndices = new Array[Int](input.length)
-      tailIndices(0) = input.head
-
-      @tailrec
-      def lengthOfLongestIncreasingSubsequence(input: Vector[Int], length: Int = 1): Int = {
-        if (input.isEmpty) {
-          length
-        } else if (tailIndices(0) > input.head) {
-          tailIndices(0) = input.head
-          lengthOfLongestIncreasingSubsequence(input.tail, length)
-        } else if (tailIndices(length - 1) < input.head) {
-          tailIndices(length) = input.head
-          lengthOfLongestIncreasingSubsequence(input.tail, length + 1)
-        } else {
-          tailIndices(tailIndices.search(input.head, 0, length).insertionPoint) = input.head
-          lengthOfLongestIncreasingSubsequence(input.tail, length)
-        }
-      }
-
-      lengthOfLongestIncreasingSubsequence(input.tail)
+  private def modifiedFibonacci(t1: Int, t2: Int) = {
+    lazy val modifiedFibonacci: Int ==> BigInt = Memo {
+      case 1 => t1
+      case 2 => t2
+      case n if n > 1 =>
+        modifiedFibonacci(n - 1) * modifiedFibonacci(n - 1) + modifiedFibonacci(n - 2)
     }
+    modifiedFibonacci
+  }
+
+  type ==>[I, O] = Memo[I, I, O]
+
+  case class Memo[I, K, O](f: I => O)(implicit ev$1: I => K) extends (I => O) {
+    type Input = I
+    type Key = K
+    type Output = O
+    private val cache: mutable.Map[K, O] = mutable.Map.empty[K, O]
+
+    override def apply(x: I): O = cache getOrElseUpdate(x, f(x))
   }
 
   //------------------------------------------------------------------------------------------//
@@ -67,7 +60,7 @@ object LongestIncreasingSubsequence {
   }
 
   @throws[Exception]
-  def run(): Unit = {
+  private def run(): Unit = {
     in = if (INPUT.isEmpty) System.in else new ByteArrayInputStream(INPUT.getBytes)
     out = new PrintWriter(System.out)
 
@@ -75,16 +68,6 @@ object LongestIncreasingSubsequence {
     solve()
     out.flush()
     if (!INPUT.isEmpty) printCustom(System.currentTimeMillis - s + "ms")
-  }
-
-  private def nextInt[Coll[_]]
-  (n: Int)(implicit cbf: CanBuildFrom[Coll[Int], Int, Coll[Int]]): Coll[Int] = {
-    val builder = cbf()
-    builder.sizeHint(n)
-    for (_ <- 0 until n) {
-      builder += nextInt()
-    }
-    builder.result()
   }
 
   private def nextInt(): Int = {
@@ -111,8 +94,8 @@ object LongestIncreasingSubsequence {
   }
 
   private val inputBuffer = new Array[Byte](1024)
-  var lenBuffer = 0
-  var ptrBuffer = 0
+  private var lenBuffer = 0
+  private var ptrBuffer = 0
 
   private def readByte(): Int = {
     if (lenBuffer == -1) throw new InputMismatchException
@@ -133,6 +116,6 @@ object LongestIncreasingSubsequence {
   }
 
   private def printCustom(o: AnyRef*): Unit = {
-    println(java.util.Arrays.deepToString(o.toArray))
+    out.println(java.util.Arrays.deepToString(o.toArray))
   }
 }

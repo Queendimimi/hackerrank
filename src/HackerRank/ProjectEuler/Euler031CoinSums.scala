@@ -1,56 +1,60 @@
-package HackerRank.Training.DynamicProgramming
+package HackerRank.ProjectEuler
 
 import java.io.{ByteArrayInputStream, IOException, PrintWriter}
 import java.util.InputMismatchException
 
-import scala.annotation.tailrec
-import scala.collection.Searching._
 import scala.collection.generic.CanBuildFrom
-import scala.language.higherKinds
+import scala.collection.mutable
+import scala.language.{higherKinds, implicitConversions}
 
 /**
   * Copyright (c) 2017 A. Roberto Fischer
   *
-  * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 4/29/2017
+  * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 6/15/2017
   */
-object LongestIncreasingSubsequence {
+private object Euler031CoinSums {
   private val INPUT = ""
 
   //------------------------------------------------------------------------------------------//
   // Solution                                                                
   //------------------------------------------------------------------------------------------//
   private def solve(): Unit = {
-    val n = nextInt()
-    val input = nextInt[Vector](n)
+    val t = nextInt()
+    val coins = Vector(1, 2, 5, 10, 20, 50, 100, 200)
+    val amounts = nextInt[Vector](t)
 
-    println(lengthOfLongestIncreasingSubsequence(input))
+    val lookup = countWays(coins, amounts.max)
+    amounts.foreach(amount => println(lookup(amount) % BigInt(1000000007)))
   }
 
-  private def lengthOfLongestIncreasingSubsequence(input: Vector[Int]): Int = {
-    if (input.isEmpty) {
-      0
-    } else {
-      val tailIndices = new Array[Int](input.length)
-      tailIndices(0) = input.head
+  private def countWays(coins: Vector[Int], amount: Int) = {
+    val cache = Array.fill[BigInt](amount + 1)(0)
+    cache(0) = 1
 
-      @tailrec
-      def lengthOfLongestIncreasingSubsequence(input: Vector[Int], length: Int = 1): Int = {
-        if (input.isEmpty) {
-          length
-        } else if (tailIndices(0) > input.head) {
-          tailIndices(0) = input.head
-          lengthOfLongestIncreasingSubsequence(input.tail, length)
-        } else if (tailIndices(length - 1) < input.head) {
-          tailIndices(length) = input.head
-          lengthOfLongestIncreasingSubsequence(input.tail, length + 1)
-        } else {
-          tailIndices(tailIndices.search(input.head, 0, length).insertionPoint) = input.head
-          lengthOfLongestIncreasingSubsequence(input.tail, length)
-        }
-      }
-
-      lengthOfLongestIncreasingSubsequence(input.tail)
+    for {i <- coins
+         j <- i to amount} {
+      cache(j) += cache(j - i)
     }
+
+    cache.toVector
+  }
+
+  lazy val _countWays: (Int, Vector[Int]) ==> BigInt = Memo {
+    case (0, _) => 1
+    case (amount, coins) if amount > 0 && coins.nonEmpty =>
+      _countWays(amount - coins.head, coins) + _countWays(amount, coins.tail)
+    case _ => 0
+  }
+
+  type ==>[I, O] = Memo[I, I, O]
+
+  final case class Memo[I, K, O](f: I => O)(implicit ev$1: I => K) extends (I => O) {
+    type Input = I
+    type Key = K
+    type Output = O
+    val cache: mutable.Map[K, O] = mutable.Map.empty[K, O]
+
+    override def apply(x: I): O = cache getOrElseUpdate(x, f(x))
   }
 
   //------------------------------------------------------------------------------------------//
@@ -67,7 +71,7 @@ object LongestIncreasingSubsequence {
   }
 
   @throws[Exception]
-  def run(): Unit = {
+  private def run(): Unit = {
     in = if (INPUT.isEmpty) System.in else new ByteArrayInputStream(INPUT.getBytes)
     out = new PrintWriter(System.out)
 
@@ -111,8 +115,8 @@ object LongestIncreasingSubsequence {
   }
 
   private val inputBuffer = new Array[Byte](1024)
-  var lenBuffer = 0
-  var ptrBuffer = 0
+  private var lenBuffer = 0
+  private var ptrBuffer = 0
 
   private def readByte(): Int = {
     if (lenBuffer == -1) throw new InputMismatchException
@@ -133,6 +137,6 @@ object LongestIncreasingSubsequence {
   }
 
   private def printCustom(o: AnyRef*): Unit = {
-    println(java.util.Arrays.deepToString(o.toArray))
+    out.println(java.util.Arrays.deepToString(o.toArray))
   }
 }

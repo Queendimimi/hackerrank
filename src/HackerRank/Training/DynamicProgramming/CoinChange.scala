@@ -4,14 +4,15 @@ import java.io.{ByteArrayInputStream, IOException, PrintWriter}
 import java.util.InputMismatchException
 
 import scala.collection.generic.CanBuildFrom
+import scala.collection.mutable
 import scala.language.higherKinds
 
 /**
   * Copyright (c) 2017 A. Roberto Fischer
   *
-  * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 4/29/2017
+  * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 6/15/2017
   */
-object LongestIncreasingSubsequent {
+private object CoinChange {
   private val INPUT = ""
 
   //------------------------------------------------------------------------------------------//
@@ -19,49 +20,32 @@ object LongestIncreasingSubsequent {
   //------------------------------------------------------------------------------------------//
   private def solve(): Unit = {
     val n = nextInt()
-    val input = nextInt[Array](n)
-    val tailIndices = new Array[Int](n)
-    tailIndices(0) = input(0)
-    var length = 1
-    for (i <- 1 until n) {
-      if (tailIndices(0) > input(i)) {
-        // new smallest
-        tailIndices(0) = input(i)
-      } else if (tailIndices(length - 1) < input(i)) {
-        // input(i) extends longest sub sequence
-        tailIndices(length) = input(i)
-        length += 1
-      } else {
-        // input(i) is potential candidate in later sub sequence
-        tailIndices(binarySearch(tailIndices, input(i), length) + 1) = input(i)
-        //        tailIndices(binarySearch(tailIndices, input(i), 0, length - 1) + 1) = input(i)
-      }
-    }
-    println(length)
+    val m = nextInt()
+    val coins = nextInt[Vector](m)
+
+    println(countWays(n, coins))
   }
 
-  private def binarySearch(coll: Seq[Int], target: Int, len: Int): Int = {
-    var right = len - 1
-    var left = 0
-    var mid = 0
-    var result = -1
-    while (left <= right) {
-      mid = left + (right - left - 1) / 2
-      if (coll(mid) < target) {
-        left = mid + 1
-        result = mid
-      } else if (coll(mid) == target) {
-        return len - 1
-      } else {
-        right = mid - 1
-      }
-    }
-    result
+  lazy val countWays: (Int, Vector[Int]) ==> BigInt = Memo {
+    case (0, _) => 1
+    case (amount, coins) if amount > 0 && coins.nonEmpty =>
+      countWays(amount - coins.head, coins) + countWays(amount, coins.tail)
+    case _ => 0
   }
 
+  type ==>[I, O] = Memo[I, I, O]
+
+  case class Memo[I, K, O](f: I => O)(implicit ev$1: I => K) extends (I => O) {
+    type Input = I
+    type Key = K
+    type Output = O
+    private val cache: mutable.Map[K, O] = mutable.Map.empty[K, O]
+
+    override def apply(x: I): O = cache getOrElseUpdate(x, f(x))
+  }
 
   //------------------------------------------------------------------------------------------//
-  // Input-Output                                                                 
+  // Input-Output
   //------------------------------------------------------------------------------------------//
   private var in: java.io.InputStream = _
   private var out: java.io.PrintWriter = _
@@ -74,7 +58,7 @@ object LongestIncreasingSubsequent {
   }
 
   @throws[Exception]
-  def run(): Unit = {
+  private def run(): Unit = {
     in = if (INPUT.isEmpty) System.in else new ByteArrayInputStream(INPUT.getBytes)
     out = new PrintWriter(System.out)
 
@@ -118,8 +102,8 @@ object LongestIncreasingSubsequent {
   }
 
   private val inputBuffer = new Array[Byte](1024)
-  var lenBuffer = 0
-  var ptrBuffer = 0
+  private var lenBuffer = 0
+  private var ptrBuffer = 0
 
   private def readByte(): Int = {
     if (lenBuffer == -1) throw new InputMismatchException
@@ -140,6 +124,6 @@ object LongestIncreasingSubsequent {
   }
 
   private def printCustom(o: AnyRef*): Unit = {
-    println(java.util.Arrays.deepToString(o.toArray))
+    out.println(java.util.Arrays.deepToString(o.toArray))
   }
 }

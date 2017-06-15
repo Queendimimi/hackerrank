@@ -1,5 +1,6 @@
 package HackerRank.Training.FunctionalProgramming.RecursionChallenges
 
+
 import java.io.{ByteArrayInputStream, IOException, PrintWriter}
 import java.util.InputMismatchException
 
@@ -10,9 +11,9 @@ import scala.language.higherKinds
 /**
   * Copyright (c) 2017 A. Roberto Fischer
   *
-  * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 6/13/2017
+  * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 6/12/2017
   */
-object ConcavePolygon {
+object ConvexHull {
   private val INPUT = ""
 
   //------------------------------------------------------------------------------------------//
@@ -20,13 +21,14 @@ object ConcavePolygon {
   //------------------------------------------------------------------------------------------//
   private def solve(): Unit = {
     val n = nextInt()
-    val points = next[Point, Set](Point(nextInt(), nextInt()), n)
-    println(if (isConcavePolygon(points)) "YES" else "NO")
-  }
-
-  private def isConcavePolygon(points: Set[Point]) = {
+    val points = next[Point, Vector](Point(nextInt(), nextInt()), n)
     val convexHullPoints = convexHull(points)
-    convexHullPoints.hashCode() != points.hashCode()
+    val perimeter = (convexHullPoints :+ convexHullPoints.head)
+      .sliding(2)
+      .foldLeft(0.0) { case (sum, value) =>
+        sum + value.head.distance(value.last)
+      }
+    out.println(perimeter)
   }
 
   final case class Point(x: Int, y: Int) {
@@ -40,22 +42,22 @@ object ConcavePolygon {
   }
 
   private def clockWise(a: Point, b: Point, c: Point) = {
-    zCrossProduct(a, b, c) <= 0
+    crossProduct(a, b, c) < 0
   }
 
   private def counterClockWise(a: Point, b: Point, c: Point) = {
-    zCrossProduct(a, b, c) >= 0
+    crossProduct(a, b, c) > 0
   }
 
-  private def zCrossProduct(a: Point, b: Point, c: Point) = {
+  private def crossProduct(a: Point, b: Point, c: Point) = {
     a.x * (b.y - c.y) + b.x * (c.y - a.y) + c.x * (a.y - b.y)
   }
 
-  private def convexHull(input: Set[Point]) = {
+  private def convexHull(input: Vector[Point]) = {
     if (input.size < 4) {
       input
     } else {
-      val points = input.toVector.sortWith(_ < _)
+      val points = input.distinct.sortWith(_ < _)
       val upperHull = mutable.ArrayBuffer.empty[Point] += points.head
       val lowerHull = mutable.ArrayBuffer.empty[Point] += points.head
 
@@ -64,7 +66,7 @@ object ConcavePolygon {
         computeHalfHull(point, points, counterClockWise, lowerHull)
       }
 
-      val resultBuilder = Set.newBuilder[Point]
+      val resultBuilder = Vector.newBuilder[Point]
       resultBuilder ++= upperHull.iterator.drop(1)
       resultBuilder ++= lowerHull.reverseIterator.drop(1)
 
@@ -90,13 +92,13 @@ object ConcavePolygon {
     }
   }
 
-  //------------------------------------------------------------------------------------------//
-  // Input-Output                                                                 
-  //------------------------------------------------------------------------------------------//
-  private var in: java.io.InputStream = _
-  private var out: java.io.PrintWriter = _
 
-  private def println(x: Any) = out.println(x)
+
+  //------------------------------------------------------------------------------------------//
+  // Input-Output
+  //------------------------------------------------------------------------------------------//
+  var in: java.io.InputStream = _
+  var out: java.io.PrintWriter = _
 
   @throws[Exception]
   def main(args: Array[String]): Unit = {
@@ -131,7 +133,8 @@ object ConcavePolygon {
     while ( {
       b = readByte()
       b != -1 && !((b >= '0' && b <= '9') || b == '-')
-    }) {}
+    }) {
+    }
     if (b == '-') {
       minus = true
       b = readByte()
@@ -170,6 +173,7 @@ object ConcavePolygon {
   }
 
   private def printCustom(o: AnyRef*): Unit = {
-    println(java.util.Arrays.deepToString(o.toArray))
+    System.out.println(java.util.Arrays.deepToString(o.toArray)
+    )
   }
 }

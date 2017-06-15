@@ -1,89 +1,25 @@
-package HackerRank.Training.Recursion
+package HackerRank.Training.FunctionalProgramming.RecursionChallenges
 
 import java.io.{ByteArrayInputStream, IOException, PrintWriter}
 import java.util.InputMismatchException
 
-import scala.annotation.tailrec
-import scala.collection.mutable
 import scala.language.higherKinds
 
 /**
   * Copyright (c) 2017 A. Roberto Fischer
   *
-  * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 6/15/2017
+  * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 6/16/2017
   */
-private object ThePowerSum {
+private object SuperDigit {
   private val INPUT = ""
 
   //------------------------------------------------------------------------------------------//
   // Solution                                                                
   //------------------------------------------------------------------------------------------//
   private def solve(): Unit = {
-    val x = nextInt()
-    val n = nextInt()
-
-    val bases = (1 to nthRoot(n, x).toInt).map(x => power(x, n).toInt).toVector
-
-    println(countWays(x, bases)(x))
-  }
-
-  private def nthRoot(n: Int, a: Double): Double = {
-    @tailrec
-    def loop(x0: Double): Double = {
-      val x1 = 1.0d / n * ((n - 1) * x0 + a / power(x0, n - 1))
-      if (x0 <= x1) {
-        x0.toDouble
-      } else {
-        loop(x1)
-      }
-    }
-
-    lazy val nthRootMemo: Double ==> Double = Memo {
-      x => loop(x)
-    }
-
-    nthRootMemo(a / 2)
-  }
-
-  private def power(n: Double, i: Int): Double = {
-    @tailrec
-    def loop(n: Double, i: Int, current: Double): Double = {
-      if (i == 1) {
-        current
-      } else {
-        loop(n, i - 1, current * n)
-      }
-    }
-
-    lazy val powerMemo: (Double, Int, Double) ==> Double = Memo {
-      case (base, p, c) if p == 1 => c
-      case (base, p, c) => powerMemo(base, p - 1, c * base)
-    }
-
-    if (i == 0) 1 else powerMemo(n, i, n)
-  }
-
-  private def countWays(amount: Int, coins: Vector[Int]) = {
-    val cache = Array.fill[Int](amount + 1)(0)
-    cache(0) = 1
-
-    for {i <- coins
-         j <- amount - i to 0 by -1} {
-      cache(j + i) += cache(j)
-    }
-
-    cache.toVector
-  }
-
-  type ==>[I, O] = Memo[I, I, O]
-
-  final case class Memo[I, K, O](f: I => O)(implicit ev$1: I => K) extends (I => O) {
-    type Input = I
-    type Key = K
-    type Output = O
-    private val cache: mutable.Map[K, O] = mutable.Map.empty[K, O]
-
-    override def apply(x: I): O = cache getOrElseUpdate(x, f(x))
+    val n = BigInt(nextString())
+    val k = nextInt()
+    out.println(1 + ((n * k - 1) % 9))
   }
 
   //------------------------------------------------------------------------------------------//
@@ -91,8 +27,6 @@ private object ThePowerSum {
   //------------------------------------------------------------------------------------------//
   private var in: java.io.InputStream = _
   private var out: java.io.PrintWriter = _
-
-  private def println(x: Any) = out.println(x)
 
   @throws[Exception]
   def main(args: Array[String]): Unit = {
@@ -108,6 +42,16 @@ private object ThePowerSum {
     solve()
     out.flush()
     if (!INPUT.isEmpty) printCustom(System.currentTimeMillis - s + "ms")
+  }
+
+  private def nextString(): String = {
+    var b = skip
+    val sb = new java.lang.StringBuilder
+    while (!isSpaceChar(b)) {
+      sb.appendCodePoint(b)
+      b = readByte()
+    }
+    sb.toString
   }
 
   private def nextInt(): Int = {
@@ -153,6 +97,17 @@ private object ThePowerSum {
       ptrBuffer += 1
       ptrBuffer - 1
     })
+  }
+
+  private def isSpaceChar(c: Int) = !(c >= 33 && c <= 126)
+
+  private def skip = {
+    var b = 0
+    while ( {
+      b = readByte()
+      b != -1 && isSpaceChar(b)
+    }) {}
+    b
   }
 
   private def printCustom(o: AnyRef*): Unit = {

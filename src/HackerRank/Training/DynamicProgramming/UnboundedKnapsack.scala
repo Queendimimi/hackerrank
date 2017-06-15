@@ -1,9 +1,9 @@
-package HackerRank.Training.Recursion
+package HackerRank.Training.DynamicProgramming
 
 import java.io.{ByteArrayInputStream, IOException, PrintWriter}
 import java.util.InputMismatchException
 
-import scala.annotation.tailrec
+import scala.collection.generic.CanBuildFrom
 import scala.collection.mutable
 import scala.language.higherKinds
 
@@ -12,70 +12,47 @@ import scala.language.higherKinds
   *
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 6/15/2017
   */
-private object ThePowerSum {
+private object UnboundedKnapsack {
   private val INPUT = ""
 
   //------------------------------------------------------------------------------------------//
   // Solution                                                                
   //------------------------------------------------------------------------------------------//
   private def solve(): Unit = {
-    val x = nextInt()
-    val n = nextInt()
-
-    val bases = (1 to nthRoot(n, x).toInt).map(x => power(x, n).toInt).toVector
-
-    println(countWays(x, bases)(x))
+    val t = nextInt()
+    next[(Int, Vector[Int]), Vector]({
+      val n = nextInt()
+      val capacity = nextInt()
+      (capacity, nextInt[Vector](n))
+    }, t).foreach {
+      case (capacity, items) => println(maxSum(capacity, items))
+    }
   }
 
-  private def nthRoot(n: Int, a: Double): Double = {
-    @tailrec
-    def loop(x0: Double): Double = {
-      val x1 = 1.0d / n * ((n - 1) * x0 + a / power(x0, n - 1))
-      if (x0 <= x1) {
-        x0.toDouble
-      } else {
-        loop(x1)
+  private def maxSum(capacity: Int, itemWeights: Vector[Int]) = {
+    //    lazy val boundKnapsack: (Int, Int) ==> Int = Memo {
+    //      case (i, j) if i < 0 || j == 0 =>
+    //        0
+    //      case (i, j) if j < itemWeights(i) =>
+    //        boundKnapsack(i - 1, j)
+    //      case (i, j) =>
+    //        Math.max(boundKnapsack(i - 1, j), itemWeights(i) + boundKnapsack(i - 1, j - itemWeights(i)))
+    //    }
+    //    boundKnapsack(itemWeights.size - 1, capacity)
+
+    val dp = Array.fill[Int](capacity + 1)(0)
+
+    for {
+      i <- 0 to capacity
+      j <- itemWeights.indices
+    } {
+      if (itemWeights(j) <= i) {
+        dp(i) = Math.max(dp(i), dp(i - itemWeights(j)) + itemWeights(j))
       }
     }
 
-    lazy val nthRootMemo: Double ==> Double = Memo {
-      x => loop(x)
-    }
-
-    nthRootMemo(a / 2)
+    dp(capacity)
   }
-
-  private def power(n: Double, i: Int): Double = {
-    @tailrec
-    def loop(n: Double, i: Int, current: Double): Double = {
-      if (i == 1) {
-        current
-      } else {
-        loop(n, i - 1, current * n)
-      }
-    }
-
-    lazy val powerMemo: (Double, Int, Double) ==> Double = Memo {
-      case (base, p, c) if p == 1 => c
-      case (base, p, c) => powerMemo(base, p - 1, c * base)
-    }
-
-    if (i == 0) 1 else powerMemo(n, i, n)
-  }
-
-  private def countWays(amount: Int, coins: Vector[Int]) = {
-    val cache = Array.fill[Int](amount + 1)(0)
-    cache(0) = 1
-
-    for {i <- coins
-         j <- amount - i to 0 by -1} {
-      cache(j + i) += cache(j)
-    }
-
-    cache.toVector
-  }
-
-  type ==>[I, O] = Memo[I, I, O]
 
   final case class Memo[I, K, O](f: I => O)(implicit ev$1: I => K) extends (I => O) {
     type Input = I
@@ -86,8 +63,10 @@ private object ThePowerSum {
     override def apply(x: I): O = cache getOrElseUpdate(x, f(x))
   }
 
+  type ==>[I, O] = Memo[I, I, O]
+
   //------------------------------------------------------------------------------------------//
-  // Input-Output                                                                 
+  // Input-Output
   //------------------------------------------------------------------------------------------//
   private var in: java.io.InputStream = _
   private var out: java.io.PrintWriter = _
@@ -108,6 +87,26 @@ private object ThePowerSum {
     solve()
     out.flush()
     if (!INPUT.isEmpty) printCustom(System.currentTimeMillis - s + "ms")
+  }
+
+  private def next[T, Coll[_]](reader: => T, n: Int)
+                              (implicit cbf: CanBuildFrom[Coll[T], T, Coll[T]]): Coll[T] = {
+    val builder = cbf()
+    builder.sizeHint(n)
+    for (_ <- 0 until n) {
+      builder += reader
+    }
+    builder.result()
+  }
+
+  private def nextInt[Coll[_]]
+  (n: Int)(implicit cbf: CanBuildFrom[Coll[Int], Int, Coll[Int]]): Coll[Int] = {
+    val builder = cbf()
+    builder.sizeHint(n)
+    for (_ <- 0 until n) {
+      builder += nextInt()
+    }
+    builder.result()
   }
 
   private def nextInt(): Int = {

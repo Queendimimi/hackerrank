@@ -1,9 +1,9 @@
-package HackerRank.Training.Recursion
+package HackerRank.Training.DynamicProgramming
 
 import java.io.{ByteArrayInputStream, IOException, PrintWriter}
 import java.util.InputMismatchException
 
-import scala.annotation.tailrec
+import scala.collection.generic.CanBuildFrom
 import scala.collection.mutable
 import scala.language.higherKinds
 
@@ -12,70 +12,49 @@ import scala.language.higherKinds
   *
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 6/15/2017
   */
-private object ThePowerSum {
+private object TheLongestCommonSubsequence {
   private val INPUT = ""
 
   //------------------------------------------------------------------------------------------//
   // Solution                                                                
   //------------------------------------------------------------------------------------------//
   private def solve(): Unit = {
-    val x = nextInt()
+    val m = nextInt()
     val n = nextInt()
+    val a = nextInt[Vector](m)
+    val b = nextInt[Vector](n)
 
-    val bases = (1 to nthRoot(n, x).toInt).map(x => power(x, n).toInt).toVector
-
-    println(countWays(x, bases)(x))
+    out.println(longestCommonSubsequence(a, b).mkString(" "))
   }
 
-  private def nthRoot(n: Int, a: Double): Double = {
-    @tailrec
-    def loop(x0: Double): Double = {
-      val x1 = 1.0d / n * ((n - 1) * x0 + a / power(x0, n - 1))
-      if (x0 <= x1) {
-        x0.toDouble
-      } else {
-        loop(x1)
+  private def longestCommonSubsequence(a: Vector[Int], b: Vector[Int]) = {
+    lazy val lcsMemo: (Int, Int) ==> Int = Memo {
+      case (m, n) if m == 0 || n == 0 => 0
+      case (m, n) if a(m - 1) == b(n - 1) => 1 + lcsMemo(m - 1, n - 1)
+      case (m, n) => Math.max(lcsMemo(m, n - 1), lcsMemo(m - 1, n))
+    }
+
+    def backTrack() = {
+      val lcsBuilder = Vector.newBuilder[Int]
+      var i = a.size
+      var j = b.size
+      while (i > 0 && j > 0) {
+        if (a(i - 1) == b(j - 1)) {
+          lcsBuilder += a(i - 1)
+          i -= 1
+          j -= 1
+        }
+        else {
+          if (lcsMemo(i - 1, j) > lcsMemo(i, j - 1)) i -= 1 else j -= 1
+        }
       }
+      lcsBuilder.result().reverse
     }
 
-    lazy val nthRootMemo: Double ==> Double = Memo {
-      x => loop(x)
-    }
+    lcsMemo(a.size, b.size)
 
-    nthRootMemo(a / 2)
+    backTrack()
   }
-
-  private def power(n: Double, i: Int): Double = {
-    @tailrec
-    def loop(n: Double, i: Int, current: Double): Double = {
-      if (i == 1) {
-        current
-      } else {
-        loop(n, i - 1, current * n)
-      }
-    }
-
-    lazy val powerMemo: (Double, Int, Double) ==> Double = Memo {
-      case (base, p, c) if p == 1 => c
-      case (base, p, c) => powerMemo(base, p - 1, c * base)
-    }
-
-    if (i == 0) 1 else powerMemo(n, i, n)
-  }
-
-  private def countWays(amount: Int, coins: Vector[Int]) = {
-    val cache = Array.fill[Int](amount + 1)(0)
-    cache(0) = 1
-
-    for {i <- coins
-         j <- amount - i to 0 by -1} {
-      cache(j + i) += cache(j)
-    }
-
-    cache.toVector
-  }
-
-  type ==>[I, O] = Memo[I, I, O]
 
   final case class Memo[I, K, O](f: I => O)(implicit ev$1: I => K) extends (I => O) {
     type Input = I
@@ -86,13 +65,13 @@ private object ThePowerSum {
     override def apply(x: I): O = cache getOrElseUpdate(x, f(x))
   }
 
+  type ==>[I, O] = Memo[I, I, O]
+
   //------------------------------------------------------------------------------------------//
   // Input-Output                                                                 
   //------------------------------------------------------------------------------------------//
   private var in: java.io.InputStream = _
   private var out: java.io.PrintWriter = _
-
-  private def println(x: Any) = out.println(x)
 
   @throws[Exception]
   def main(args: Array[String]): Unit = {
@@ -108,6 +87,16 @@ private object ThePowerSum {
     solve()
     out.flush()
     if (!INPUT.isEmpty) printCustom(System.currentTimeMillis - s + "ms")
+  }
+
+  private def nextInt[Coll[_]]
+  (n: Int)(implicit cbf: CanBuildFrom[Coll[Int], Int, Coll[Int]]): Coll[Int] = {
+    val builder = cbf()
+    builder.sizeHint(n)
+    for (_ <- 0 until n) {
+      builder += nextInt()
+    }
+    builder.result()
   }
 
   private def nextInt(): Int = {

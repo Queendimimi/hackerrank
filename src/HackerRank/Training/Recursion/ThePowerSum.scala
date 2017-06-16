@@ -56,13 +56,14 @@ private object ThePowerSum {
     }
 
     lazy val powerMemo: (Double, Int, Double) ==> Double = Memo {
-      case (base, p, c) if p == 1 => c
+      case (_, p, c) if p == 1 => c
       case (base, p, c) => powerMemo(base, p - 1, c * base)
     }
 
     if (i == 0) 1 else powerMemo(n, i, n)
   }
 
+  //bounded by 1 coin Change
   private def countWays(amount: Int, coins: Vector[Int]) = {
     val cache = Array.fill[Int](amount + 1)(0)
     cache(0) = 1
@@ -107,7 +108,7 @@ private object ThePowerSum {
     val s = System.currentTimeMillis
     solve()
     out.flush()
-    if (!INPUT.isEmpty) printCustom(System.currentTimeMillis - s + "ms")
+    if (!INPUT.isEmpty) System.out.println(System.currentTimeMillis - s + "ms")
   }
 
   private def nextInt(): Int = {
@@ -153,9 +154,5 @@ private object ThePowerSum {
       ptrBuffer += 1
       ptrBuffer - 1
     })
-  }
-
-  private def printCustom(o: AnyRef*): Unit = {
-    out.println(java.util.Arrays.deepToString(o.toArray))
   }
 }

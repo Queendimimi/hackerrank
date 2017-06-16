@@ -3,7 +3,10 @@ package HackerRank.Training.BasicProgramming
 import java.io.{ByteArrayInputStream, IOException, PrintWriter}
 import java.util.InputMismatchException
 
+import scala.annotation.tailrec
 import scala.language.higherKinds
+import scala.math.BigInt
+import scala.util.control.TailCalls._
 
 /**
   * Copyright (c) 2017 A. Roberto Fischer
@@ -11,17 +14,23 @@ import scala.language.higherKinds
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 5/31/2017
   */
 object ExtraLongFactorials {
-  private val INPUT = ""
+  private val INPUT = "99000"
 
   //------------------------------------------------------------------------------------------//
   // Solution                                                                
   //------------------------------------------------------------------------------------------//
   private def solve(): Unit = {
-    println(factorial(BigInt(nextString())))
+    val input = BigInt(nextString())
+    println(factorial(input))
   }
 
-  private def factorial(n: BigInt): BigInt = {
-    if (n == 0) 1 else n * factorial(n - 1)
+  private def trampolinedFactorial(n: BigInt, accumulator: BigInt = 1): TailRec[BigInt] = {
+    if (n == 1) done(accumulator) else tailcall(trampolinedFactorial(n - 1, n * accumulator))
+  }
+
+  @tailrec
+  private def factorial(n: BigInt, accumulator: BigInt = 1): BigInt = {
+    if (n == 1) accumulator else factorial(n - 1, accumulator * n)
   }
 
   //------------------------------------------------------------------------------------------//
@@ -45,7 +54,7 @@ object ExtraLongFactorials {
     val s = System.currentTimeMillis
     solve()
     out.flush()
-    if (!INPUT.isEmpty) printCustom(System.currentTimeMillis - s + "ms")
+    if (!INPUT.isEmpty) System.out.println(System.currentTimeMillis - s + "ms")
   }
 
   private def nextString(): String = {
@@ -91,7 +100,4 @@ object ExtraLongFactorials {
     b
   }
 
-  private def printCustom(o: AnyRef*): Unit = {
-    println(java.util.Arrays.deepToString(o.toArray))
-  }
 }

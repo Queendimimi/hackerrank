@@ -71,7 +71,7 @@ object Day4BinomialDistribution1 {
     val s = System.currentTimeMillis
     solve()
     out.flush()
-    if (!INPUT.isEmpty) printCustom(System.currentTimeMillis - s + "ms")
+    if (!INPUT.isEmpty) System.out.println(System.currentTimeMillis - s + "ms")
   }
 
   private def nextDouble(): Double = nextString().toDouble
@@ -119,7 +119,4 @@ object Day4BinomialDistribution1 {
     b
   }
 
-  private def printCustom(o: AnyRef*): Unit = {
-    println(java.util.Arrays.deepToString(o.toArray))
-  }
 }

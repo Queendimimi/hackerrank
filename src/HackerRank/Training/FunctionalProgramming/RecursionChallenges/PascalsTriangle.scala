@@ -1,45 +1,60 @@
-package HackerRank.Training.Stacks
+package HackerRank.Training.FunctionalProgramming.RecursionChallenges
 
 import java.io.{ByteArrayInputStream, IOException, PrintWriter}
 import java.util.InputMismatchException
 
-import scala.collection.generic.CanBuildFrom
 import scala.collection.mutable
 import scala.language.higherKinds
 
 /**
   * Copyright (c) 2017 A. Roberto Fischer
   *
-  * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 6/7/2017
+  * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 6/16/2017
   */
-object MaximumElement {
+private object PascalsTriangle {
   private val INPUT = ""
 
   //------------------------------------------------------------------------------------------//
   // Solution                                                                
   //------------------------------------------------------------------------------------------//
   private def solve(): Unit = {
-    val n = nextInt()
-    val queries = next[(Int, Int), Vector]({
-      val q = nextInt()
-      val v = if (q == 1) nextInt() else -1
-      (q, v)
-    }, n)
-    val stack = mutable.ArrayStack[(Int, Int)]()
+    val k = nextInt()
 
-    var max = Int.MinValue
-    queries.foreach {
-      case (1, value) =>
-        max = Math.max(value, max)
-        stack.push((value, max))
-      case (2, _) =>
-        if (stack.nonEmpty) stack.pop()
-        if (stack.isEmpty) max = Int.MinValue else max = stack.head._2
-      case (3, _) =>
-        stack.headOption.foreach { case (_, maximum) => println(maximum) }
-      case _ => throw new RuntimeException
-    }
+    println(pascalsTriangle(k - 1).map(_.mkString(" ")).mkString("\n"))
   }
+
+  private def pascalsTriangle(depth: Int) = {
+
+    lazy val triangleMemo: Int ==> Vector[Int] = Memo {
+      case 0 => Vector(1)
+      case 1 => Vector(1, 1)
+      case n => (Iterator(1) ++ triangleMemo(n - 1).sliding(2).map(_.sum) ++ Iterator(1)).toVector
+    }
+
+    lazy val binomialMemo: (Int, Int) ==> Long = Memo {
+      case (n, k) if n == k => 1
+      case (_, 0) => 1
+      case (n, k) => binomialMemo(n - 1, k - 1) + binomialMemo(n - 1, k)
+    }
+
+    val builder = Vector.newBuilder[Vector[Int]]
+    for (i <- 0 to depth) {
+      builder += triangleMemo(i)
+    }
+
+    builder.result()
+  }
+
+  final case class Memo[I, K, O](f: I => O)(implicit ev$1: I => K) extends (I => O) {
+    type Input = I
+    type Key = K
+    type Output = O
+    private val cache: mutable.Map[K, O] = mutable.Map.empty[K, O]
+
+    override def apply(x: I): O = cache getOrElseUpdate(x, f(x))
+  }
+
+  type ==>[I, O] = Memo[I, I, O]
 
   //------------------------------------------------------------------------------------------//
   // Input-Output                                                                 
@@ -55,24 +70,14 @@ object MaximumElement {
   }
 
   @throws[Exception]
-  def run(): Unit = {
+  private def run(): Unit = {
     in = if (INPUT.isEmpty) System.in else new ByteArrayInputStream(INPUT.getBytes)
     out = new PrintWriter(System.out)
 
     val s = System.currentTimeMillis
     solve()
     out.flush()
-    if (!INPUT.isEmpty) System.out.println(System.currentTimeMillis - s + "ms")
-  }
-
-  private def next[T, Coll[_]](reader: => T, n: Int)
-                              (implicit cbf: CanBuildFrom[Coll[T], T, Coll[T]]): Coll[T] = {
-    val builder = cbf()
-    builder.sizeHint(n)
-    for (_ <- 0 until n) {
-      builder += reader
-    }
-    builder.result()
+    if (!INPUT.isEmpty) System.out.print(System.currentTimeMillis - s + "ms")
   }
 
   private def nextInt(): Int = {
@@ -99,8 +104,8 @@ object MaximumElement {
   }
 
   private val inputBuffer = new Array[Byte](1024)
-  var lenBuffer = 0
-  var ptrBuffer = 0
+  private var lenBuffer = 0
+  private var ptrBuffer = 0
 
   private def readByte(): Int = {
     if (lenBuffer == -1) throw new InputMismatchException

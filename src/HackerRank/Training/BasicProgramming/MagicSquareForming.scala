@@ -60,7 +60,7 @@ object MagicSquareForming {
     val s = System.currentTimeMillis
     solve()
     out.flush()
-    if (!INPUT.isEmpty) printCustom(System.currentTimeMillis - s + "ms")
+    if (!INPUT.isEmpty) System.out.println(System.currentTimeMillis - s + "ms")
   }
 
   private def next[T, Coll[_]](reader: => T, n: Int)
@@ -126,9 +126,5 @@ object MagicSquareForming {
       ptrBuffer += 1
       ptrBuffer - 1
     })
-  }
-
-  private def printCustom(o: AnyRef*): Unit = {
-    println(java.util.Arrays.deepToString(o.toArray))
   }
 }

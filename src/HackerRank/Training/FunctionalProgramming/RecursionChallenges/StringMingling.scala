@@ -1,39 +1,70 @@
-package HackerRank.Training.BasicProgramming
+package HackerRank.Training.FunctionalProgramming.RecursionChallenges
 
 import java.io.{ByteArrayInputStream, IOException, PrintWriter}
 import java.util.InputMismatchException
 
+import scala.annotation.tailrec
+import scala.collection.generic.CanBuildFrom
+import scala.collection.mutable
 import scala.language.higherKinds
 
 /**
   * Copyright (c) 2017 A. Roberto Fischer
   *
-  * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 4/26/2017
+  * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 6/16/2017
   */
-object TimeConversion {
+private object StringMingling {
   private val INPUT = ""
 
   //------------------------------------------------------------------------------------------//
   // Solution                                                                
   //------------------------------------------------------------------------------------------//
   private def solve(): Unit = {
-    val time = nextString()
-    val pmOrAm = time takeRight 2
-    val hoursMinutesSeconds = time.dropRight(2).split(":").map(_.trim)
-    pmOrAm match {
-      case "AM" =>
-        val adjustedHours = hoursMinutesSeconds(0) match {
-          case "12" => "00"
-          case _ => hoursMinutesSeconds(0)
+    val a = nextString().to[Vector]
+    val b = nextString()
+
+    println((a interleave b).mkString(""))
+  }
+
+  implicit class SeqImprovements[T](a: Seq[T]) {
+
+    def interleave(b: Seq[T])(implicit cbf: CanBuildFrom[Seq[T], T, Seq[T]]): Seq[T] = {
+      require(a.size == b.size)
+
+      @tailrec
+      def recursiveInterleave(indexA: Int = 0,
+                              indexB: Int = 0,
+                              accumulator: mutable.Builder[T, Seq[T]] = cbf()): Seq[T] = {
+        if (indexA == a.size) {
+          accumulator.result()
+        } else {
+          accumulator += a(indexA) += b(indexB)
+          recursiveInterleave(indexA + 1, indexB + 1, accumulator)
         }
-        println(s"$adjustedHours:${hoursMinutesSeconds(1)}:${hoursMinutesSeconds(2)}")
-      case "PM" =>
-        val adjustedHours = hoursMinutesSeconds(0) match {
-          case "12" => "12"
-          case _ => hoursMinutesSeconds(0).toInt + 12
+      }
+
+      recursiveInterleave()
+    }
+  }
+
+  implicit class IterableImprovements[T](a: Iterable[T]) {
+
+    def interleave(b: Iterable[T])(implicit cbf: CanBuildFrom[Iterable[T], T, Iterable[T]]): Iterable[T] = {
+      require(a.size == b.size)
+
+      @tailrec
+      def recursiveInterleave(a: Iterable[T],
+                              b: Iterable[T],
+                              accumulator: mutable.Builder[T, Iterable[T]] = cbf()): Iterable[T] = {
+        if (a.isEmpty) {
+          accumulator.result()
+        } else {
+          accumulator += a.head += b.head
+          recursiveInterleave(a.tail, b.tail, accumulator)
         }
-        println(s"$adjustedHours:${hoursMinutesSeconds(1)}:${hoursMinutesSeconds(2)}")
-      case _ => println("Input format error")
+      }
+
+      recursiveInterleave(a, b)
     }
   }
 
@@ -51,7 +82,7 @@ object TimeConversion {
   }
 
   @throws[Exception]
-  def run(): Unit = {
+  private def run(): Unit = {
     in = if (INPUT.isEmpty) System.in else new ByteArrayInputStream(INPUT.getBytes)
     out = new PrintWriter(System.out)
 
@@ -72,8 +103,8 @@ object TimeConversion {
   }
 
   private val inputBuffer = new Array[Byte](1024)
-  var lenBuffer = 0
-  var ptrBuffer = 0
+  private var lenBuffer = 0
+  private var ptrBuffer = 0
 
   private def readByte(): Int = {
     if (lenBuffer == -1) throw new InputMismatchException
@@ -103,5 +134,4 @@ object TimeConversion {
     }) {}
     b
   }
-
 }

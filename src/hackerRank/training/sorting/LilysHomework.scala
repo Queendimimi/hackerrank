@@ -64,7 +64,7 @@ object LilysHomework {
     val s = System.currentTimeMillis
     solve()
     out.flush()
-    if (!INPUT.isEmpty) printCustom(System.currentTimeMillis - s + "ms")
+    if (!INPUT.isEmpty) System.out.println(System.currentTimeMillis - s + "ms")
   }
 
   private def nextIntWithIndex[Coll[_]]
@@ -120,9 +120,5 @@ object LilysHomework {
       ptrBuffer += 1
       ptrBuffer - 1
     })
-  }
-
-  private def printCustom(o: AnyRef*): Unit = {
-    println(java.util.Arrays.deepToString(o.toArray))
   }
 }

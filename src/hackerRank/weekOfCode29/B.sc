@@ -41,5 +41,5 @@ println(sort(List("6",
   "3",
   "10",
   "3",
-  "5").toList).mkString("\n"))
+  "5")).mkString("\n"))
 

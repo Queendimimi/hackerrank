@@ -1,18 +1,18 @@
-package HackerRank.Training.Arrays
+package HackerRank.Training.FunctionalProgramming.Introduction
 
 import java.io.{ByteArrayInputStream, IOException, PrintWriter}
 import java.util.InputMismatchException
 
+import scala.annotation.tailrec
 import scala.collection.generic.CanBuildFrom
-import scala.collection.mutable
 import scala.language.higherKinds
 
 /**
   * Copyright (c) 2017 A. Roberto Fischer
   *
-  * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 4/22/2017
+  * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 6/1/2017
   */
-object SparseArrays {
+object EvalEPowX {
   private val INPUT = ""
 
   //------------------------------------------------------------------------------------------//
@@ -20,16 +20,25 @@ object SparseArrays {
   //------------------------------------------------------------------------------------------//
   private def solve(): Unit = {
     val n = nextInt()
-    val map = mutable.Map.empty[String, Int]
-    for (_ <- 0 until n) {
-      val string = nextString()
-      map.get(string) match {
-        case None => map += string -> 1
-        case Some(count) => map += string -> (count + 1)
+    nextDouble[Vector](n).foreach(x => println(e(x)))
+
+  }
+
+  private def power(n: Double, i: Int): Double = {
+    @tailrec
+    def _power(n: Double, i: Int, current: Double): Double = {
+      if (i == 1) {
+        current
+      } else {
+        _power(n, i - 1, current * n)
       }
     }
-    val q = nextInt()
-    println(nextString[Array](q).map(query => map.getOrElse(query, 0)).mkString("\n"))
+
+    if (i == 0) 1 else _power(n, i, n)
+  }
+
+  def e(x: Double): Double = {
+    (1 until 10).map(current => power(x, current) / (1 to current).product).sum + 1d
   }
 
   //------------------------------------------------------------------------------------------//
@@ -56,15 +65,17 @@ object SparseArrays {
     if (!INPUT.isEmpty) System.out.println(System.currentTimeMillis - s + "ms")
   }
 
-  private def nextString[Coll[_]]
-  (n: Int)(implicit cbf: CanBuildFrom[Coll[String], String, Coll[String]]): Coll[String] = {
+  private def nextDouble[Coll[Double]]
+  (n: Int)(implicit cbf: CanBuildFrom[Coll[Double], Double, Coll[Double]]): Coll[Double] = {
     val builder = cbf()
     builder.sizeHint(n)
     for (_ <- 0 until n) {
-      builder += nextString()
+      builder += nextDouble()
     }
     builder.result()
   }
+
+  private def nextDouble(): Double = nextString().toDouble
 
   private def nextString(): String = {
     var b = skip

@@ -1,48 +1,53 @@
-package HackerRank.Training.FunctionalProgramming.DPChallenges
+package HackerRank.Training.FunctionalProgramming.Recursion
 
 import java.io.{ByteArrayInputStream, IOException, PrintWriter}
 import java.util.InputMismatchException
 
-import scala.collection.generic.CanBuildFrom
+import scala.annotation.tailrec
 import scala.collection.mutable
-import scala.language.{higherKinds, implicitConversions}
+import scala.language.higherKinds
 
 /**
   * Copyright (c) 2017 A. Roberto Fischer
   *
-  * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 6/13/2017
+  * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 6/16/2017
   */
-object Fibonacci {
-//  private val INPUT = "1\n100"
-    private val INPUT = ""
+private object StringCompression {
+  private val INPUT = ""
 
   //------------------------------------------------------------------------------------------//
   // Solution                                                                
   //------------------------------------------------------------------------------------------//
   private def solve(): Unit = {
-    val t = nextInt()
-    nextInt[Vector](t).foreach(x => println(fibonacci(x) % BigInt(100000007)))
+    println(nextString().compress())
   }
 
-  type ==>[I, O] = Memo[I, I, O]
+  implicit class StringImprovements(a: String) {
 
-  lazy val fibonacci: Int ==> BigInt = Memo {
-    case 0 => 0
-    case 1 => 1
-    case n if n > 1 => fibonacci(n - 1) + fibonacci(n - 2)
-  }
-
-  case class Memo[I, K, O](f: I => O)(implicit ev$1: I => K) extends (I => O) {
-    type Input = I
-    type Key = K
-    type Output = O
-    private val cache: mutable.Map[K, O] = mutable.Map.empty[K, O]
-
-    override def apply(x: I): O = cache getOrElseUpdate(x, f(x))
+    @tailrec
+    final def compress(index: Int = 0,
+                       previous: Char = ' ',
+                       counter: Int = 0,
+                       accumulator: mutable.StringBuilder = StringBuilder.newBuilder): String = {
+      if (index == a.length) {
+        if (counter > 1) accumulator ++= counter.toString
+        accumulator.result()
+      } else {
+        if (a(index) != previous && counter <= 1) {
+          accumulator += a(index)
+          compress(index + 1, a(index), counter = 1, accumulator)
+        } else if (a(index) != previous && counter > 1) {
+          accumulator ++= counter.toString += a(index)
+          compress(index + 1, a(index), counter = 1, accumulator)
+        } else {
+          compress(index + 1, previous, counter + 1, accumulator)
+        }
+      }
+    }
   }
 
   //------------------------------------------------------------------------------------------//
-  // Input-Output
+  // Input-Output                                                                 
   //------------------------------------------------------------------------------------------//
   private var in: java.io.InputStream = _
   private var out: java.io.PrintWriter = _
@@ -55,7 +60,7 @@ object Fibonacci {
   }
 
   @throws[Exception]
-  def run(): Unit = {
+  private def run(): Unit = {
     in = if (INPUT.isEmpty) System.in else new ByteArrayInputStream(INPUT.getBytes)
     out = new PrintWriter(System.out)
 
@@ -65,43 +70,19 @@ object Fibonacci {
     if (!INPUT.isEmpty) System.out.println(System.currentTimeMillis - s + "ms")
   }
 
-  private def nextInt[Coll[_]]
-  (n: Int)(implicit cbf: CanBuildFrom[Coll[Int], Int, Coll[Int]]): Coll[Int] = {
-    val builder = cbf()
-    builder.sizeHint(n)
-    for (_ <- 0 until n) {
-      builder += nextInt()
-    }
-    builder.result()
-  }
-
-  private def nextInt(): Int = {
-    var num = 0
-    var b = 0
-    var minus = false
-    while ( {
-      b = readByte()
-      b != -1 && !((b >= '0' && b <= '9') || b == '-')
-    }) {
-    }
-    if (b == '-') {
-      minus = true
+  private def nextString(): String = {
+    var b = skip
+    val sb = new java.lang.StringBuilder
+    while (!isSpaceChar(b)) {
+      sb.appendCodePoint(b)
       b = readByte()
     }
-    while (true) {
-      if (b >= '0' && b <= '9') {
-        num = num * 10 + (b - '0')
-      } else {
-        if (minus) return -num else return num
-      }
-      b = readByte()
-    }
-    throw new IOException("Read Int")
+    sb.toString
   }
 
   private val inputBuffer = new Array[Byte](1024)
-  var lenBuffer = 0
-  var ptrBuffer = 0
+  private var lenBuffer = 0
+  private var ptrBuffer = 0
 
   private def readByte(): Int = {
     if (lenBuffer == -1) throw new InputMismatchException
@@ -119,5 +100,16 @@ object Fibonacci {
       ptrBuffer += 1
       ptrBuffer - 1
     })
+  }
+
+  private def isSpaceChar(c: Int) = !(c >= 33 && c <= 126)
+
+  private def skip = {
+    var b = 0
+    while ( {
+      b = readByte()
+      b != -1 && isSpaceChar(b)
+    }) {}
+    b
   }
 }

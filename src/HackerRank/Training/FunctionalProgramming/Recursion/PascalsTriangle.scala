@@ -1,8 +1,9 @@
-package HackerRank.Training.FunctionalProgramming.RecursionChallenges
+package HackerRank.Training.FunctionalProgramming.Recursion
 
 import java.io.{ByteArrayInputStream, IOException, PrintWriter}
 import java.util.InputMismatchException
 
+import scala.collection.mutable
 import scala.language.higherKinds
 
 /**
@@ -10,23 +11,58 @@ import scala.language.higherKinds
   *
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 6/16/2017
   */
-private object SuperDigit {
+private object PascalsTriangle {
   private val INPUT = ""
 
   //------------------------------------------------------------------------------------------//
   // Solution                                                                
   //------------------------------------------------------------------------------------------//
   private def solve(): Unit = {
-    val n = BigInt(nextString())
     val k = nextInt()
-    out.println(1 + ((n * k - 1) % 9))
+
+    println(pascalsTriangle(k - 1).map(_.mkString(" ")).mkString("\n"))
   }
+
+  private def pascalsTriangle(depth: Int) = {
+
+    lazy val triangleMemo: Int ==> Vector[Int] = Memo {
+      case 0 => Vector(1)
+      case 1 => Vector(1, 1)
+      case n => (Iterator(1) ++ triangleMemo(n - 1).sliding(2).map(_.sum) ++ Iterator(1)).toVector
+    }
+
+    lazy val binomialMemo: (Int, Int) ==> Long = Memo {
+      case (n, k) if n == k => 1
+      case (_, 0) => 1
+      case (n, k) => binomialMemo(n - 1, k - 1) + binomialMemo(n - 1, k)
+    }
+
+    val builder = Vector.newBuilder[Vector[Int]]
+    for (i <- 0 to depth) {
+      builder += triangleMemo(i)
+    }
+
+    builder.result()
+  }
+
+  final case class Memo[I, K, O](f: I => O)(implicit ev$1: I => K) extends (I => O) {
+    type Input = I
+    type Key = K
+    type Output = O
+    private val cache: mutable.Map[K, O] = mutable.Map.empty[K, O]
+
+    override def apply(x: I): O = cache getOrElseUpdate(x, f(x))
+  }
+
+  type ==>[I, O] = Memo[I, I, O]
 
   //------------------------------------------------------------------------------------------//
   // Input-Output                                                                 
   //------------------------------------------------------------------------------------------//
   private var in: java.io.InputStream = _
   private var out: java.io.PrintWriter = _
+
+  private def println(x: Any) = out.println(x)
 
   @throws[Exception]
   def main(args: Array[String]): Unit = {
@@ -41,17 +77,7 @@ private object SuperDigit {
     val s = System.currentTimeMillis
     solve()
     out.flush()
-    if (!INPUT.isEmpty) System.out.println(System.currentTimeMillis - s + "ms")
-  }
-
-  private def nextString(): String = {
-    var b = skip
-    val sb = new java.lang.StringBuilder
-    while (!isSpaceChar(b)) {
-      sb.appendCodePoint(b)
-      b = readByte()
-    }
-    sb.toString
+    if (!INPUT.isEmpty) System.out.print(System.currentTimeMillis - s + "ms")
   }
 
   private def nextInt(): Int = {
@@ -98,16 +124,4 @@ private object SuperDigit {
       ptrBuffer - 1
     })
   }
-
-  private def isSpaceChar(c: Int) = !(c >= 33 && c <= 126)
-
-  private def skip = {
-    var b = 0
-    while ( {
-      b = readByte()
-      b != -1 && isSpaceChar(b)
-    }) {}
-    b
-  }
-
 }

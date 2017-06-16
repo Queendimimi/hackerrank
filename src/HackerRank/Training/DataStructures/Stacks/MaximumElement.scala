@@ -1,54 +1,44 @@
-package HackerRank.Training.FunctionalProgramming.DPChallenges
+package HackerRank.Training.DataStructures.Stacks
 
 import java.io.{ByteArrayInputStream, IOException, PrintWriter}
 import java.util.InputMismatchException
 
+import scala.collection.generic.CanBuildFrom
 import scala.collection.mutable
 import scala.language.higherKinds
 
 /**
   * Copyright (c) 2017 A. Roberto Fischer
   *
-  * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 6/13/2017
+  * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 6/7/2017
   */
-object DifferentWays {
-  //  private val INPUT = "1\n10000 2000"
+object MaximumElement {
   private val INPUT = ""
 
   //------------------------------------------------------------------------------------------//
   // Solution                                                                
   //------------------------------------------------------------------------------------------//
   private def solve(): Unit = {
-    val t = nextInt()
+    val n = nextInt()
+    val queries = next[(Int, Int), Vector]({
+      val q = nextInt()
+      val v = if (q == 1) nextInt() else -1
+      (q, v)
+    }, n)
+    val stack = mutable.ArrayStack[(Int, Int)]()
 
-    for (_ <- 0 until t) {
-      println(choose(nextInt(), nextInt()) % BigInt(100000007))
+    var max = Int.MinValue
+    queries.foreach {
+      case (1, value) =>
+        max = Math.max(value, max)
+        stack.push((value, max))
+      case (2, _) =>
+        if (stack.nonEmpty) stack.pop()
+        if (stack.isEmpty) max = Int.MinValue else max = stack.head._2
+      case (3, _) =>
+        stack.headOption.foreach { case (_, maximum) => println(maximum) }
+      case _ => throw new RuntimeException
     }
-  }
-
-  type ==>[I, O] = Memo[I, I, O]
-
-  lazy val choose: (Int, Int) ==> BigInt = Memo {
-    case (n, 0) =>
-      require(0 <= n)
-      1
-    case (n, k) if k == n =>
-      1
-    case (n, k) if k > (n / 2) =>
-      require(k <= n)
-      choose(n, n - k)
-    case (n, k) =>
-      require(k <= n)
-      n * choose(n - 1, k - 1) / k
-  }
-
-  case class Memo[I, K, O](f: I => O)(implicit ev$1: I => K) extends (I => O) {
-    type Input = I
-    type Key = K
-    type Output = O
-    val cache: mutable.Map[K, O] = mutable.Map.empty[K, O]
-
-    override def apply(x: I): O = cache getOrElseUpdate(x, f(x))
   }
 
   //------------------------------------------------------------------------------------------//
@@ -73,6 +63,16 @@ object DifferentWays {
     solve()
     out.flush()
     if (!INPUT.isEmpty) System.out.println(System.currentTimeMillis - s + "ms")
+  }
+
+  private def next[T, Coll[_]](reader: => T, n: Int)
+                              (implicit cbf: CanBuildFrom[Coll[T], T, Coll[T]]): Coll[T] = {
+    val builder = cbf()
+    builder.sizeHint(n)
+    for (_ <- 0 until n) {
+      builder += reader
+    }
+    builder.result()
   }
 
   private def nextInt(): Int = {

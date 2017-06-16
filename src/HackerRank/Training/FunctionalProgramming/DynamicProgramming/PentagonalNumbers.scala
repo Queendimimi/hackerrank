@@ -1,43 +1,47 @@
-package HackerRank.Training.FunctionalProgramming.IntroductionCallenges
+package HackerRank.Training.FunctionalProgramming.DynamicProgramming
 
 import java.io.{ByteArrayInputStream, IOException, PrintWriter}
 import java.util.InputMismatchException
 
-import scala.collection.generic.CanBuildFrom
+import scala.collection.mutable
 import scala.language.higherKinds
 
 /**
   * Copyright (c) 2017 A. Roberto Fischer
   *
-  * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 6/13/2017
+  * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 6/14/2017
   */
-object ComputeThePerimeterOfaPolygon {
+object PentagonalNumbers {
   private val INPUT = ""
 
   //------------------------------------------------------------------------------------------//
   // Solution                                                                
   //------------------------------------------------------------------------------------------//
   private def solve(): Unit = {
-    val n = nextInt()
-    val points = next[Point, Vector](Point(nextInt(), nextInt()), n)
-    val perimeter = (points :+ points.head)
-      .sliding(2)
-      .foldLeft(0.0) { case (sum, value) =>
-        val pointA = value.head
-        val pointB = value.last
-        sum + pointA.distance(pointB)
-      }
-    println(perimeter)
+    val t = nextInt()
+    for (_ <- 0 until t) {
+      val n = nextInt()
+      println(n * (3 * n - 1) / 2)
+      //      println(pentagonalNumber(nextInt()))
+    }
   }
 
-  final case class Point(x: Int, y: Int) {
-    def <(b: Point): Boolean = {
-      (x < b.x) || ((b.x >= x) && (y < b.y))
-    }
+  lazy val pentagonalNumber: Int ==> BigInt = Memo {
+    case 1 => 1
+    case 2 => 5
+    case n if n > 2 =>
+      pentagonalNumber(n - 1) - 2 * (n - 1) + 1 + 5 * n - 5
+  }
 
-    def distance(b: Point): Double = {
-      Math.sqrt((x - b.x) * (x - b.x) + (y - b.y) * (y - b.y))
-    }
+  type ==>[I, O] = Memo[I, I, O]
+
+  case class Memo[I, K, O](f: I => O)(implicit ev$1: I => K) extends (I => O) {
+    type Input = I
+    type Key = K
+    type Output = O
+    val cache: mutable.Map[K, O] = mutable.Map.empty[K, O]
+
+    override def apply(x: I): O = cache getOrElseUpdate(x, f(x))
   }
 
   //------------------------------------------------------------------------------------------//
@@ -62,16 +66,6 @@ object ComputeThePerimeterOfaPolygon {
     solve()
     out.flush()
     if (!INPUT.isEmpty) System.out.println(System.currentTimeMillis - s + "ms")
-  }
-
-  private def next[T, Coll[_]](reader: => T, n: Int)
-                              (implicit cbf: CanBuildFrom[Coll[T], T, Coll[T]]): Coll[T] = {
-    val builder = cbf()
-    builder.sizeHint(n)
-    for (_ <- 0 until n) {
-      builder += reader
-    }
-    builder.result()
   }
 
   private def nextInt(): Int = {

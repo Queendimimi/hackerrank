@@ -1,51 +1,48 @@
-package HackerRank.Training.FunctionalProgramming.DPChallenges
+package HackerRank.Training.FunctionalProgramming.DynamicProgramming
 
 import java.io.{ByteArrayInputStream, IOException, PrintWriter}
 import java.util.InputMismatchException
 
+import scala.collection.generic.CanBuildFrom
 import scala.collection.mutable
-import scala.language.higherKinds
+import scala.language.{higherKinds, implicitConversions}
 
 /**
   * Copyright (c) 2017 A. Roberto Fischer
   *
-  * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 6/14/2017
+  * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 6/13/2017
   */
-object PentagonalNumbers {
-  private val INPUT = ""
+object Fibonacci {
+//  private val INPUT = "1\n100"
+    private val INPUT = ""
 
   //------------------------------------------------------------------------------------------//
   // Solution                                                                
   //------------------------------------------------------------------------------------------//
   private def solve(): Unit = {
     val t = nextInt()
-    for (_ <- 0 until t) {
-      val n = nextInt()
-      println(n * (3 * n - 1) / 2)
-      //      println(pentagonalNumber(nextInt()))
-    }
-  }
-
-  lazy val pentagonalNumber: Int ==> BigInt = Memo {
-    case 1 => 1
-    case 2 => 5
-    case n if n > 2 =>
-      pentagonalNumber(n - 1) - 2 * (n - 1) + 1 + 5 * n - 5
+    nextInt[Vector](t).foreach(x => println(fibonacci(x) % BigInt(100000007)))
   }
 
   type ==>[I, O] = Memo[I, I, O]
+
+  lazy val fibonacci: Int ==> BigInt = Memo {
+    case 0 => 0
+    case 1 => 1
+    case n if n > 1 => fibonacci(n - 1) + fibonacci(n - 2)
+  }
 
   case class Memo[I, K, O](f: I => O)(implicit ev$1: I => K) extends (I => O) {
     type Input = I
     type Key = K
     type Output = O
-    val cache: mutable.Map[K, O] = mutable.Map.empty[K, O]
+    private val cache: mutable.Map[K, O] = mutable.Map.empty[K, O]
 
     override def apply(x: I): O = cache getOrElseUpdate(x, f(x))
   }
 
   //------------------------------------------------------------------------------------------//
-  // Input-Output                                                                 
+  // Input-Output
   //------------------------------------------------------------------------------------------//
   private var in: java.io.InputStream = _
   private var out: java.io.PrintWriter = _
@@ -68,6 +65,16 @@ object PentagonalNumbers {
     if (!INPUT.isEmpty) System.out.println(System.currentTimeMillis - s + "ms")
   }
 
+  private def nextInt[Coll[_]]
+  (n: Int)(implicit cbf: CanBuildFrom[Coll[Int], Int, Coll[Int]]): Coll[Int] = {
+    val builder = cbf()
+    builder.sizeHint(n)
+    for (_ <- 0 until n) {
+      builder += nextInt()
+    }
+    builder.result()
+  }
+
   private def nextInt(): Int = {
     var num = 0
     var b = 0
@@ -75,7 +82,8 @@ object PentagonalNumbers {
     while ( {
       b = readByte()
       b != -1 && !((b >= '0' && b <= '9') || b == '-')
-    }) {}
+    }) {
+    }
     if (b == '-') {
       minus = true
       b = readByte()

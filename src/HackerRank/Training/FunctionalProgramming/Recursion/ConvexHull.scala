@@ -1,4 +1,4 @@
-package HackerRank.Training.FunctionalProgramming.RecursionChallenges
+package HackerRank.Training.FunctionalProgramming.Recursion
 
 
 import java.io.{ByteArrayInputStream, IOException, PrintWriter}

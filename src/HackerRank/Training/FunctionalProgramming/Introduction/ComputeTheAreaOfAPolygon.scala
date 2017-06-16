@@ -1,18 +1,17 @@
-package HackerRank.Training.FunctionalProgramming.IntroductionCallenges
+package HackerRank.Training.FunctionalProgramming.Introduction
 
 import java.io.{ByteArrayInputStream, IOException, PrintWriter}
 import java.util.InputMismatchException
 
-import scala.annotation.tailrec
 import scala.collection.generic.CanBuildFrom
 import scala.language.higherKinds
 
 /**
   * Copyright (c) 2017 A. Roberto Fischer
   *
-  * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 6/1/2017
+  * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 6/2/2017
   */
-object EvalEPowX {
+object ComputeTheAreaOfAPolygon {
   private val INPUT = ""
 
   //------------------------------------------------------------------------------------------//
@@ -20,25 +19,28 @@ object EvalEPowX {
   //------------------------------------------------------------------------------------------//
   private def solve(): Unit = {
     val n = nextInt()
-    nextDouble[Vector](n).foreach(x => println(e(x)))
-
+    val polygon = Polygon(next[Point, Vector](Point(nextInt(), nextInt()), n))
+    println((polygon.area * 100).toInt / 100.0)
   }
 
-  private def power(n: Double, i: Int): Double = {
-    @tailrec
-    def _power(n: Double, i: Int, current: Double): Double = {
-      if (i == 1) {
-        current
-      } else {
-        _power(n, i - 1, current * n)
+
+  case class Point(x: Int, y: Int)
+
+  case class Polygon(orderedPoints: Seq[Point]) {
+    def area: Double = {
+      if (orderedPoints.length <= 1) 0 else {
+
+        val areaSquared = (orderedPoints.last +: orderedPoints)
+          .sliding(2)
+          .map { it =>
+            val (a, b) = (it.head, it.last)
+            (a.x - b.x) * (a.y + b.y)
+          }
+          .sum
+
+        Math.abs(areaSquared) / 2.0
       }
     }
-
-    if (i == 0) 1 else _power(n, i, n)
-  }
-
-  def e(x: Double): Double = {
-    (1 until 10).map(current => power(x, current) / (1 to current).product).sum + 1d
   }
 
   //------------------------------------------------------------------------------------------//
@@ -65,26 +67,14 @@ object EvalEPowX {
     if (!INPUT.isEmpty) System.out.println(System.currentTimeMillis - s + "ms")
   }
 
-  private def nextDouble[Coll[Double]]
-  (n: Int)(implicit cbf: CanBuildFrom[Coll[Double], Double, Coll[Double]]): Coll[Double] = {
+  private def next[T, Coll[_]](reader: => T, n: Int)
+                              (implicit cbf: CanBuildFrom[Coll[T], T, Coll[T]]): Coll[T] = {
     val builder = cbf()
     builder.sizeHint(n)
     for (_ <- 0 until n) {
-      builder += nextDouble()
+      builder += reader
     }
     builder.result()
-  }
-
-  private def nextDouble(): Double = nextString().toDouble
-
-  private def nextString(): String = {
-    var b = skip
-    val sb = new java.lang.StringBuilder
-    while (!isSpaceChar(b)) {
-      sb.appendCodePoint(b)
-      b = readByte()
-    }
-    sb.toString
   }
 
   private def nextInt(): Int = {
@@ -131,16 +121,4 @@ object EvalEPowX {
       ptrBuffer - 1
     })
   }
-
-  private def isSpaceChar(c: Int) = !(c >= 33 && c <= 126)
-
-  private def skip = {
-    var b = 0
-    while ( {
-      b = readByte()
-      b != -1 && isSpaceChar(b)
-    }) {}
-    b
-  }
-
 }

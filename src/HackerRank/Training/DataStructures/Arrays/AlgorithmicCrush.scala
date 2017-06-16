@@ -1,17 +1,16 @@
-package HackerRank.Training.FunctionalProgramming.IntroductionCallenges
+package HackerRank.Training.DataStructures.Arrays
 
 import java.io.{ByteArrayInputStream, IOException, PrintWriter}
 import java.util.InputMismatchException
 
-import scala.collection.generic.CanBuildFrom
 import scala.language.higherKinds
 
 /**
   * Copyright (c) 2017 A. Roberto Fischer
   *
-  * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 6/2/2017
+  * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 4/24/2017
   */
-object ComputeTheAreaOfAPolygon {
+object AlgorithmicCrush {
   private val INPUT = ""
 
   //------------------------------------------------------------------------------------------//
@@ -19,28 +18,23 @@ object ComputeTheAreaOfAPolygon {
   //------------------------------------------------------------------------------------------//
   private def solve(): Unit = {
     val n = nextInt()
-    val polygon = Polygon(next[Point, Vector](Point(nextInt(), nextInt()), n))
-    println((polygon.area * 100).toInt / 100.0)
-  }
+    val array = Array.fill(n + 1)(0)
+    val m = nextInt()
 
-
-  case class Point(x: Int, y: Int)
-
-  case class Polygon(orderedPoints: Seq[Point]) {
-    def area: Double = {
-      if (orderedPoints.length <= 1) 0 else {
-
-        val areaSquared = (orderedPoints.last +: orderedPoints)
-          .sliding(2)
-          .map { it =>
-            val (a, b) = (it.head, it.last)
-            (a.x - b.x) * (a.y + b.y)
-          }
-          .sum
-
-        Math.abs(areaSquared) / 2.0
-      }
+    for (_ <- 0 until m) {
+      val (left, right, amount) = (nextInt(), nextInt(), nextInt())
+      array(left) += amount
+      if (right + 1 <= n) array(right + 1) -= amount
     }
+
+    var x = 0L
+    var max = 0L
+    for (i <- 1 to n) {
+      x += array(i)
+      if (max < x) max = x
+    }
+
+    println(max)
   }
 
   //------------------------------------------------------------------------------------------//
@@ -65,16 +59,6 @@ object ComputeTheAreaOfAPolygon {
     solve()
     out.flush()
     if (!INPUT.isEmpty) System.out.println(System.currentTimeMillis - s + "ms")
-  }
-
-  private def next[T, Coll[_]](reader: => T, n: Int)
-                              (implicit cbf: CanBuildFrom[Coll[T], T, Coll[T]]): Coll[T] = {
-    val builder = cbf()
-    builder.sizeHint(n)
-    for (_ <- 0 until n) {
-      builder += reader
-    }
-    builder.result()
   }
 
   private def nextInt(): Int = {

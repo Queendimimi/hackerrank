@@ -1,48 +1,44 @@
-package HackerRank.Training.FunctionalProgramming.DPChallenges
+package HackerRank.Training.FunctionalProgramming.Introduction
 
 import java.io.{ByteArrayInputStream, IOException, PrintWriter}
 import java.util.InputMismatchException
 
 import scala.collection.generic.CanBuildFrom
-import scala.collection.mutable
 import scala.language.higherKinds
 
 /**
   * Copyright (c) 2017 A. Roberto Fischer
   *
-  * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 6/14/2017
+  * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 6/13/2017
   */
-private object NumberOfBinarySearchTree {
+object ComputeThePerimeterOfaPolygon {
   private val INPUT = ""
 
   //------------------------------------------------------------------------------------------//
   // Solution                                                                
   //------------------------------------------------------------------------------------------//
   private def solve(): Unit = {
-    val t = nextInt()
-    nextInt[Vector](t).foreach(x => println(countPossibleBST(x) % BigInt(100000007)))
-  }
-
-  lazy val countPossibleBST: Int ==> BigInt = Memo {
-    case 0 | 1 => 1
-    case n if n > 1 =>
-      (1 to n).foldLeft(BigInt(0)) { case (accumulator, root) =>
-        val left = countPossibleBST(root - 1)
-        val right = countPossibleBST(n - root)
-        accumulator + left * right
+    val n = nextInt()
+    val points = next[Point, Vector](Point(nextInt(), nextInt()), n)
+    val perimeter = (points :+ points.head)
+      .sliding(2)
+      .foldLeft(0.0) { case (sum, value) =>
+        val pointA = value.head
+        val pointB = value.last
+        sum + pointA.distance(pointB)
       }
+    println(perimeter)
   }
 
-  final case class Memo[I, K, O](f: I => O)(implicit ev$1: I => K) extends (I => O) {
-    type Input = I
-    type Key = K
-    type Output = O
-    val cache: mutable.Map[K, O] = mutable.Map.empty[K, O]
+  final case class Point(x: Int, y: Int) {
+    def <(b: Point): Boolean = {
+      (x < b.x) || ((b.x >= x) && (y < b.y))
+    }
 
-    override def apply(x: I): O = cache getOrElseUpdate(x, f(x))
+    def distance(b: Point): Double = {
+      Math.sqrt((x - b.x) * (x - b.x) + (y - b.y) * (y - b.y))
+    }
   }
-
-  type ==>[I, O] = Memo[I, I, O]
 
   //------------------------------------------------------------------------------------------//
   // Input-Output                                                                 
@@ -58,7 +54,7 @@ private object NumberOfBinarySearchTree {
   }
 
   @throws[Exception]
-  private def run(): Unit = {
+  def run(): Unit = {
     in = if (INPUT.isEmpty) System.in else new ByteArrayInputStream(INPUT.getBytes)
     out = new PrintWriter(System.out)
 
@@ -68,12 +64,12 @@ private object NumberOfBinarySearchTree {
     if (!INPUT.isEmpty) System.out.println(System.currentTimeMillis - s + "ms")
   }
 
-  private def nextInt[Coll[_]]
-  (n: Int)(implicit cbf: CanBuildFrom[Coll[Int], Int, Coll[Int]]): Coll[Int] = {
+  private def next[T, Coll[_]](reader: => T, n: Int)
+                              (implicit cbf: CanBuildFrom[Coll[T], T, Coll[T]]): Coll[T] = {
     val builder = cbf()
     builder.sizeHint(n)
     for (_ <- 0 until n) {
-      builder += nextInt()
+      builder += reader
     }
     builder.result()
   }
@@ -102,8 +98,8 @@ private object NumberOfBinarySearchTree {
   }
 
   private val inputBuffer = new Array[Byte](1024)
-  private var lenBuffer = 0
-  private var ptrBuffer = 0
+  var lenBuffer = 0
+  var ptrBuffer = 0
 
   private def readByte(): Int = {
     if (lenBuffer == -1) throw new InputMismatchException

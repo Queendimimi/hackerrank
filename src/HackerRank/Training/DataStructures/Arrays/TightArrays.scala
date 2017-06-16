@@ -1,4 +1,4 @@
-package HackerRank.Training.Arrays
+package HackerRank.Training.DataStructures.Arrays
 
 import java.io.{ByteArrayInputStream, IOException, PrintWriter}
 import java.util.InputMismatchException
@@ -8,33 +8,29 @@ import scala.language.higherKinds
 /**
   * Copyright (c) 2017 A. Roberto Fischer
   *
-  * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 4/24/2017
+  * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 4/22/2017
   */
-object AlgorithmicCrush {
+object TightArrays {
   private val INPUT = ""
 
   //------------------------------------------------------------------------------------------//
   // Solution                                                                
   //------------------------------------------------------------------------------------------//
   private def solve(): Unit = {
-    val n = nextInt()
-    val array = Array.fill(n + 1)(0)
-    val m = nextInt()
+    val a = nextInt()
+    val b = nextInt()
+    val c = nextInt()
 
-    for (_ <- 0 until m) {
-      val (left, right, amount) = (nextInt(), nextInt(), nextInt())
-      array(left) += amount
-      if (right + 1 <= n) array(right + 1) -= amount
+    val result = if (a >= b && b >= c) {
+      a - c + 1
+    } else if (a <= b && b <= c) {
+      c - a + 1
+    } else if (b < a) {
+      a - b + (c - b) + 1
+    } else if (b > c) {
+      b - a + (b - c) + 1
     }
-
-    var x = 0L
-    var max = 0L
-    for (i <- 1 to n) {
-      x += array(i)
-      if (max < x) max = x
-    }
-
-    println(max)
+    println(result)
   }
 
   //------------------------------------------------------------------------------------------//

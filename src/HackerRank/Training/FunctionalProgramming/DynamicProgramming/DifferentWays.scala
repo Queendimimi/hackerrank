@@ -1,44 +1,54 @@
-package HackerRank.Training.FunctionalProgramming.AdHocChallenges
+package HackerRank.Training.FunctionalProgramming.DynamicProgramming
 
 import java.io.{ByteArrayInputStream, IOException, PrintWriter}
 import java.util.InputMismatchException
 
-import scala.annotation.tailrec
+import scala.collection.mutable
 import scala.language.higherKinds
 
 /**
   * Copyright (c) 2017 A. Roberto Fischer
   *
-  * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 6/14/2017
+  * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 6/13/2017
   */
-object CommonDivisors {
-  private val INPUT = "3\n10 4\n1 100\n288 240"
+object DifferentWays {
+  //  private val INPUT = "1\n10000 2000"
+  private val INPUT = ""
 
   //------------------------------------------------------------------------------------------//
   // Solution                                                                
   //------------------------------------------------------------------------------------------//
   private def solve(): Unit = {
     val t = nextInt()
+
     for (_ <- 0 until t) {
-      println(countCommonDivisors(nextInt(), nextInt()))
+      println(choose(nextInt(), nextInt()) % BigInt(100000007))
     }
   }
 
-  @tailrec
-  private def gcd(a: Int, b: Int): Int = {
-    if (b == 0) a else gcd(b, a % b)
+  type ==>[I, O] = Memo[I, I, O]
+
+  lazy val choose: (Int, Int) ==> BigInt = Memo {
+    case (n, 0) =>
+      require(0 <= n)
+      1
+    case (n, k) if k == n =>
+      1
+    case (n, k) if k > (n / 2) =>
+      require(k <= n)
+      choose(n, n - k)
+    case (n, k) =>
+      require(k <= n)
+      n * choose(n - 1, k - 1) / k
   }
 
-  private def countCommonDivisors(a: Int, b: Int) = {
-    val n = gcd(a, b)
+  case class Memo[I, K, O](f: I => O)(implicit ev$1: I => K) extends (I => O) {
+    type Input = I
+    type Key = K
+    type Output = O
+    val cache: mutable.Map[K, O] = mutable.Map.empty[K, O]
 
-    (1 to Math.sqrt(n).toInt).foldLeft(0) { case (sum, i) =>
-      if (n % i == 0) {
-        if (n / i == i) sum + 1 else sum + 2
-      } else {
-        sum
-      }
-    }
+    override def apply(x: I): O = cache getOrElseUpdate(x, f(x))
   }
 
   //------------------------------------------------------------------------------------------//

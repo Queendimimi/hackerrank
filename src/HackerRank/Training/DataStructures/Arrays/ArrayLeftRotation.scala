@@ -1,18 +1,17 @@
-package HackerRank.Training.Arrays
+package HackerRank.Training.DataStructures.Arrays
 
 import java.io.{ByteArrayInputStream, IOException, PrintWriter}
 import java.util.InputMismatchException
 
 import scala.collection.generic.CanBuildFrom
-import scala.collection.mutable.ListBuffer
-import scala.language.higherKinds
+import scala.language.{higherKinds, reflectiveCalls}
 
 /**
   * Copyright (c) 2017 A. Roberto Fischer
   *
-  * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 6/7/2017
+  * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 4/22/2017
   */
-object DynamicArray {
+object ArrayLeftRotation {
   private val INPUT = ""
 
   //------------------------------------------------------------------------------------------//
@@ -20,17 +19,25 @@ object DynamicArray {
   //------------------------------------------------------------------------------------------//
   private def solve(): Unit = {
     val n = nextInt()
-    val q = nextInt()
-    val seqList = Array.fill(n)(ListBuffer.empty[Int])
-    val queries = next[(Int, Int, Int), Vector]((nextInt(), nextInt(), nextInt()), q)
-    var lastAnswer = 0
-    queries.foreach {
-      case (1, x, y) =>
-        seqList((x ^ lastAnswer) % n) = seqList((x ^ lastAnswer) % n) += y
-      case (2, x, y) =>
-        lastAnswer = seqList((x ^ lastAnswer) % n)(y % seqList((x ^ lastAnswer) % n).size)
-        println(lastAnswer)
-      case _ => throw new RuntimeException
+    val d = nextInt()
+    println(nextInt[Vector](n).rotateLeft(d).mkString(" "))
+  }
+
+  implicit class IterableExt[A, Coll](xs: Coll)
+                                     (implicit c2s: Coll => Seq[A],
+                                      cbf: CanBuildFrom[Coll, A, Coll]) {
+    def rotateRight(i: Int): Coll = {
+      val builder = cbf()
+      val size = xs.size
+      builder ++= xs.view.takeRight(i % size) ++ xs.view.dropRight(i % size)
+      builder.result()
+    }
+
+    def rotateLeft(i: Int): Coll = {
+      val builder = cbf()
+      val size = xs.size
+      builder ++= xs.view.drop(i % size) ++ xs.view.take(i % size)
+      builder.result()
     }
   }
 
@@ -58,12 +65,12 @@ object DynamicArray {
     if (!INPUT.isEmpty) System.out.println(System.currentTimeMillis - s + "ms")
   }
 
-  private def next[T, Coll[_]](reader: => T, n: Int)
-                              (implicit cbf: CanBuildFrom[Coll[T], T, Coll[T]]): Coll[T] = {
+  private def nextInt[Coll[_]]
+  (n: Int)(implicit cbf: CanBuildFrom[Coll[Int], Int, Coll[Int]]): Coll[Int] = {
     val builder = cbf()
     builder.sizeHint(n)
     for (_ <- 0 until n) {
-      builder += reader
+      builder += nextInt()
     }
     builder.result()
   }

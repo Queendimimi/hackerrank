@@ -1,37 +1,48 @@
-package HackerRank.Training.Arrays
+package HackerRank.Training.FunctionalProgramming.DynamicProgramming
 
 import java.io.{ByteArrayInputStream, IOException, PrintWriter}
 import java.util.InputMismatchException
 
+import scala.collection.generic.CanBuildFrom
+import scala.collection.mutable
 import scala.language.higherKinds
 
 /**
   * Copyright (c) 2017 A. Roberto Fischer
   *
-  * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 4/22/2017
+  * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 6/14/2017
   */
-object TightArrays {
+private object NumberOfBinarySearchTree {
   private val INPUT = ""
 
   //------------------------------------------------------------------------------------------//
   // Solution                                                                
   //------------------------------------------------------------------------------------------//
   private def solve(): Unit = {
-    val a = nextInt()
-    val b = nextInt()
-    val c = nextInt()
-
-    val result = if (a >= b && b >= c) {
-      a - c + 1
-    } else if (a <= b && b <= c) {
-      c - a + 1
-    } else if (b < a) {
-      a - b + (c - b) + 1
-    } else if (b > c) {
-      b - a + (b - c) + 1
-    }
-    println(result)
+    val t = nextInt()
+    nextInt[Vector](t).foreach(x => println(countPossibleBST(x) % BigInt(100000007)))
   }
+
+  lazy val countPossibleBST: Int ==> BigInt = Memo {
+    case 0 | 1 => 1
+    case n if n > 1 =>
+      (1 to n).foldLeft(BigInt(0)) { case (accumulator, root) =>
+        val left = countPossibleBST(root - 1)
+        val right = countPossibleBST(n - root)
+        accumulator + left * right
+      }
+  }
+
+  final case class Memo[I, K, O](f: I => O)(implicit ev$1: I => K) extends (I => O) {
+    type Input = I
+    type Key = K
+    type Output = O
+    val cache: mutable.Map[K, O] = mutable.Map.empty[K, O]
+
+    override def apply(x: I): O = cache getOrElseUpdate(x, f(x))
+  }
+
+  type ==>[I, O] = Memo[I, I, O]
 
   //------------------------------------------------------------------------------------------//
   // Input-Output                                                                 
@@ -47,7 +58,7 @@ object TightArrays {
   }
 
   @throws[Exception]
-  def run(): Unit = {
+  private def run(): Unit = {
     in = if (INPUT.isEmpty) System.in else new ByteArrayInputStream(INPUT.getBytes)
     out = new PrintWriter(System.out)
 
@@ -55,6 +66,16 @@ object TightArrays {
     solve()
     out.flush()
     if (!INPUT.isEmpty) System.out.println(System.currentTimeMillis - s + "ms")
+  }
+
+  private def nextInt[Coll[_]]
+  (n: Int)(implicit cbf: CanBuildFrom[Coll[Int], Int, Coll[Int]]): Coll[Int] = {
+    val builder = cbf()
+    builder.sizeHint(n)
+    for (_ <- 0 until n) {
+      builder += nextInt()
+    }
+    builder.result()
   }
 
   private def nextInt(): Int = {
@@ -81,8 +102,8 @@ object TightArrays {
   }
 
   private val inputBuffer = new Array[Byte](1024)
-  var lenBuffer = 0
-  var ptrBuffer = 0
+  private var lenBuffer = 0
+  private var ptrBuffer = 0
 
   private def readByte(): Int = {
     if (lenBuffer == -1) throw new InputMismatchException

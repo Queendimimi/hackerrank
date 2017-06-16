@@ -1,4 +1,4 @@
-package HackerRank.Training.Stacks
+package HackerRank.Training.FunctionalProgramming.Recursion
 
 import java.io.{ByteArrayInputStream, IOException, PrintWriter}
 import java.util.InputMismatchException
@@ -10,9 +10,9 @@ import scala.language.higherKinds
 /**
   * Copyright (c) 2017 A. Roberto Fischer
   *
-  * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 6/7/2017
+  * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 6/13/2017
   */
-object MaximumElement {
+object ConcavePolygon {
   private val INPUT = ""
 
   //------------------------------------------------------------------------------------------//
@@ -20,24 +20,73 @@ object MaximumElement {
   //------------------------------------------------------------------------------------------//
   private def solve(): Unit = {
     val n = nextInt()
-    val queries = next[(Int, Int), Vector]({
-      val q = nextInt()
-      val v = if (q == 1) nextInt() else -1
-      (q, v)
-    }, n)
-    val stack = mutable.ArrayStack[(Int, Int)]()
+    val points = next[Point, Set](Point(nextInt(), nextInt()), n)
+    println(if (isConcavePolygon(points)) "YES" else "NO")
+  }
 
-    var max = Int.MinValue
-    queries.foreach {
-      case (1, value) =>
-        max = Math.max(value, max)
-        stack.push((value, max))
-      case (2, _) =>
-        if (stack.nonEmpty) stack.pop()
-        if (stack.isEmpty) max = Int.MinValue else max = stack.head._2
-      case (3, _) =>
-        stack.headOption.foreach { case (_, maximum) => println(maximum) }
-      case _ => throw new RuntimeException
+  private def isConcavePolygon(points: Set[Point]) = {
+    val convexHullPoints = convexHull(points)
+    convexHullPoints.hashCode() != points.hashCode()
+  }
+
+  final case class Point(x: Int, y: Int) {
+    def <(b: Point): Boolean = {
+      (x < b.x) || ((b.x >= x) && (y < b.y))
+    }
+
+    def distance(b: Point): Double = {
+      Math.sqrt((x - b.x) * (x - b.x) + (y - b.y) * (y - b.y))
+    }
+  }
+
+  private def clockWise(a: Point, b: Point, c: Point) = {
+    zCrossProduct(a, b, c) <= 0
+  }
+
+  private def counterClockWise(a: Point, b: Point, c: Point) = {
+    zCrossProduct(a, b, c) >= 0
+  }
+
+  private def zCrossProduct(a: Point, b: Point, c: Point) = {
+    a.x * (b.y - c.y) + b.x * (c.y - a.y) + c.x * (a.y - b.y)
+  }
+
+  private def convexHull(input: Set[Point]) = {
+    if (input.size < 4) {
+      input
+    } else {
+      val points = input.toVector.sortWith(_ < _)
+      val upperHull = mutable.ArrayBuffer.empty[Point] += points.head
+      val lowerHull = mutable.ArrayBuffer.empty[Point] += points.head
+
+      for (point <- points.iterator.drop(1)) {
+        computeHalfHull(point, points, clockWise, upperHull)
+        computeHalfHull(point, points, counterClockWise, lowerHull)
+      }
+
+      val resultBuilder = Set.newBuilder[Point]
+      resultBuilder ++= upperHull.iterator.drop(1)
+      resultBuilder ++= lowerHull.reverseIterator.drop(1)
+
+      resultBuilder.result()
+    }
+  }
+
+  private def computeHalfHull(currentPoint: Point,
+                              points: Vector[Point],
+                              orientation: (Point, Point, Point) => Boolean,
+                              builder: mutable.ArrayBuffer[Point]) = {
+    if (currentPoint == points(points.size - 1) ||
+      orientation(points.head, currentPoint, points.last)) {
+
+      while (builder.size >= 2 && !orientation(
+        builder(builder.size - 2),
+        builder(builder.size - 1),
+        currentPoint)
+      ) {
+        builder.remove(builder.size - 1)
+      }
+      builder += currentPoint
     }
   }
 

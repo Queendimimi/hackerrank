@@ -1,4 +1,4 @@
-package HackerRank.Training.FunctionalProgramming.RecursionChallenges
+package HackerRank.Training.DataStructures.Stacks
 
 import java.io.{ByteArrayInputStream, IOException, PrintWriter}
 import java.util.InputMismatchException
@@ -10,83 +10,37 @@ import scala.language.higherKinds
 /**
   * Copyright (c) 2017 A. Roberto Fischer
   *
-  * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 6/13/2017
+  * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 6/7/2017
   */
-object ConcavePolygon {
+object BalancedBrackets {
   private val INPUT = ""
 
   //------------------------------------------------------------------------------------------//
   // Solution                                                                
   //------------------------------------------------------------------------------------------//
   private def solve(): Unit = {
+    val alphabet = Map('}' -> '{', ']' -> '[', ')' -> '(')
     val n = nextInt()
-    val points = next[Point, Set](Point(nextInt(), nextInt()), n)
-    println(if (isConcavePolygon(points)) "YES" else "NO")
+    val input = nextString[Vector](n)
+    input.foreach(x => println(if (isBalanced(x, alphabet)) "YES" else "NO"))
   }
 
-  private def isConcavePolygon(points: Set[Point]) = {
-    val convexHullPoints = convexHull(points)
-    convexHullPoints.hashCode() != points.hashCode()
-  }
-
-  final case class Point(x: Int, y: Int) {
-    def <(b: Point): Boolean = {
-      (x < b.x) || ((b.x >= x) && (y < b.y))
-    }
-
-    def distance(b: Point): Double = {
-      Math.sqrt((x - b.x) * (x - b.x) + (y - b.y) * (y - b.y))
-    }
-  }
-
-  private def clockWise(a: Point, b: Point, c: Point) = {
-    zCrossProduct(a, b, c) <= 0
-  }
-
-  private def counterClockWise(a: Point, b: Point, c: Point) = {
-    zCrossProduct(a, b, c) >= 0
-  }
-
-  private def zCrossProduct(a: Point, b: Point, c: Point) = {
-    a.x * (b.y - c.y) + b.x * (c.y - a.y) + c.x * (a.y - b.y)
-  }
-
-  private def convexHull(input: Set[Point]) = {
-    if (input.size < 4) {
-      input
+  private def isBalanced(input: String, alphabet: Map[Char, Char]): Boolean = {
+    if (input.length % 2 != 0) {
+      false
     } else {
-      val points = input.toVector.sortWith(_ < _)
-      val upperHull = mutable.ArrayBuffer.empty[Point] += points.head
-      val lowerHull = mutable.ArrayBuffer.empty[Point] += points.head
-
-      for (point <- points.iterator.drop(1)) {
-        computeHalfHull(point, points, clockWise, upperHull)
-        computeHalfHull(point, points, counterClockWise, lowerHull)
+      val stack = mutable.ArrayStack[Char]()
+      val balanced = input.takeWhile {
+        case char if alphabet.values.toSet.contains(char) =>
+          stack.push(char)
+          true
+        case char if alphabet.keySet.contains(char) =>
+          stack.headOption.fold(false)(_ =>
+            stack.pop() == alphabet(char)
+          )
+        case _ => false
       }
-
-      val resultBuilder = Set.newBuilder[Point]
-      resultBuilder ++= upperHull.iterator.drop(1)
-      resultBuilder ++= lowerHull.reverseIterator.drop(1)
-
-      resultBuilder.result()
-    }
-  }
-
-  private def computeHalfHull(currentPoint: Point,
-                              points: Vector[Point],
-                              orientation: (Point, Point, Point) => Boolean,
-                              builder: mutable.ArrayBuffer[Point]) = {
-    if (currentPoint == points(points.size - 1) ||
-      orientation(points.head, currentPoint, points.last)) {
-
-      while (builder.size >= 2 && !orientation(
-        builder(builder.size - 2),
-        builder(builder.size - 1),
-        currentPoint)
-      ) {
-        builder.remove(builder.size - 1)
-      }
-      builder += currentPoint
+      balanced == input && stack.isEmpty
     }
   }
 
@@ -114,14 +68,24 @@ object ConcavePolygon {
     if (!INPUT.isEmpty) System.out.println(System.currentTimeMillis - s + "ms")
   }
 
-  private def next[T, Coll[_]](reader: => T, n: Int)
-                              (implicit cbf: CanBuildFrom[Coll[T], T, Coll[T]]): Coll[T] = {
+  private def nextString[Coll[_]]
+  (n: Int)(implicit cbf: CanBuildFrom[Coll[String], String, Coll[String]]): Coll[String] = {
     val builder = cbf()
     builder.sizeHint(n)
     for (_ <- 0 until n) {
-      builder += reader
+      builder += nextString()
     }
     builder.result()
+  }
+
+  private def nextString(): String = {
+    var b = skip
+    val sb = new java.lang.StringBuilder
+    while (!isSpaceChar(b)) {
+      sb.appendCodePoint(b)
+      b = readByte()
+    }
+    sb.toString
   }
 
   private def nextInt(): Int = {
@@ -168,4 +132,16 @@ object ConcavePolygon {
       ptrBuffer - 1
     })
   }
+
+  private def isSpaceChar(c: Int) = !(c >= 33 && c <= 126)
+
+  private def skip = {
+    var b = 0
+    while ( {
+      b = readByte()
+      b != -1 && isSpaceChar(b)
+    }) {}
+    b
+  }
+
 }

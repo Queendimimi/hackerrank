@@ -11,7 +11,7 @@ import scala.language.{higherKinds, reflectiveCalls}
   *
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 4/22/2017
   */
-object ArrayLeftRotation {
+object leftRotation {
   private val INPUT = ""
 
   //------------------------------------------------------------------------------------------//

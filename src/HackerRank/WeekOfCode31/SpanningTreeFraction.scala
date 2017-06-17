@@ -12,20 +12,18 @@ import scala.language.higherKinds
   *
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 4/18/2017
   */
-object dSpanningTreeFraction {
-  //  private val INPUT = "10 20\n0 8 98 2\n0 1 99 1\n1 2 100 2\n0 9 99 1\n7 8 98 1\n2 8 100 2\n3 5 100 2\n3 3 97 2\n0 3 100 1\n1 4 98 1\n1 8 98 1\n7 9 97 1\n6 9 100 1\n4 5 100 2\n3 9 98 2\n7 8 99 2\n3 6 98 1\n0 5 100 2\n2 5 99 1\n5 7 99 1\n0"
+object SpanningTreeFraction {
+//  private val INPUT = "10 20\n0 8 98 2\n0 1 99 1\n1 2 100 2\n0 9 99 1\n7 8 98 1\n2 8 100 2\n3 5 100 2\n3 3 97 2\n0 3 100 1\n1 4 98 1\n1 8 98 1\n7 9 97 1\n6 9 100 1\n4 5 100 2\n3 9 98 2\n7 8 99 2\n3 6 98 1\n0 5 100 2\n2 5 99 1\n5 7 99 1\n0"
 
-  private val INPUT = ""
+    private val INPUT = ""
 
   //------------------------------------------------------------------------------------------//
-  // SOLUTION
+  // Solution
   //------------------------------------------------------------------------------------------//
-  var n = 0
-  var m = 0
 
   private def solve(): Unit = {
-    n = nextInt()
-    m = nextInt()
+    val n = nextInt()
+    val m = nextInt()
     val edges = next[Edge, Array]({
       val u = nextInt()
       val v = nextInt()
@@ -37,7 +35,7 @@ object dSpanningTreeFraction {
     val epsilon = 0.00001
     val min = 0
     val max = 10000001
-    val optimalMSTSum = fractionalLinearOptimization(improveTarget(edges, _), epsilon, min, max)
+    val optimalMSTSum = fractionalLinearOptimization(improveTarget(edges, n, _), epsilon, min, max)
     val divider = gcd(optimalMSTSum._1.toInt, optimalMSTSum._2.toInt)
     println(optimalMSTSum._1.toInt / divider + "/" + optimalMSTSum._2.toInt / divider)
   }
@@ -63,13 +61,13 @@ object dSpanningTreeFraction {
     _binarySearch(0.0, min, max)
   }
 
-  private def improveTarget(edges: Seq[Edge], factor: Double) = {
-    val (aSum, bSum) = kruskalMST(edges, factor)
+  private def improveTarget(edges: Seq[Edge], n: Int, factor: Double) = {
+    val (aSum, bSum) = kruskalMST(edges, n, factor)
     val improvement = aSum >= bSum * factor
     if (improvement) Right((aSum, bSum)) else Left((aSum, bSum))
   }
 
-  private def kruskalMST(edges: Seq[Edge], factor: Double) = {
+  private def kruskalMST(edges: Seq[Edge], n: Int, factor: Double) = {
     val unionFind = UnionFind(n)
     val edgeList = edges.sortBy(_.weight(factor))
 

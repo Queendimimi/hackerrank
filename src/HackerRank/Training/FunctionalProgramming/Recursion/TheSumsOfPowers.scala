@@ -23,8 +23,9 @@ private object TheSumsOfPowers {
     val n = nextInt()
 
     val bases = (1 to nthRoot(n, x).toInt).map(x => power(x, n).toInt).toVector
+//    1 to Math.pow(x, 1.0 / n).toInt + 1).map(x => Math.pow(x, n).toInt).toVector
 
-    println(countWays(x, bases)(x))
+    println(countWays(x, bases))
   }
 
   private def nthRoot(n: Int, a: Double): Double = {
@@ -64,16 +65,23 @@ private object TheSumsOfPowers {
   }
 
   //bounded by 1 coin Change
-  private def countWays(amount: Int, coins: Vector[Int]) = {
-    val cache = Array.fill[Int](amount + 1)(0)
-    cache(0) = 1
-
-    for {i <- coins
-         j <- amount - i to 0 by -1} {
-      cache(j + i) += cache(j)
+  private def countWays(amount: Int, values: Vector[Int]) = {
+    //    val cache = Array.fill[Int](amount + 1)(0)
+    //    cache(0) = 1
+    //
+    //    for {i <- values
+    //         j <- amount - i to 0 by -1} {
+    //      cache(j + i) += cache(j)
+    //    }
+    //
+    //    cache.toVector
+    lazy val countMemo: (Int, Vector[Int]) ==> Int = Memo {
+      case (0, _) => 1
+      case (a, v) if v.isEmpty || a < 0 => 0
+      case (a, v) => countMemo(a, v.tail) + countMemo(a - v.head, v.tail)
     }
 
-    cache.toVector
+    countMemo(amount, values)
   }
 
   type ==>[I, O] = Memo[I, I, O]

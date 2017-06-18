@@ -13,7 +13,7 @@ import scala.language.higherKinds
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 6/18/2017
   */
 private object SuperQueensOnAChessboard {
-  private val INPUT = "14"
+  private val INPUT = ""
 
   //------------------------------------------------------------------------------------------//
   // Solution                                                                

@@ -11,31 +11,36 @@ import scala.language.higherKinds
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 6/16/2017
   */
 private object FractalTrees {
-  private val INPUT = ""
+  private val INPUT = "5"
 
   //------------------------------------------------------------------------------------------//
   // Solution                                                                
   //------------------------------------------------------------------------------------------//
   private def solve(): Unit = {
-    val board = Array.fill(63, 100)('_')
-    drawTree(board, 0, 49, depth = nextInt(), 16)
-    println(board.reverse.map(_.mkString).mkString("\n"))
+    println(drawTree(100, 63, 32, nextInt()).reverse.map(_.mkString).mkString("\n"))
   }
 
-  private def drawTree(board: Array[Array[Char]],
-                       startY: Int,
-                       startX: Int,
-                       depth: Int,
-                       halfHeight: Int) {
-    if (depth > 0) {
-      for (k <- 0 until halfHeight) {
-        board(startY + k)(startX) = '1'
-        board(startY + halfHeight + k)(startX + k + 1) = '1'
-        board(startY + halfHeight + k)(startX - k - 1) = '1'
+  private def drawTree(width: Int, height: Int, triangleHeight: Int, depth: Int) = {
+    val board = Array.fill(height, width)('_')
+
+    def recursiveDrawTree(startX: Int = if (width % 2 == 0) width / 2 - 1 else width / 2,
+                          startY: Int = 0,
+                          halfHeight: Int = triangleHeight / 2,
+                          depth: Int = depth): Vector[Vector[Char]] = {
+      if (depth > 0) {
+        for (k <- 0 until halfHeight) {
+          board(startY + k)(startX) = '1'
+          board(startY + halfHeight + k)(startX + k + 1) = '1'
+          board(startY + halfHeight + k)(startX - k - 1) = '1'
+        }
+        recursiveDrawTree(startX + halfHeight, startY + halfHeight * 2, halfHeight / 2, depth - 1)
+        recursiveDrawTree(startX - halfHeight, startY + halfHeight * 2, halfHeight / 2, depth - 1)
+      } else {
+        board.map(_.toVector).toVector
       }
-      drawTree(board, startY + halfHeight * 2, startX + halfHeight, depth - 1, halfHeight / 2)
-      drawTree(board, startY + halfHeight * 2, startX - halfHeight, depth - 1, halfHeight / 2)
     }
+
+    recursiveDrawTree()
   }
 
   //------------------------------------------------------------------------------------------//

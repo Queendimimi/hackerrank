@@ -6,6 +6,7 @@ import java.util.InputMismatchException
 import scala.collection.generic.CanBuildFrom
 import scala.collection.mutable
 import scala.language.{higherKinds, implicitConversions}
+import scala.math.BigInt
 
 /**
   * Copyright (c) 2017 A. Roberto Fischer
@@ -24,22 +25,89 @@ object Fibonacci {
     nextInt[Vector](t).foreach(x => println(fibonacci(x) % BigInt(100000007)))
   }
 
-  type ==>[I, O] = Memo[I, I, O]
+  private def fibonacciForSuperHighNumbers(n: BigInt, mod: BigInt) = {
+    val fibonacciMatrix: Matrix = Matrix(Vector.tabulate(2, 2)((row, col) =>
+      if (row == 1 && col == 1) 0 else 1
+    ))
 
-  lazy val fibonacci: Int ==> BigInt = Memo {
-    case 0 => 0
-    case 1 => 1
-    case n if n > 1 => fibonacci(n - 1) + fibonacci(n - 2)
+    fibonacciMatrix.power(
+      exponent = n,
+      mod
+    )(0)(1)
   }
 
-  case class Memo[I, K, O](f: I => O)(implicit ev$1: I => K) extends (I => O) {
-    type Input = I
-    type Key = K
-    type Output = O
-    private val cache: mutable.Map[K, O] = mutable.Map.empty[K, O]
+  private final case class Matrix(matrix: Vector[Vector[BigInt]]) {
+    val m: Int = matrix.size
+    val n: Int = matrix.map(_.size).head
 
-    override def apply(x: I): O = cache getOrElseUpdate(x, f(x))
+    lazy val identity = Matrix(Vector.tabulate(m, n)((row, col) =>
+      if (row == col) 1 else 0
+    ))
+
+    def row(i: Int): Vector[BigInt] = matrix(i)
+
+    def column(j: Int): Vector[BigInt] = matrix.map(_ (j))
+
+    def mod(c: BigInt): Matrix = {
+      Matrix(matrix.map(_.map(_ % c)))
+    }
+
+    def *(b: Matrix): Matrix = {
+      Matrix(Vector.tabulate(m, b.n)((i, j) =>
+        (this.row(i), b.column(j)).zipped.map(_ * _).sum))
+    }
+
+    def power(exponent: BigInt, mod: BigInt, a: Matrix = this): Matrix = {
+      if (exponent == 0) {
+        identity
+      } else if (exponent % 2 == 1) {
+        (a * power(exponent - 1, mod)) mod mod
+      } else {
+        val d = power(exponent / 2, mod)
+        (d * d) mod mod
+      }
+    }
+
+    def apply(i: Int)(j: Int): BigInt = {
+      matrix(i)(j)
+    }
   }
+
+  private final object fibonacci extends Memo[BigInt, BigInt, BigInt, (BigInt, BigInt)] {
+
+    //  F(2n-1) = F(n)^2 + F(n-1)^2
+    //  F(2n) = (2F(n-1) + F(n))*F(n)
+    def _fibonacci(n: BigInt): (BigInt, BigInt) = {
+      if (n == 0) {
+        cache.getOrElseUpdate(n, (0, 1))
+      } else {
+        val (a, b) = _fibonacci(n / 2)
+        val c = (2 * b - a) * a
+        val d = a * a + b * b
+        if (n % 2 == 0) {
+          cache.getOrElseUpdate(n, (c, d))
+        } else {
+          cache.getOrElseUpdate(n, (d, c + d))
+        }
+      }
+    }
+
+    override def apply(v1: BigInt): BigInt = {
+      _fibonacci(v1)._1
+    }
+
+  }
+
+  abstract class Memo[I, K, O, M](implicit ev$1: I => K) extends (I => O) {
+    private type Input = I
+    private type Output = O
+    private type Memory = M
+    protected val cache: mutable.Map[K, M] = mutable.Map.empty[K, M]
+
+    override def apply(v1: I): O
+  }
+
+  type ==>[I, O] = Memo[I, I, O, O]
 
   //------------------------------------------------------------------------------------------//
   // Input-Output

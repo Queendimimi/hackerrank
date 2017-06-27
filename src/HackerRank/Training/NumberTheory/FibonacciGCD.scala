@@ -56,20 +56,15 @@ private object FibonacciGCD {
         (this.row(i), b.column(j)).zipped.map(_ * _).sum))
     }
 
-    def power(exponent: BigInt, mod: BigInt): Matrix = {
-
-      def _power(e: BigInt, c: BigInt, a: Matrix = this): TailRec[Matrix] = {
-        if (e == 0) {
-          done(identity)
-        } else if (e % 2 == 1) {
-          done((a * tailcall(_power(e - 1, c, a)).result) mod c)
-        } else {
-          val d = tailcall(_power(e / 2, c, a)).result
-          done((d * d) mod c)
-        }
+    def power(exponent: BigInt, mod: BigInt, a: Matrix = this): Matrix = {
+      if (exponent == 0) {
+        identity
+      } else if (exponent % 2 == 1) {
+        (a * power(exponent - 1, mod)) mod mod
+      } else {
+        val d = power(exponent / 2, mod)
+        (d * d) mod mod
       }
-
-      _power(exponent, mod).result
     }
 
     def apply(i: Int)(j: Int): BigInt = {

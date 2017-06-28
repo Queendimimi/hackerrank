@@ -56,43 +56,24 @@ private object FibonacciGCD {
         (this.row(i), b.column(j)).zipped.map(_ * _).sum))
     }
 
-    def power(exponent: BigInt, mod: BigInt, a: Matrix = this): Matrix = {
-      if (exponent == 0) {
-        identity
-      } else if (exponent % 2 == 1) {
-        (a * power(exponent - 1, mod)) mod mod
-      } else {
-        val d = power(exponent / 2, mod)
-        (d * d) mod mod
+    def power(exponent: BigInt, mod: BigInt): Matrix = {
+
+      def _power(e: BigInt, c: BigInt, a: Matrix = this): TailRec[Matrix] = {
+        if (e == 0) {
+          done(identity)
+        } else if (e % 2 == 1) {
+          done((a * tailcall(_power(e - 1, c, a)).result) mod c)
+        } else {
+          val d = tailcall(_power(e / 2, c, a)).result
+          done((d * d) mod c)
+        }
       }
+
+      _power(exponent, mod).result
     }
 
     def apply(i: Int)(j: Int): BigInt = {
       matrix(i)(j)
-    }
-  }
-
-  private final object fibonacci extends Memo[BigInt, BigInt, (BigInt, BigInt)] {
-
-    //  F(2n-1) = F(n)^2 + F(n-1)^2
-    //  F(2n) = (2F(n-1) + F(n))*F(n)
-    def _fibonacci(n: BigInt): TailRec[(BigInt, BigInt)] = {
-      if (n == 0) {
-        done(cache.getOrElseUpdate(n, (0, 1)))
-      } else {
-        val (a, b) = tailcall(_fibonacci(n / 2)).result
-        val c = (2 * b - a) * a
-        val d = a * a + b * b
-        if (n % 2 == 0) {
-          done(cache.getOrElseUpdate(n, (c, d)))
-        } else {
-          done(cache.getOrElseUpdate(n, (d, c + d)))
-        }
-      }
-    }
-
-    override def apply(v1: BigInt): BigInt = {
-      _fibonacci(v1).result._1
     }
   }
 
@@ -111,16 +92,17 @@ private object FibonacciGCD {
     }
   }
 
-  trait Memo[I, O, M] extends (I => O) {
+  trait Memo[I, K, O, M] extends (I => O) {
     private type Input = I
+    private type Key = K
     private type Output = O
     private type Memory = M
-    val cache: mutable.Map[I, M] = mutable.Map.empty[I, M]
+    val cache: mutable.Map[K, M] = mutable.Map.empty[K, M]
 
     override def apply(v1: I): O
   }
 
-  type ==>[I, O] = Memo[I, O, O]
+  type ==>[I, O] = Memo[I, I, O, O]
 
 
   //------------------------------------------------------------------------------------------//

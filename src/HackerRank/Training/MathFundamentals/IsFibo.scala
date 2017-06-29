@@ -24,30 +24,32 @@ private object IsFibo {
     val maxN = BigInt("10000000000")
 
     val fibonacciNumbers = Stream.from(0)
-      .map(n => fibonacci(n))
+      .map(n =>  new Fibonacci[Long].apply(n))
       .takeWhile(_ <= maxN)
-      .foldLeft(Set.newBuilder[BigInt])(_ += _).result()
+      .foldLeft(Set.newBuilder[Long])(_ += _).result()
 
     val t = nextInt()
-    next[BigInt, Vector](BigInt(nextLong()), t).foreach { n =>
+    next[Long, Vector](nextLong(), t).foreach { n =>
       println(
         if (fibonacciNumbers.contains(n)) "IsFibo" else "IsNotFibo"
       )
     }
   }
 
-  private final object fibonacci extends (BigInt ==> (BigInt, BigInt)) {
+  private final class Fibonacci[T: Integral] extends (T ==> (T, T)) {
+
+    import Integral.Implicits._
 
     //  F(2n-1) = F(n)^2 + F(n-1)^2
     //  F(2n) = (2F(n-1) + F(n))*F(n)
-    def _fibonacci(n: BigInt): TailRec[(BigInt, BigInt)] = {
+    def _fibonacci(n: T): TailRec[(T, T)] = {
       if (n == 0) {
-        done(cache.getOrElseUpdate(n, (0, 1)))
+        done(cache.getOrElseUpdate(n, (implicitly[Integral[T]].zero, implicitly[Integral[T]].one)))
       } else {
-        val (a, b) = tailcall(_fibonacci(n / 2)).result
-        val c = (2 * b - a) * a
+        val (a, b) = tailcall(_fibonacci(n / implicitly[Integral[T]].fromInt(2))).result
+        val c = (implicitly[Integral[T]].fromInt(2) * b - a) * a
         val d = a * a + b * b
-        if (n % 2 == 0) {
+        if (n % implicitly[Integral[T]].fromInt(2) == 0) {
           done(cache.getOrElseUpdate(n, (c, d)))
         } else {
           done(cache.getOrElseUpdate(n, (d, c + d)))
@@ -55,7 +57,7 @@ private object IsFibo {
       }
     }
 
-    override def apply(v1: BigInt): BigInt = {
+    override def apply(v1: T): T = {
       _fibonacci(v1).result._1
     }
   }

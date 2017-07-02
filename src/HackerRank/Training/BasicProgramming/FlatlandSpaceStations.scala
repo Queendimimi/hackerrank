@@ -27,7 +27,7 @@ private object FlatlandSpaceStations {
     import Integral.Implicits._
 
     if (n == markedIndices.size) 0 else if (n == markedIndices.size - 1) 1 else {
-      val sortedMarked = markedIndices.view.sorted
+      val sortedMarked = markedIndices.sorted
 
       val leftOuterMax = sortedMarked.head
 

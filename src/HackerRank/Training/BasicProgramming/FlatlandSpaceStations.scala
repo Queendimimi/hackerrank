@@ -1,17 +1,17 @@
-package HackerRank.Training.DataStructures.Arrays
+package HackerRank.Training.BasicProgramming
 
 import java.io.{ByteArrayInputStream, IOException, PrintWriter}
 import java.util.InputMismatchException
 
 import scala.collection.generic.CanBuildFrom
-import scala.language.{higherKinds, reflectiveCalls}
+import scala.language.higherKinds
 
 /**
   * Copyright (c) 2017 A. Roberto Fischer
   *
-  * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 4/22/2017
+  * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 7/2/2017
   */
-object leftRotation {
+private object FlatlandSpaceStations {
   private val INPUT = ""
 
   //------------------------------------------------------------------------------------------//
@@ -19,25 +19,26 @@ object leftRotation {
   //------------------------------------------------------------------------------------------//
   private def solve(): Unit = {
     val n = nextInt()
-    val d = nextInt()
-    println(nextInt[Vector](n).rotateLeft(d).mkString(" "))
+    val m = nextInt()
+    println(maxDistanceToMarked(n, nextInt[Vector](m)))
   }
 
-  implicit class IterableExt[A, Coll](xs: Coll)
-                                     (implicit c2s: Coll => Seq[A],
-                                      cbf: CanBuildFrom[Coll, A, Coll]) {
-    def rotateRight(i: Int): Coll = {
-      val builder = cbf()
-      val size = xs.size
-      builder ++= xs.view.takeRight(i % size) ++ xs.view.dropRight(i % size)
-      builder.result()
-    }
+  private def maxDistanceToMarked[T: Integral](n: T, markedIndices: Seq[T]) = {
+    import Integral.Implicits._
 
-    def rotateLeft(i: Int): Coll = {
-      val builder = cbf()
-      val size = xs.size
-      builder ++= xs.view.drop(i % size) ++ xs.view.take(i % size)
-      builder.result()
+    if (n == markedIndices.size) 0 else if (n == markedIndices.size - 1) 1 else {
+      val sortedMarked = markedIndices.view.sorted
+
+      val leftOuterMax = sortedMarked.head
+
+      val innerMax = sortedMarked
+        .sliding(2)
+        .map(x => (x.last - x.head) / implicitly[Integral[T]].fromInt(2))
+        .max
+
+      val rightOuterMax = n - sortedMarked.last - implicitly[Integral[T]].one
+
+      Vector(leftOuterMax, innerMax, rightOuterMax).max
     }
   }
 
@@ -55,7 +56,7 @@ object leftRotation {
   }
 
   @throws[Exception]
-  def run(): Unit = {
+  private def run(): Unit = {
     in = if (INPUT.isEmpty) System.in else new ByteArrayInputStream(INPUT.getBytes)
     out = new PrintWriter(System.out)
 
@@ -99,8 +100,8 @@ object leftRotation {
   }
 
   private val inputBuffer = new Array[Byte](1024)
-  var lenBuffer = 0
-  var ptrBuffer = 0
+  private var lenBuffer = 0
+  private var ptrBuffer = 0
 
   private def readByte(): Int = {
     if (lenBuffer == -1) throw new InputMismatchException
@@ -119,4 +120,5 @@ object leftRotation {
       ptrBuffer - 1
     })
   }
+
 }

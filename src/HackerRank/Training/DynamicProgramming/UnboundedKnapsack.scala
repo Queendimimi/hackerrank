@@ -12,13 +12,13 @@ import scala.language.higherKinds
   *
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 6/15/2017
   */
-private object UnboundedKnapsack {
-  private val INPUT = ""
+private[this] object UnboundedKnapsack {
+  private[this] val INPUT = ""
 
   //------------------------------------------------------------------------------------------//
   // Solution                                                                
   //------------------------------------------------------------------------------------------//
-  private def solve(): Unit = {
+  private[this] def solve(): Unit = {
     val t = nextInt()
     next[(Int, Vector[Int]), Vector]({
       val n = nextInt()
@@ -29,7 +29,7 @@ private object UnboundedKnapsack {
     }
   }
 
-  private def maxSum(capacity: Int, itemWeights: Vector[Int]) = {
+  private[this] def maxSum(capacity: Int, itemWeights: Vector[Int]) = {
     //    lazy val boundKnapsack: (Int, Int) ==> Int = Memo {
     //      case (i, j) if i < 0 || j == 0 =>
     //        0
@@ -58,7 +58,7 @@ private object UnboundedKnapsack {
     type Input = I
     type Key = K
     type Output = O
-    private val cache: mutable.Map[K, O] = mutable.Map.empty[K, O]
+    private[this] val cache: mutable.Map[K, O] = mutable.Map.empty[K, O]
 
     override def apply(x: I): O = cache getOrElseUpdate(x, f(x))
   }
@@ -68,10 +68,10 @@ private object UnboundedKnapsack {
   //------------------------------------------------------------------------------------------//
   // Input-Output
   //------------------------------------------------------------------------------------------//
-  private var in: java.io.InputStream = _
-  private var out: java.io.PrintWriter = _
+  private[this] var in: java.io.InputStream = _
+  private[this] var out: java.io.PrintWriter = _
 
-  private def println(x: Any) = out.println(x)
+  private[this] def println(x: Any) = out.println(x)
 
   @throws[Exception]
   def main(args: Array[String]): Unit = {
@@ -79,7 +79,7 @@ private object UnboundedKnapsack {
   }
 
   @throws[Exception]
-  private def run(): Unit = {
+  private[this] def run(): Unit = {
     in = if (INPUT.isEmpty) System.in else new ByteArrayInputStream(INPUT.getBytes)
     out = new PrintWriter(System.out)
 
@@ -89,7 +89,7 @@ private object UnboundedKnapsack {
     if (!INPUT.isEmpty) System.out.println(System.currentTimeMillis - s + "ms")
   }
 
-  private def next[T, Coll[_]](reader: => T, n: Int)
+  private[this] def next[T, Coll[_]](reader: => T, n: Int)
                               (implicit cbf: CanBuildFrom[Coll[T], T, Coll[T]]): Coll[T] = {
     val builder = cbf()
     builder.sizeHint(n)
@@ -99,7 +99,7 @@ private object UnboundedKnapsack {
     builder.result()
   }
 
-  private def nextInt[Coll[_]]
+  private[this] def nextInt[Coll[_]]
   (n: Int)(implicit cbf: CanBuildFrom[Coll[Int], Int, Coll[Int]]): Coll[Int] = {
     val builder = cbf()
     builder.sizeHint(n)
@@ -109,7 +109,7 @@ private object UnboundedKnapsack {
     builder.result()
   }
 
-  private def nextInt(): Int = {
+  private[this] def nextInt(): Int = {
     var num = 0
     var b = 0
     var minus = false
@@ -132,11 +132,11 @@ private object UnboundedKnapsack {
     throw new IOException("Read Int")
   }
 
-  private val inputBuffer = new Array[Byte](1024)
-  private var lenBuffer = 0
-  private var ptrBuffer = 0
+  private[this] val inputBuffer = new Array[Byte](1024)
+  private[this] var lenBuffer = 0
+  private[this] var ptrBuffer = 0
 
-  private def readByte(): Int = {
+  private[this] def readByte(): Int = {
     if (lenBuffer == -1) throw new InputMismatchException
     if (ptrBuffer >= lenBuffer) {
       ptrBuffer = 0

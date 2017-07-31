@@ -14,14 +14,14 @@ import scala.language.higherKinds
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 4/20/2017
   */
 object CtciIceCreamParlor {
-  //  private val INPUT = ""
-  private val source = Source.fromURL("https://hr-testcases-us-east-1.s3.amazonaws.com/24108/input01.txt?AWSAccessKeyId=AKIAJAMR4KJHHUS76CYQ&Expires=1492682262&Signature=9OVgVTqrubx%2BTbFIpMFX9fCUYGw%3D&response-content-type=text%2Fplain")
-  private val INPUT = source.getLines mkString "\n"
+  //  private[this] val INPUT = ""
+  private[this] val source = Source.fromURL("https://hr-testcases-us-east-1.s3.amazonaws.com/24108/input01.txt?AWSAccessKeyId=AKIAJAMR4KJHHUS76CYQ&Expires=1492682262&Signature=9OVgVTqrubx%2BTbFIpMFX9fCUYGw%3D&response-content-type=text%2Fplain")
+  private[this] val INPUT = source.getLines mkString "\n"
 
   //------------------------------------------------------------------------------------------//
   // Solution                                                                
   //------------------------------------------------------------------------------------------//
-  private def solve(): Unit = {
+  private[this] def solve(): Unit = {
     val t = nextInt()
     for (_ <- 0 until t) {
       val money = nextInt()
@@ -38,7 +38,7 @@ object CtciIceCreamParlor {
     }
   }
 
-  private def findFlavors(flavorCosts: Seq[Int], money: Int) = {
+  private[this] def findFlavors(flavorCosts: Seq[Int], money: Int) = {
     split(money).find { case (a, b) =>
       if (a != b) {
         flavorCosts.search(a).isInstanceOf[Found] && flavorCosts.search(b).isInstanceOf[Found]
@@ -48,7 +48,7 @@ object CtciIceCreamParlor {
     }
   }
 
-  private def split(n: Int) = {
+  private[this] def split(n: Int) = {
     val builder = Array.newBuilder[(Int, Int)]
     for (i <- 1 to n / 2) {
       builder += ((i, n - i))
@@ -56,7 +56,7 @@ object CtciIceCreamParlor {
     builder.result()
   }
 
-  private def linearSearch(coll: Seq[Int], elem: Int, fromLeft: Boolean = true): Option[Int] = {
+  private[this] def linearSearch(coll: Seq[Int], elem: Int, fromLeft: Boolean = true): Option[Int] = {
     if (fromLeft) {
       for (i <- coll.indices) {
         if (coll(i) == elem) return Some(i + 1)
@@ -73,10 +73,10 @@ object CtciIceCreamParlor {
   //------------------------------------------------------------------------------------------//
   // Input-Output                                                                 
   //------------------------------------------------------------------------------------------//
-  private var in: java.io.InputStream = _
-  private var out: java.io.PrintWriter = _
+  private[this] var in: java.io.InputStream = _
+  private[this] var out: java.io.PrintWriter = _
 
-  private def println(x: Any) = out.println(x)
+  private[this] def println(x: Any) = out.println(x)
 
   @throws[Exception]
   def main(args: Array[String]): Unit = {
@@ -94,11 +94,11 @@ object CtciIceCreamParlor {
     if (!INPUT.isEmpty) print(System.currentTimeMillis - s + "ms")
   }
 
-  private val inputBuffer = new Array[Byte](1024)
+  private[this] val inputBuffer = new Array[Byte](1024)
   var lenBuffer = 0
   var ptrBuffer = 0
 
-  private def readByte(): Int = {
+  private[this] def readByte(): Int = {
     if (lenBuffer == -1) throw new InputMismatchException
     if (ptrBuffer >= lenBuffer) {
       ptrBuffer = 0
@@ -116,7 +116,7 @@ object CtciIceCreamParlor {
     })
   }
 
-  private def nextInt[Coll[Int]]
+  private[this] def nextInt[Coll[Int]]
   (n: Int)(implicit cbf: CanBuildFrom[Coll[Int], Int, Coll[Int]]): Coll[Int] = {
     val builder = cbf()
     builder.sizeHint(n)
@@ -126,7 +126,7 @@ object CtciIceCreamParlor {
     builder.result()
   }
 
-  private def nextInt(): Int = {
+  private[this] def nextInt(): Int = {
     var num = 0
     var b = 0
     var minus = false
@@ -149,7 +149,7 @@ object CtciIceCreamParlor {
     throw new IOException("Read Int")
   }
 
-  private def print(o: AnyRef*): Unit = {
+  private[this] def print(o: AnyRef*): Unit = {
     println(java.util.Arrays.deepToString(o.toArray))
   }
 }

@@ -12,13 +12,13 @@ import scala.language.higherKinds
   *
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 6/14/2017
   */
-private object NumberOfBinarySearchTree {
-  private val INPUT = ""
+private[this] object NumberOfBinarySearchTree {
+  private[this] val INPUT = ""
 
   //------------------------------------------------------------------------------------------//
   // Solution                                                                
   //------------------------------------------------------------------------------------------//
-  private def solve(): Unit = {
+  private[this] def solve(): Unit = {
     val t = nextInt()
     nextInt[Vector](t).foreach(x => println(countPossibleBST(x) % BigInt(100000007)))
   }
@@ -47,10 +47,10 @@ private object NumberOfBinarySearchTree {
   //------------------------------------------------------------------------------------------//
   // Input-Output                                                                 
   //------------------------------------------------------------------------------------------//
-  private var in: java.io.InputStream = _
-  private var out: java.io.PrintWriter = _
+  private[this] var in: java.io.InputStream = _
+  private[this] var out: java.io.PrintWriter = _
 
-  private def println(x: Any) = out.println(x)
+  private[this] def println(x: Any) = out.println(x)
 
   @throws[Exception]
   def main(args: Array[String]): Unit = {
@@ -58,7 +58,7 @@ private object NumberOfBinarySearchTree {
   }
 
   @throws[Exception]
-  private def run(): Unit = {
+  private[this] def run(): Unit = {
     in = if (INPUT.isEmpty) System.in else new ByteArrayInputStream(INPUT.getBytes)
     out = new PrintWriter(System.out)
 
@@ -68,7 +68,7 @@ private object NumberOfBinarySearchTree {
     if (!INPUT.isEmpty) System.out.println(System.currentTimeMillis - s + "ms")
   }
 
-  private def nextInt[Coll[_]]
+  private[this] def nextInt[Coll[_]]
   (n: Int)(implicit cbf: CanBuildFrom[Coll[Int], Int, Coll[Int]]): Coll[Int] = {
     val builder = cbf()
     builder.sizeHint(n)
@@ -78,7 +78,7 @@ private object NumberOfBinarySearchTree {
     builder.result()
   }
 
-  private def nextInt(): Int = {
+  private[this] def nextInt(): Int = {
     var num = 0
     var b = 0
     var minus = false
@@ -101,11 +101,11 @@ private object NumberOfBinarySearchTree {
     throw new IOException("Read Int")
   }
 
-  private val inputBuffer = new Array[Byte](1024)
-  private var lenBuffer = 0
-  private var ptrBuffer = 0
+  private[this] val inputBuffer = new Array[Byte](1024)
+  private[this] var lenBuffer = 0
+  private[this] var ptrBuffer = 0
 
-  private def readByte(): Int = {
+  private[this] def readByte(): Int = {
     if (lenBuffer == -1) throw new InputMismatchException
     if (ptrBuffer >= lenBuffer) {
       ptrBuffer = 0

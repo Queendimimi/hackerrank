@@ -12,13 +12,13 @@ import scala.language.{higherKinds, implicitConversions}
   *
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 6/15/2017
   */
-private object Euler031CoinSums {
-  private val INPUT = ""
+private[this] object Euler031CoinSums {
+  private[this] val INPUT = ""
 
   //------------------------------------------------------------------------------------------//
   // Solution                                                                
   //------------------------------------------------------------------------------------------//
-  private def solve(): Unit = {
+  private[this] def solve(): Unit = {
     val t = nextInt()
     val coins = Vector(1, 2, 5, 10, 20, 50, 100, 200)
     val amounts = nextInt[Vector](t)
@@ -27,7 +27,7 @@ private object Euler031CoinSums {
     amounts.foreach(amount => println(lookup(amount) % BigInt(1000000007)))
   }
 
-  private def countWays(coins: Vector[Int], amount: Int) = {
+  private[this] def countWays(coins: Vector[Int], amount: Int) = {
     val cache = Array.fill[BigInt](amount + 1)(0)
     cache(0) = 1
 
@@ -60,10 +60,10 @@ private object Euler031CoinSums {
   //------------------------------------------------------------------------------------------//
   // Input-Output                                                                 
   //------------------------------------------------------------------------------------------//
-  private var in: java.io.InputStream = _
-  private var out: java.io.PrintWriter = _
+  private[this] var in: java.io.InputStream = _
+  private[this] var out: java.io.PrintWriter = _
 
-  private def println(x: Any) = out.println(x)
+  private[this] def println(x: Any) = out.println(x)
 
   @throws[Exception]
   def main(args: Array[String]): Unit = {
@@ -71,7 +71,7 @@ private object Euler031CoinSums {
   }
 
   @throws[Exception]
-  private def run(): Unit = {
+  private[this] def run(): Unit = {
     in = if (INPUT.isEmpty) System.in else new ByteArrayInputStream(INPUT.getBytes)
     out = new PrintWriter(System.out)
 
@@ -81,7 +81,7 @@ private object Euler031CoinSums {
     if (!INPUT.isEmpty) System.out.println(System.currentTimeMillis - s + "ms")
   }
 
-  private def nextInt[Coll[_]]
+  private[this] def nextInt[Coll[_]]
   (n: Int)(implicit cbf: CanBuildFrom[Coll[Int], Int, Coll[Int]]): Coll[Int] = {
     val builder = cbf()
     builder.sizeHint(n)
@@ -91,7 +91,7 @@ private object Euler031CoinSums {
     builder.result()
   }
 
-  private def nextInt(): Int = {
+  private[this] def nextInt(): Int = {
     var num = 0
     var b = 0
     var minus = false
@@ -114,11 +114,11 @@ private object Euler031CoinSums {
     throw new IOException("Read Int")
   }
 
-  private val inputBuffer = new Array[Byte](1024)
-  private var lenBuffer = 0
-  private var ptrBuffer = 0
+  private[this] val inputBuffer = new Array[Byte](1024)
+  private[this] var lenBuffer = 0
+  private[this] var ptrBuffer = 0
 
-  private def readByte(): Int = {
+  private[this] def readByte(): Int = {
     if (lenBuffer == -1) throw new InputMismatchException
     if (ptrBuffer >= lenBuffer) {
       ptrBuffer = 0

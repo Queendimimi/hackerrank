@@ -14,13 +14,13 @@ import scala.util.control.TailCalls.{TailRec, done, tailcall}
   *
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 6/28/2017
   */
-private object IsFibo {
-  private val INPUT = ""
+private[this] object IsFibo {
+  private[this] val INPUT = ""
 
   //------------------------------------------------------------------------------------------//
   // Solution                                                                
   //------------------------------------------------------------------------------------------//
-  private def solve(): Unit = {
+  private[this] def solve(): Unit = {
     val maxN = BigInt("10000000000")
 
     val fibonacciNumbers = Stream.from(0)
@@ -36,7 +36,7 @@ private object IsFibo {
     }
   }
 
-  private final class Fibonacci[T: Integral] extends (T ==> (T, T)) {
+  private[this] final class Fibonacci[T: Integral] extends (T ==> (T, T)) {
 
     import Integral.Implicits._
 
@@ -63,10 +63,10 @@ private object IsFibo {
   }
 
   trait Memo[I, K, O, M] extends (I => O) {
-    private type Input = I
-    private type Key = K
-    private type Output = O
-    private type Memory = M
+    private[this] type Input = I
+    private[this] type Key = K
+    private[this] type Output = O
+    private[this] type Memory = M
     val cache: mutable.Map[K, M] = mutable.Map.empty[K, M]
 
     override def apply(v1: I): O
@@ -78,10 +78,10 @@ private object IsFibo {
   //------------------------------------------------------------------------------------------//
   // Input-Output
   //------------------------------------------------------------------------------------------//
-  private var in: java.io.InputStream = _
-  private var out: java.io.PrintWriter = _
+  private[this] var in: java.io.InputStream = _
+  private[this] var out: java.io.PrintWriter = _
 
-  private def println(x: Any) = out.println(x)
+  private[this] def println(x: Any) = out.println(x)
 
   @throws[Exception]
   def main(args: Array[String]): Unit = {
@@ -89,7 +89,7 @@ private object IsFibo {
   }
 
   @throws[Exception]
-  private def run(): Unit = {
+  private[this] def run(): Unit = {
     in = if (INPUT.isEmpty) System.in else new ByteArrayInputStream(INPUT.getBytes)
     out = new PrintWriter(System.out)
 
@@ -99,7 +99,7 @@ private object IsFibo {
     if (!INPUT.isEmpty) System.out.println(System.currentTimeMillis - s + "ms")
   }
 
-  private def next[T, Coll[_]](reader: => T, n: Int)
+  private[this] def next[T, Coll[_]](reader: => T, n: Int)
                               (implicit cbf: CanBuildFrom[Coll[T], T, Coll[T]]): Coll[T] = {
     val builder = cbf()
     builder.sizeHint(n)
@@ -109,7 +109,7 @@ private object IsFibo {
     builder.result()
   }
 
-  private def nextInt(): Int = {
+  private[this] def nextInt(): Int = {
     var num = 0
     var b = 0
     var minus = false
@@ -132,7 +132,7 @@ private object IsFibo {
     throw new IOException("Read Int")
   }
 
-  private def nextLong(): Long = {
+  private[this] def nextLong(): Long = {
     var num = 0L
     var b = 0
     var minus = false
@@ -155,11 +155,11 @@ private object IsFibo {
     throw new IOException("Read Long")
   }
 
-  private val inputBuffer = new Array[Byte](1024)
-  private var lenBuffer = 0
-  private var ptrBuffer = 0
+  private[this] val inputBuffer = new Array[Byte](1024)
+  private[this] var lenBuffer = 0
+  private[this] var ptrBuffer = 0
 
-  private def readByte(): Int = {
+  private[this] def readByte(): Int = {
     if (lenBuffer == -1) throw new InputMismatchException
     if (ptrBuffer >= lenBuffer) {
       ptrBuffer = 0

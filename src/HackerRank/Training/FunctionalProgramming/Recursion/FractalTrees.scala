@@ -10,17 +10,17 @@ import scala.language.higherKinds
   *
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 6/16/2017
   */
-private object FractalTrees {
-  private val INPUT = "5"
+private[this] object FractalTrees {
+  private[this] val INPUT = "5"
 
   //------------------------------------------------------------------------------------------//
   // Solution                                                                
   //------------------------------------------------------------------------------------------//
-  private def solve(): Unit = {
+  private[this] def solve(): Unit = {
     println(drawTree(100, 63, 32, nextInt()).reverse.map(_.mkString).mkString("\n"))
   }
 
-  private def drawTree(width: Int, height: Int, triangleHeight: Int, depth: Int) = {
+  private[this] def drawTree(width: Int, height: Int, triangleHeight: Int, depth: Int) = {
     val board = Array.fill(height, width)('_')
 
     def recursiveDrawTree(startX: Int = if (width % 2 == 0) width / 2 - 1 else width / 2,
@@ -46,10 +46,10 @@ private object FractalTrees {
   //------------------------------------------------------------------------------------------//
   // Input-Output                                                                 
   //------------------------------------------------------------------------------------------//
-  private var in: java.io.InputStream = _
-  private var out: java.io.PrintWriter = _
+  private[this] var in: java.io.InputStream = _
+  private[this] var out: java.io.PrintWriter = _
 
-  private def println(x: Any) = out.println(x)
+  private[this] def println(x: Any) = out.println(x)
 
   @throws[Exception]
   def main(args: Array[String]): Unit = {
@@ -57,7 +57,7 @@ private object FractalTrees {
   }
 
   @throws[Exception]
-  private def run(): Unit = {
+  private[this] def run(): Unit = {
     in = if (INPUT.isEmpty) System.in else new ByteArrayInputStream(INPUT.getBytes)
     out = new PrintWriter(System.out)
 
@@ -67,7 +67,7 @@ private object FractalTrees {
     if (!INPUT.isEmpty) System.out.println(System.currentTimeMillis - s + "ms")
   }
 
-  private def nextInt(): Int = {
+  private[this] def nextInt(): Int = {
     var num = 0
     var b = 0
     var minus = false
@@ -90,11 +90,11 @@ private object FractalTrees {
     throw new IOException("Read Int")
   }
 
-  private val inputBuffer = new Array[Byte](1024)
-  private var lenBuffer = 0
-  private var ptrBuffer = 0
+  private[this] val inputBuffer = new Array[Byte](1024)
+  private[this] var lenBuffer = 0
+  private[this] var ptrBuffer = 0
 
-  private def readByte(): Int = {
+  private[this] def readByte(): Int = {
     if (lenBuffer == -1) throw new InputMismatchException
     if (ptrBuffer >= lenBuffer) {
       ptrBuffer = 0

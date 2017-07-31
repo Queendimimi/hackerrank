@@ -13,19 +13,19 @@ import scala.language.higherKinds
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 6/7/2017
   */
 object BalancedBrackets {
-  private val INPUT = ""
+  private[this] val INPUT = ""
 
   //------------------------------------------------------------------------------------------//
   // Solution                                                                
   //------------------------------------------------------------------------------------------//
-  private def solve(): Unit = {
+  private[this] def solve(): Unit = {
     val alphabet = Map('}' -> '{', ']' -> '[', ')' -> '(')
     val n = nextInt()
     val input = nextString[Vector](n)
     input.foreach(x => println(if (isBalanced(x, alphabet)) "YES" else "NO"))
   }
 
-  private def isBalanced(input: String, alphabet: Map[Char, Char]): Boolean = {
+  private[this] def isBalanced(input: String, alphabet: Map[Char, Char]): Boolean = {
     if (input.length % 2 != 0) {
       false
     } else {
@@ -47,10 +47,10 @@ object BalancedBrackets {
   //------------------------------------------------------------------------------------------//
   // Input-Output                                                                 
   //------------------------------------------------------------------------------------------//
-  private var in: java.io.InputStream = _
-  private var out: java.io.PrintWriter = _
+  private[this] var in: java.io.InputStream = _
+  private[this] var out: java.io.PrintWriter = _
 
-  private def println(x: Any) = out.println(x)
+  private[this] def println(x: Any) = out.println(x)
 
   @throws[Exception]
   def main(args: Array[String]): Unit = {
@@ -68,7 +68,7 @@ object BalancedBrackets {
     if (!INPUT.isEmpty) System.out.println(System.currentTimeMillis - s + "ms")
   }
 
-  private def nextString[Coll[_]]
+  private[this] def nextString[Coll[_]]
   (n: Int)(implicit cbf: CanBuildFrom[Coll[String], String, Coll[String]]): Coll[String] = {
     val builder = cbf()
     builder.sizeHint(n)
@@ -78,7 +78,7 @@ object BalancedBrackets {
     builder.result()
   }
 
-  private def nextString(): String = {
+  private[this] def nextString(): String = {
     var b = skip
     val sb = new java.lang.StringBuilder
     while (!isSpaceChar(b)) {
@@ -88,7 +88,7 @@ object BalancedBrackets {
     sb.toString
   }
 
-  private def nextInt(): Int = {
+  private[this] def nextInt(): Int = {
     var num = 0
     var b = 0
     var minus = false
@@ -111,11 +111,11 @@ object BalancedBrackets {
     throw new IOException("Read Int")
   }
 
-  private val inputBuffer = new Array[Byte](1024)
+  private[this] val inputBuffer = new Array[Byte](1024)
   var lenBuffer = 0
   var ptrBuffer = 0
 
-  private def readByte(): Int = {
+  private[this] def readByte(): Int = {
     if (lenBuffer == -1) throw new InputMismatchException
     if (ptrBuffer >= lenBuffer) {
       ptrBuffer = 0
@@ -133,9 +133,9 @@ object BalancedBrackets {
     })
   }
 
-  private def isSpaceChar(c: Int) = !(c >= 33 && c <= 126)
+  private[this] def isSpaceChar(c: Int) = !(c >= 33 && c <= 126)
 
-  private def skip = {
+  private[this] def skip = {
     var b = 0
     while ( {
       b = readByte()

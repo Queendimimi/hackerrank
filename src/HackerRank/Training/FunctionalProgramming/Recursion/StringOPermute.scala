@@ -13,13 +13,13 @@ import scala.language.higherKinds
   *
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 6/16/2017
   */
-private object StringOPermute {
-  private val INPUT = ""
+private[this] object StringOPermute {
+  private[this] val INPUT = ""
 
   //------------------------------------------------------------------------------------------//
   // Solution                                                                
   //------------------------------------------------------------------------------------------//
-  private def solve(): Unit = {
+  private[this] def solve(): Unit = {
     val t = nextInt()
 
     next[Unit, Vector](out.println(nextString().to[Vector].swapEven.mkString("")), t)
@@ -49,8 +49,8 @@ private object StringOPermute {
   //------------------------------------------------------------------------------------------//
   // Input-Output                                                                 
   //------------------------------------------------------------------------------------------//
-  private var in: java.io.InputStream = _
-  private var out: java.io.PrintWriter = _
+  private[this] var in: java.io.InputStream = _
+  private[this] var out: java.io.PrintWriter = _
 
   @throws[Exception]
   def main(args: Array[String]): Unit = {
@@ -58,7 +58,7 @@ private object StringOPermute {
   }
 
   @throws[Exception]
-  private def run(): Unit = {
+  private[this] def run(): Unit = {
     in = if (INPUT.isEmpty) System.in else new ByteArrayInputStream(INPUT.getBytes)
     out = new PrintWriter(System.out)
 
@@ -68,7 +68,7 @@ private object StringOPermute {
     if (!INPUT.isEmpty) System.out.println(System.currentTimeMillis - s + "ms")
   }
 
-  private def next[T, Coll[_]](reader: => T, n: Int)
+  private[this] def next[T, Coll[_]](reader: => T, n: Int)
                               (implicit cbf: CanBuildFrom[Coll[T], T, Coll[T]]): Coll[T] = {
     val builder = cbf()
     builder.sizeHint(n)
@@ -78,7 +78,7 @@ private object StringOPermute {
     builder.result()
   }
 
-  private def nextString(): String = {
+  private[this] def nextString(): String = {
     var b = skip
     val sb = new java.lang.StringBuilder
     while (!isSpaceChar(b)) {
@@ -88,7 +88,7 @@ private object StringOPermute {
     sb.toString
   }
 
-  private def nextInt(): Int = {
+  private[this] def nextInt(): Int = {
     var num = 0
     var b = 0
     var minus = false
@@ -111,11 +111,11 @@ private object StringOPermute {
     throw new IOException("Read Int")
   }
 
-  private val inputBuffer = new Array[Byte](1024)
-  private var lenBuffer = 0
-  private var ptrBuffer = 0
+  private[this] val inputBuffer = new Array[Byte](1024)
+  private[this] var lenBuffer = 0
+  private[this] var ptrBuffer = 0
 
-  private def readByte(): Int = {
+  private[this] def readByte(): Int = {
     if (lenBuffer == -1) throw new InputMismatchException
     if (ptrBuffer >= lenBuffer) {
       ptrBuffer = 0
@@ -133,9 +133,9 @@ private object StringOPermute {
     })
   }
 
-  private def isSpaceChar(c: Int) = !(c >= 33 && c <= 126)
+  private[this] def isSpaceChar(c: Int) = !(c >= 33 && c <= 126)
 
-  private def skip = {
+  private[this] def skip = {
     var b = 0
     while ( {
       b = readByte()

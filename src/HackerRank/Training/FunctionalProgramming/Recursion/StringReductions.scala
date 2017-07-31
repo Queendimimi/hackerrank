@@ -14,13 +14,13 @@ import scala.language.higherKinds
   *
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 6/18/2017
   */
-private object StringReductions {
-  private val INPUT = ""
+private[this] object StringReductions {
+  private[this] val INPUT = ""
 
   //------------------------------------------------------------------------------------------//
   // Solution                                                                
   //------------------------------------------------------------------------------------------//
-  private def solve(): Unit = {
+  private[this] def solve(): Unit = {
     println(nextString().toVector.removeCommonElements().mkString)
   }
 
@@ -48,10 +48,10 @@ private object StringReductions {
   //------------------------------------------------------------------------------------------//
   // Input-Output                                                                 
   //------------------------------------------------------------------------------------------//
-  private var in: java.io.InputStream = _
-  private var out: java.io.PrintWriter = _
+  private[this] var in: java.io.InputStream = _
+  private[this] var out: java.io.PrintWriter = _
 
-  private def println(x: Any) = out.println(x)
+  private[this] def println(x: Any) = out.println(x)
 
   @throws[Exception]
   def main(args: Array[String]): Unit = {
@@ -59,7 +59,7 @@ private object StringReductions {
   }
 
   @throws[Exception]
-  private def run(): Unit = {
+  private[this] def run(): Unit = {
     in = if (INPUT.isEmpty) System.in else new ByteArrayInputStream(INPUT.getBytes)
     out = new PrintWriter(System.out)
 
@@ -69,7 +69,7 @@ private object StringReductions {
     if (!INPUT.isEmpty) System.out.println(System.currentTimeMillis - s + "ms")
   }
 
-  private def nextString(): String = {
+  private[this] def nextString(): String = {
     var b = skip
     val sb = new java.lang.StringBuilder
     while (!isSpaceChar(b)) {
@@ -79,11 +79,11 @@ private object StringReductions {
     sb.toString
   }
 
-  private val inputBuffer = new Array[Byte](1024)
-  private var lenBuffer = 0
-  private var ptrBuffer = 0
+  private[this] val inputBuffer = new Array[Byte](1024)
+  private[this] var lenBuffer = 0
+  private[this] var ptrBuffer = 0
 
-  private def readByte(): Int = {
+  private[this] def readByte(): Int = {
     if (lenBuffer == -1) throw new InputMismatchException
     if (ptrBuffer >= lenBuffer) {
       ptrBuffer = 0
@@ -101,9 +101,9 @@ private object StringReductions {
     })
   }
 
-  private def isSpaceChar(c: Int) = !(c >= 33 && c <= 126)
+  private[this] def isSpaceChar(c: Int) = !(c >= 33 && c <= 126)
 
-  private def skip = {
+  private[this] def skip = {
     var b = 0
     while ( {
       b = readByte()

@@ -12,12 +12,12 @@ import scala.language.higherKinds
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 6/4/2017
   */
 object DesignerPdfViewer {
-  private val INPUT = "6 5 7 3 6 7 3 4 4 2 3 7 1 3 7 4 6 1 2 4 3 3 1 1 3 5\nzbkkfhwplj"
+  private[this] val INPUT = "6 5 7 3 6 7 3 4 4 2 3 7 1 3 7 4 6 1 2 4 3 3 1 1 3 5\nzbkkfhwplj"
 
   //------------------------------------------------------------------------------------------//
   // Solution                                                                
   //------------------------------------------------------------------------------------------//
-  private def solve(): Unit = {
+  private[this] def solve(): Unit = {
     val char = 'a'
     val alphabet = nextIntWithIndex[Vector](26)
       .map { case (height, index) => (char + index).toChar -> height }.toMap
@@ -30,10 +30,10 @@ object DesignerPdfViewer {
   //------------------------------------------------------------------------------------------//
   // Input-Output                                                                 
   //------------------------------------------------------------------------------------------//
-  private var in: java.io.InputStream = _
-  private var out: java.io.PrintWriter = _
+  private[this] var in: java.io.InputStream = _
+  private[this] var out: java.io.PrintWriter = _
 
-  private def println(x: Any) = out.println(x)
+  private[this] def println(x: Any) = out.println(x)
 
   @throws[Exception]
   def main(args: Array[String]): Unit = {
@@ -51,7 +51,7 @@ object DesignerPdfViewer {
     if (!INPUT.isEmpty) System.out.println(System.currentTimeMillis - s + "ms")
   }
 
-  private def nextIntWithIndex[Coll[_]]
+  private[this] def nextIntWithIndex[Coll[_]]
   (n: Int)(implicit cbf: CanBuildFrom[Coll[(Int, Int)], (Int, Int), Coll[(Int, Int)]]): Coll[(Int, Int)] = {
     val builder = cbf()
     builder.sizeHint(n)
@@ -61,7 +61,7 @@ object DesignerPdfViewer {
     builder.result()
   }
 
-  private def nextString(): String = {
+  private[this] def nextString(): String = {
     var b = skip
     val sb = new java.lang.StringBuilder
     while (!isSpaceChar(b)) {
@@ -71,7 +71,7 @@ object DesignerPdfViewer {
     sb.toString
   }
 
-  private def nextInt(): Int = {
+  private[this] def nextInt(): Int = {
     var num = 0
     var b = 0
     var minus = false
@@ -94,11 +94,11 @@ object DesignerPdfViewer {
     throw new IOException("Read Int")
   }
 
-  private val inputBuffer = new Array[Byte](1024)
+  private[this] val inputBuffer = new Array[Byte](1024)
   var lenBuffer = 0
   var ptrBuffer = 0
 
-  private def readByte(): Int = {
+  private[this] def readByte(): Int = {
     if (lenBuffer == -1) throw new InputMismatchException
     if (ptrBuffer >= lenBuffer) {
       ptrBuffer = 0
@@ -116,9 +116,9 @@ object DesignerPdfViewer {
     })
   }
 
-  private def isSpaceChar(c: Int) = !(c >= 33 && c <= 126)
+  private[this] def isSpaceChar(c: Int) = !(c >= 33 && c <= 126)
 
-  private def skip = {
+  private[this] def skip = {
     var b = 0
     while ( {
       b = readByte()

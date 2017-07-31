@@ -11,19 +11,19 @@ import scala.language.higherKinds
   *
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 7/2/2017
   */
-private object FlatlandSpaceStations {
-  private val INPUT = ""
+private[this] object FlatlandSpaceStations {
+  private[this] val INPUT = ""
 
   //------------------------------------------------------------------------------------------//
   // Solution                                                                
   //------------------------------------------------------------------------------------------//
-  private def solve(): Unit = {
+  private[this] def solve(): Unit = {
     val n = nextInt()
     val m = nextInt()
     println(maxDistanceToMarked(n, nextInt[Vector](m)))
   }
 
-  private def maxDistanceToMarked[T: Integral](n: T, markedIndices: Seq[T]) = {
+  private[this] def maxDistanceToMarked[T: Integral](n: T, markedIndices: Seq[T]) = {
     import Integral.Implicits._
 
     if (n == markedIndices.size) 0 else if (n == markedIndices.size - 1) 1 else {
@@ -45,10 +45,10 @@ private object FlatlandSpaceStations {
   //------------------------------------------------------------------------------------------//
   // Input-Output                                                                 
   //------------------------------------------------------------------------------------------//
-  private var in: java.io.InputStream = _
-  private var out: java.io.PrintWriter = _
+  private[this] var in: java.io.InputStream = _
+  private[this] var out: java.io.PrintWriter = _
 
-  private def println(x: Any) = out.println(x)
+  private[this] def println(x: Any) = out.println(x)
 
   @throws[Exception]
   def main(args: Array[String]): Unit = {
@@ -56,7 +56,7 @@ private object FlatlandSpaceStations {
   }
 
   @throws[Exception]
-  private def run(): Unit = {
+  private[this] def run(): Unit = {
     in = if (INPUT.isEmpty) System.in else new ByteArrayInputStream(INPUT.getBytes)
     out = new PrintWriter(System.out)
 
@@ -66,7 +66,7 @@ private object FlatlandSpaceStations {
     if (!INPUT.isEmpty) System.out.println(System.currentTimeMillis - s + "ms")
   }
 
-  private def nextInt[Coll[_]]
+  private[this] def nextInt[Coll[_]]
   (n: Int)(implicit cbf: CanBuildFrom[Coll[Int], Int, Coll[Int]]): Coll[Int] = {
     val builder = cbf()
     builder.sizeHint(n)
@@ -76,7 +76,7 @@ private object FlatlandSpaceStations {
     builder.result()
   }
 
-  private def nextInt(): Int = {
+  private[this] def nextInt(): Int = {
     var num = 0
     var b = 0
     var minus = false
@@ -99,11 +99,11 @@ private object FlatlandSpaceStations {
     throw new IOException("Read Int")
   }
 
-  private val inputBuffer = new Array[Byte](1024)
-  private var lenBuffer = 0
-  private var ptrBuffer = 0
+  private[this] val inputBuffer = new Array[Byte](1024)
+  private[this] var lenBuffer = 0
+  private[this] var ptrBuffer = 0
 
-  private def readByte(): Int = {
+  private[this] def readByte(): Int = {
     if (lenBuffer == -1) throw new InputMismatchException
     if (ptrBuffer >= lenBuffer) {
       ptrBuffer = 0

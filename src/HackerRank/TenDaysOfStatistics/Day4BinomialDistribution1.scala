@@ -12,12 +12,12 @@ import scala.language.higherKinds
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 5/9/2017
   */
 object Day4BinomialDistribution1 {
-  private val INPUT = "1.09 1"
+  private[this] val INPUT = "1.09 1"
 
   //------------------------------------------------------------------------------------------//
   // Solution                                                                
   //------------------------------------------------------------------------------------------//
-  private def solve(): Unit = {
+  private[this] def solve(): Unit = {
     val boys = nextDouble()
     val girls = nextDouble()
     val odds = boys / (boys + girls)
@@ -25,7 +25,7 @@ object Day4BinomialDistribution1 {
   }
 
 
-  private def power(n: Double, i: Int) = {
+  private[this] def power(n: Double, i: Int) = {
     @tailrec
     def _power(n: Double, i: Int, current: Double): Double = {
       if (i == 1) {
@@ -38,25 +38,25 @@ object Day4BinomialDistribution1 {
     if (i == 0) 1.0 else _power(n, i, n)
   }
 
-  private def factorial(n: Int): Int = {
+  private[this] def factorial(n: Int): Int = {
     if (n == 0) 1 else n * factorial(n - 1)
   }
 
-  private def combination(n: Int, k: Int) = {
+  private[this] def combination(n: Int, k: Int) = {
     factorial(n) / (factorial(k) * factorial(n - k))
   }
 
-  private def binomialDist(n: Int, x: Int, p: Double) = {
+  private[this] def binomialDist(n: Int, x: Int, p: Double) = {
     combination(n, x) * power(p, x) * power(1 - p, n - x)
   }
 
   //------------------------------------------------------------------------------------------//
   // Input-Output                                                                 
   //------------------------------------------------------------------------------------------//
-  private var in: java.io.InputStream = _
-  private var out: java.io.PrintWriter = _
+  private[this] var in: java.io.InputStream = _
+  private[this] var out: java.io.PrintWriter = _
 
-  private def println(x: Any) = out.println(x)
+  private[this] def println(x: Any) = out.println(x)
 
   @throws[Exception]
   def main(args: Array[String]): Unit = {
@@ -74,9 +74,9 @@ object Day4BinomialDistribution1 {
     if (!INPUT.isEmpty) System.out.println(System.currentTimeMillis - s + "ms")
   }
 
-  private def nextDouble(): Double = nextString().toDouble
+  private[this] def nextDouble(): Double = nextString().toDouble
 
-  private def nextString(): String = {
+  private[this] def nextString(): String = {
     var b = skip
     val sb = new java.lang.StringBuilder
     while (!isSpaceChar(b)) {
@@ -86,11 +86,11 @@ object Day4BinomialDistribution1 {
     sb.toString
   }
 
-  private val inputBuffer = new Array[Byte](1024)
+  private[this] val inputBuffer = new Array[Byte](1024)
   var lenBuffer = 0
   var ptrBuffer = 0
 
-  private def readByte(): Int = {
+  private[this] def readByte(): Int = {
     if (lenBuffer == -1) throw new InputMismatchException
     if (ptrBuffer >= lenBuffer) {
       ptrBuffer = 0
@@ -108,9 +108,9 @@ object Day4BinomialDistribution1 {
     })
   }
 
-  private def isSpaceChar(c: Int) = !(c >= 33 && c <= 126)
+  private[this] def isSpaceChar(c: Int) = !(c >= 33 && c <= 126)
 
-  private def skip = {
+  private[this] def skip = {
     var b = 0
     while ( {
       b = readByte()

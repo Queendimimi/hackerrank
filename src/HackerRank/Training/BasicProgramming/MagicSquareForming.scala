@@ -12,7 +12,7 @@ import scala.language.higherKinds
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 6/5/2017
   */
 object MagicSquareForming {
-  private val INPUT = ""
+  private[this] val INPUT = ""
 
   //------------------------------------------------------------------------------------------//
   // Solution                                                                
@@ -28,7 +28,7 @@ object MagicSquareForming {
     Vector(Vector(2, 7, 6), Vector(9, 5, 1), Vector(4, 3, 8))
   )
 
-  private def solve(): Unit = {
+  private[this] def solve(): Unit = {
     val square = next[Vector[Int], Vector](nextInt[Vector](3), 3)
 
     val result = allMagicSquares
@@ -42,10 +42,10 @@ object MagicSquareForming {
   //------------------------------------------------------------------------------------------//
   // Input-Output                                                                 
   //------------------------------------------------------------------------------------------//
-  private var in: java.io.InputStream = _
-  private var out: java.io.PrintWriter = _
+  private[this] var in: java.io.InputStream = _
+  private[this] var out: java.io.PrintWriter = _
 
-  private def println(x: Any) = out.println(x)
+  private[this] def println(x: Any) = out.println(x)
 
   @throws[Exception]
   def main(args: Array[String]): Unit = {
@@ -63,7 +63,7 @@ object MagicSquareForming {
     if (!INPUT.isEmpty) System.out.println(System.currentTimeMillis - s + "ms")
   }
 
-  private def next[T, Coll[_]](reader: => T, n: Int)
+  private[this] def next[T, Coll[_]](reader: => T, n: Int)
                               (implicit cbf: CanBuildFrom[Coll[T], T, Coll[T]]): Coll[T] = {
     val builder = cbf()
     builder.sizeHint(n)
@@ -73,7 +73,7 @@ object MagicSquareForming {
     builder.result()
   }
 
-  private def nextInt[Coll[_]]
+  private[this] def nextInt[Coll[_]]
   (n: Int)(implicit cbf: CanBuildFrom[Coll[Int], Int, Coll[Int]]): Coll[Int] = {
     val builder = cbf()
     builder.sizeHint(n)
@@ -83,7 +83,7 @@ object MagicSquareForming {
     builder.result()
   }
 
-  private def nextInt(): Int = {
+  private[this] def nextInt(): Int = {
     var num = 0
     var b = 0
     var minus = false
@@ -106,11 +106,11 @@ object MagicSquareForming {
     throw new IOException("Read Int")
   }
 
-  private val inputBuffer = new Array[Byte](1024)
+  private[this] val inputBuffer = new Array[Byte](1024)
   var lenBuffer = 0
   var ptrBuffer = 0
 
-  private def readByte(): Int = {
+  private[this] def readByte(): Int = {
     if (lenBuffer == -1) throw new InputMismatchException
     if (ptrBuffer >= lenBuffer) {
       ptrBuffer = 0

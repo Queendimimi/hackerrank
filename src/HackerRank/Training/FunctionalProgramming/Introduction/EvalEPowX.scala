@@ -13,18 +13,18 @@ import scala.language.higherKinds
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 6/1/2017
   */
 object EvalEPowX {
-  private val INPUT = ""
+  private[this] val INPUT = ""
 
   //------------------------------------------------------------------------------------------//
   // Solution                                                                
   //------------------------------------------------------------------------------------------//
-  private def solve(): Unit = {
+  private[this] def solve(): Unit = {
     val n = nextInt()
     nextDouble[Vector](n).foreach(x => println(e(x)))
 
   }
 
-  private def power(n: Double, i: Int): Double = {
+  private[this] def power(n: Double, i: Int): Double = {
     @tailrec
     def _power(n: Double, i: Int, current: Double): Double = {
       if (i == 1) {
@@ -44,10 +44,10 @@ object EvalEPowX {
   //------------------------------------------------------------------------------------------//
   // Input-Output                                                                 
   //------------------------------------------------------------------------------------------//
-  private var in: java.io.InputStream = _
-  private var out: java.io.PrintWriter = _
+  private[this] var in: java.io.InputStream = _
+  private[this] var out: java.io.PrintWriter = _
 
-  private def println(x: Any) = out.println(x)
+  private[this] def println(x: Any) = out.println(x)
 
   @throws[Exception]
   def main(args: Array[String]): Unit = {
@@ -65,7 +65,7 @@ object EvalEPowX {
     if (!INPUT.isEmpty) System.out.println(System.currentTimeMillis - s + "ms")
   }
 
-  private def nextDouble[Coll[Double]]
+  private[this] def nextDouble[Coll[Double]]
   (n: Int)(implicit cbf: CanBuildFrom[Coll[Double], Double, Coll[Double]]): Coll[Double] = {
     val builder = cbf()
     builder.sizeHint(n)
@@ -75,9 +75,9 @@ object EvalEPowX {
     builder.result()
   }
 
-  private def nextDouble(): Double = nextString().toDouble
+  private[this] def nextDouble(): Double = nextString().toDouble
 
-  private def nextString(): String = {
+  private[this] def nextString(): String = {
     var b = skip
     val sb = new java.lang.StringBuilder
     while (!isSpaceChar(b)) {
@@ -87,7 +87,7 @@ object EvalEPowX {
     sb.toString
   }
 
-  private def nextInt(): Int = {
+  private[this] def nextInt(): Int = {
     var num = 0
     var b = 0
     var minus = false
@@ -110,11 +110,11 @@ object EvalEPowX {
     throw new IOException("Read Int")
   }
 
-  private val inputBuffer = new Array[Byte](1024)
+  private[this] val inputBuffer = new Array[Byte](1024)
   var lenBuffer = 0
   var ptrBuffer = 0
 
-  private def readByte(): Int = {
+  private[this] def readByte(): Int = {
     if (lenBuffer == -1) throw new InputMismatchException
     if (ptrBuffer >= lenBuffer) {
       ptrBuffer = 0
@@ -132,9 +132,9 @@ object EvalEPowX {
     })
   }
 
-  private def isSpaceChar(c: Int) = !(c >= 33 && c <= 126)
+  private[this] def isSpaceChar(c: Int) = !(c >= 33 && c <= 126)
 
-  private def skip = {
+  private[this] def skip = {
     var b = 0
     while ( {
       b = readByte()

@@ -12,18 +12,18 @@ import scala.language.higherKinds
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 6/3/2017
   */
 object EqualityInAnArray {
-  private val INPUT = "8\n96 96 45 52 73 44 51 96"
+  private[this] val INPUT = "8\n96 96 45 52 73 44 51 96"
 
   //------------------------------------------------------------------------------------------//
   // Solution                                                                
   //------------------------------------------------------------------------------------------//
-  private def solve(): Unit = {
+  private[this] def solve(): Unit = {
     val n = nextInt()
     val countMap = countIntOccurrence(n)
     println(n - countMap.maxBy(_._2)._2)
   }
 
-  private def countIntOccurrence(n: Int) = {
+  private[this] def countIntOccurrence(n: Int) = {
     var map = mutable.Map.empty[Int, Int]
     for (_ <- 0 until n) {
       val current = nextInt()
@@ -38,10 +38,10 @@ object EqualityInAnArray {
   //------------------------------------------------------------------------------------------//
   // Input-Output                                                                 
   //------------------------------------------------------------------------------------------//
-  private var in: java.io.InputStream = _
-  private var out: java.io.PrintWriter = _
+  private[this] var in: java.io.InputStream = _
+  private[this] var out: java.io.PrintWriter = _
 
-  private def println(x: Any) = out.println(x)
+  private[this] def println(x: Any) = out.println(x)
 
   @throws[Exception]
   def main(args: Array[String]): Unit = {
@@ -59,7 +59,7 @@ object EqualityInAnArray {
     if (!INPUT.isEmpty) System.out.println(System.currentTimeMillis - s + "ms")
   }
 
-  private def nextInt(): Int = {
+  private[this] def nextInt(): Int = {
     var num = 0
     var b = 0
     var minus = false
@@ -82,11 +82,11 @@ object EqualityInAnArray {
     throw new IOException("Read Int")
   }
 
-  private val inputBuffer = new Array[Byte](1024)
+  private[this] val inputBuffer = new Array[Byte](1024)
   var lenBuffer = 0
   var ptrBuffer = 0
 
-  private def readByte(): Int = {
+  private[this] def readByte(): Int = {
     if (lenBuffer == -1) throw new InputMismatchException
     if (ptrBuffer >= lenBuffer) {
       ptrBuffer = 0

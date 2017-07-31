@@ -14,12 +14,12 @@ import scala.language.higherKinds
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 4/22/2017
   */
 object Euler002EvenFibonacciNumbers {
-  private val INPUT = ""
+  private[this] val INPUT = ""
 
   //------------------------------------------------------------------------------------------//
   // Solution                                                                
   //------------------------------------------------------------------------------------------//
-  private def solve(): Unit = {
+  private[this] def solve(): Unit = {
     val n = nextInt()
     nextLong[Array](n).foreach(x => println(evenFibonacci(x).sum))
   }
@@ -44,10 +44,10 @@ object Euler002EvenFibonacciNumbers {
   //------------------------------------------------------------------------------------------//
   // Input-Output                                                                 
   //------------------------------------------------------------------------------------------//
-  private var in: java.io.InputStream = _
-  private var out: java.io.PrintWriter = _
+  private[this] var in: java.io.InputStream = _
+  private[this] var out: java.io.PrintWriter = _
 
-  private def println(x: Any) = out.println(x)
+  private[this] def println(x: Any) = out.println(x)
 
   @throws[Exception]
   def main(args: Array[String]): Unit = {
@@ -65,7 +65,7 @@ object Euler002EvenFibonacciNumbers {
     if (!INPUT.isEmpty) System.out.println(System.currentTimeMillis - s + "ms")
   }
 
-  private def nextLong[Coll[_]]
+  private[this] def nextLong[Coll[_]]
   (n: Int)(implicit cbf: CanBuildFrom[Coll[Long], Long, Coll[Long]]): Coll[Long] = {
     val builder = cbf()
     builder.sizeHint(n)
@@ -75,7 +75,7 @@ object Euler002EvenFibonacciNumbers {
     builder.result()
   }
 
-  private def nextInt(): Int = {
+  private[this] def nextInt(): Int = {
     var num = 0
     var b = 0
     var minus = false
@@ -98,7 +98,7 @@ object Euler002EvenFibonacciNumbers {
     throw new IOException("Read Int")
   }
 
-  private def nextLong(): Long = {
+  private[this] def nextLong(): Long = {
     var num = 0L
     var b = 0
     var minus = false
@@ -121,11 +121,11 @@ object Euler002EvenFibonacciNumbers {
     throw new IOException("Read Long")
   }
 
-  private val inputBuffer = new Array[Byte](1024)
+  private[this] val inputBuffer = new Array[Byte](1024)
   var lenBuffer = 0
   var ptrBuffer = 0
 
-  private def readByte(): Int = {
+  private[this] def readByte(): Int = {
     if (lenBuffer == -1) throw new InputMismatchException
     if (ptrBuffer >= lenBuffer) {
       ptrBuffer = 0

@@ -12,12 +12,12 @@ import scala.language.higherKinds
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 4/26/2017
   */
 object Day1InterquartileRange {
-  private val INPUT = ""
+  private[this] val INPUT = ""
 
   //------------------------------------------------------------------------------------------//
   // Solution                                                                
   //------------------------------------------------------------------------------------------//
-  private def solve(): Unit = {
+  private[this] def solve(): Unit = {
     val n = nextInt()
     val x = nextInt[Vector](n)
     val frequency = nextInt[Vector](n)
@@ -31,7 +31,7 @@ object Day1InterquartileRange {
     println(round(result._3 - result._1))
   }
 
-  private def quartiles(input: Vector[Int]) = {
+  private[this] def quartiles(input: Vector[Int]) = {
     val q50 = median(input)
     val (left, right) = splitAtMedian(input)
     val q25 = median(left)
@@ -39,7 +39,7 @@ object Day1InterquartileRange {
     (q25, q50, q75)
   }
 
-  private def splitAtMedian(input: Vector[Int]) = {
+  private[this] def splitAtMedian(input: Vector[Int]) = {
     if (input.length % 2 == 0) {
       input.splitAt(input.length / 2)
     } else {
@@ -64,10 +64,10 @@ object Day1InterquartileRange {
   //------------------------------------------------------------------------------------------//
   // Input-Output                                                                 
   //------------------------------------------------------------------------------------------//
-  private var in: java.io.InputStream = _
-  private var out: java.io.PrintWriter = _
+  private[this] var in: java.io.InputStream = _
+  private[this] var out: java.io.PrintWriter = _
 
-  private def println(x: Any) = out.println(x)
+  private[this] def println(x: Any) = out.println(x)
 
   @throws[Exception]
   def main(args: Array[String]): Unit = {
@@ -85,7 +85,7 @@ object Day1InterquartileRange {
     if (!INPUT.isEmpty) System.out.println(System.currentTimeMillis - s + "ms")
   }
 
-  private def nextInt[Coll[_]]
+  private[this] def nextInt[Coll[_]]
   (n: Int)(implicit cbf: CanBuildFrom[Coll[Int], Int, Coll[Int]]): Coll[Int] = {
     val builder = cbf()
     builder.sizeHint(n)
@@ -95,7 +95,7 @@ object Day1InterquartileRange {
     builder.result()
   }
 
-  private def nextInt(): Int = {
+  private[this] def nextInt(): Int = {
     var num = 0
     var b = 0
     var minus = false
@@ -118,11 +118,11 @@ object Day1InterquartileRange {
     throw new IOException("Read Int")
   }
 
-  private val inputBuffer = new Array[Byte](1024)
+  private[this] val inputBuffer = new Array[Byte](1024)
   var lenBuffer = 0
   var ptrBuffer = 0
 
-  private def readByte(): Int = {
+  private[this] def readByte(): Int = {
     if (lenBuffer == -1) throw new InputMismatchException
     if (ptrBuffer >= lenBuffer) {
       ptrBuffer = 0

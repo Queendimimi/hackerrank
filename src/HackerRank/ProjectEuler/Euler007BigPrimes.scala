@@ -12,18 +12,18 @@ import scala.language.higherKinds
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 4/23/2017
   */
 object Euler007BigPrimes {
-  private val INPUT = "1\n10001"
+  private[this] val INPUT = "1\n10001"
 
   //------------------------------------------------------------------------------------------//
   // Solution                                                                
   //------------------------------------------------------------------------------------------//
-  private def solve(): Unit = {
+  private[this] def solve(): Unit = {
     val n = nextInt()
     nextInt[Array](n).foreach(x => println(nthPrime(x)))
   }
 
   // Count number of set bits in an int
-  private def popCount(number: Int): Int = {
+  private[this] def popCount(number: Int): Int = {
     var n = number
     n -= (n >>> 1) & 0x55555555
     n = ((n >>> 2) & 0x33333333) + (n & 0x33333333)
@@ -31,7 +31,7 @@ object Euler007BigPrimes {
     (n * 0x01010101) >> 24
   }
 
-  private def nthPrime(n: Int): Int = {
+  private[this] def nthPrime(n: Int): Int = {
     if (n < 2) return 2
     if (n == 2) return 3
     if (n == 3) return 5
@@ -98,10 +98,10 @@ object Euler007BigPrimes {
   //------------------------------------------------------------------------------------------//
   // Input-Output
   //------------------------------------------------------------------------------------------//
-  private var in: java.io.InputStream = _
-  private var out: java.io.PrintWriter = _
+  private[this] var in: java.io.InputStream = _
+  private[this] var out: java.io.PrintWriter = _
 
-  private def println(x: Any) = out.println(x)
+  private[this] def println(x: Any) = out.println(x)
 
   @throws[Exception]
   def main(args: Array[String]): Unit = {
@@ -119,7 +119,7 @@ object Euler007BigPrimes {
     if (!INPUT.isEmpty) System.out.println(System.currentTimeMillis - s + "ms")
   }
 
-  private def nextInt[Coll[_]]
+  private[this] def nextInt[Coll[_]]
   (n: Int)(implicit cbf: CanBuildFrom[Coll[Int], Int, Coll[Int]]): Coll[Int] = {
     val builder = cbf()
     builder.sizeHint(n)
@@ -129,7 +129,7 @@ object Euler007BigPrimes {
     builder.result()
   }
 
-  private def nextInt(): Int = {
+  private[this] def nextInt(): Int = {
     var num = 0
     var b = 0
     var minus = false
@@ -152,11 +152,11 @@ object Euler007BigPrimes {
     throw new IOException("Read Int")
   }
 
-  private val inputBuffer = new Array[Byte](1024)
+  private[this] val inputBuffer = new Array[Byte](1024)
   var lenBuffer = 0
   var ptrBuffer = 0
 
-  private def readByte(): Int = {
+  private[this] def readByte(): Int = {
     if (lenBuffer == -1) throw new InputMismatchException
     if (ptrBuffer >= lenBuffer) {
       ptrBuffer = 0

@@ -13,15 +13,15 @@ import scala.language.higherKinds
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 4/18/2017
   */
 object SpanningTreeFraction {
-//  private val INPUT = "10 20\n0 8 98 2\n0 1 99 1\n1 2 100 2\n0 9 99 1\n7 8 98 1\n2 8 100 2\n3 5 100 2\n3 3 97 2\n0 3 100 1\n1 4 98 1\n1 8 98 1\n7 9 97 1\n6 9 100 1\n4 5 100 2\n3 9 98 2\n7 8 99 2\n3 6 98 1\n0 5 100 2\n2 5 99 1\n5 7 99 1\n0"
+//  private[this] val INPUT = "10 20\n0 8 98 2\n0 1 99 1\n1 2 100 2\n0 9 99 1\n7 8 98 1\n2 8 100 2\n3 5 100 2\n3 3 97 2\n0 3 100 1\n1 4 98 1\n1 8 98 1\n7 9 97 1\n6 9 100 1\n4 5 100 2\n3 9 98 2\n7 8 99 2\n3 6 98 1\n0 5 100 2\n2 5 99 1\n5 7 99 1\n0"
 
-    private val INPUT = ""
+    private[this] val INPUT = ""
 
   //------------------------------------------------------------------------------------------//
   // Solution
   //------------------------------------------------------------------------------------------//
 
-  private def solve(): Unit = {
+  private[this] def solve(): Unit = {
     val n = nextInt()
     val m = nextInt()
     val edges = next[Edge, Array]({
@@ -40,7 +40,7 @@ object SpanningTreeFraction {
     println(optimalMSTSum._1.toInt / divider + "/" + optimalMSTSum._2.toInt / divider)
   }
 
-  private def fractionalLinearOptimization(targetFunction: Double => Either[(Double, Double), (Double, Double)],
+  private[this] def fractionalLinearOptimization(targetFunction: Double => Either[(Double, Double), (Double, Double)],
                                            epsilon: Double,
                                            min: Int,
                                            max: Int) = {
@@ -61,13 +61,13 @@ object SpanningTreeFraction {
     _binarySearch(0.0, min, max)
   }
 
-  private def improveTarget(edges: Seq[Edge], n: Int, factor: Double) = {
+  private[this] def improveTarget(edges: Seq[Edge], n: Int, factor: Double) = {
     val (aSum, bSum) = kruskalMST(edges, n, factor)
     val improvement = aSum >= bSum * factor
     if (improvement) Right((aSum, bSum)) else Left((aSum, bSum))
   }
 
-  private def kruskalMST(edges: Seq[Edge], n: Int, factor: Double) = {
+  private[this] def kruskalMST(edges: Seq[Edge], n: Int, factor: Double) = {
     val unionFind = UnionFind(n)
     val edgeList = edges.sortBy(_.weight(factor))
 
@@ -176,10 +176,10 @@ object SpanningTreeFraction {
   //------------------------------------------------------------------------------------------//
   // Input-Output                                                                 
   //------------------------------------------------------------------------------------------//
-  private var in: java.io.InputStream = _
-  private var out: java.io.PrintWriter = _
+  private[this] var in: java.io.InputStream = _
+  private[this] var out: java.io.PrintWriter = _
 
-  private def println(x: Any) = out.println(x)
+  private[this] def println(x: Any) = out.println(x)
 
   @throws[Exception]
   def main(args: Array[String]): Unit = {
@@ -197,11 +197,11 @@ object SpanningTreeFraction {
     if (!INPUT.isEmpty) print(System.currentTimeMillis - s + "ms")
   }
 
-  private val inputBuffer = new Array[Byte](1024)
+  private[this] val inputBuffer = new Array[Byte](1024)
   var lenBuffer = 0
   var ptrBuffer = 0
 
-  private def readByte(): Int = {
+  private[this] def readByte(): Int = {
     if (lenBuffer == -1) throw new InputMismatchException
     if (ptrBuffer >= lenBuffer) {
       ptrBuffer = 0
@@ -219,7 +219,7 @@ object SpanningTreeFraction {
     })
   }
 
-  private def next[T, Coll[_]](reader: => T, n: Int)
+  private[this] def next[T, Coll[_]](reader: => T, n: Int)
                               (implicit cbf: CanBuildFrom[Coll[T], T, Coll[T]]): Coll[T] = {
     val builder = cbf()
     builder.sizeHint(n)
@@ -229,7 +229,7 @@ object SpanningTreeFraction {
     builder.result()
   }
 
-  private def nextInt(): Int = {
+  private[this] def nextInt(): Int = {
     var num = 0
     var b = 0
     var minus = false
@@ -252,7 +252,7 @@ object SpanningTreeFraction {
     throw new IOException("Read Int")
   }
 
-  private def print(o: AnyRef*): Unit = {
+  private[this] def print(o: AnyRef*): Unit = {
     println(java.util.Arrays.deepToString(o.toArray))
   }
 }

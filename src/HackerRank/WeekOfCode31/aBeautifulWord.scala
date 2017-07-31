@@ -9,7 +9,7 @@ import java.util.InputMismatchException
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 4/17/2017
   */
 object aBeautifulWord {
-  private val INPUT = ""
+  private[this] val INPUT = ""
 
   def solve(): Unit = {
     val word = nextString
@@ -28,10 +28,10 @@ object aBeautifulWord {
     }
   }
 
-  private var in: java.io.InputStream = _
-  private var out: java.io.PrintWriter = _
+  private[this] var in: java.io.InputStream = _
+  private[this] var out: java.io.PrintWriter = _
 
-  private def println(x: Any) = out.println(x)
+  private[this] def println(x: Any) = out.println(x)
 
   @throws[Exception]
   def main(args: Array[String]): Unit = {
@@ -49,11 +49,11 @@ object aBeautifulWord {
     if (!INPUT.isEmpty) print(System.currentTimeMillis - s + "ms")
   }
 
-  private val inputBuffer = new Array[Byte](1024)
+  private[this] val inputBuffer = new Array[Byte](1024)
   var lenBuffer = 0
   var ptrBuffer = 0
 
-  private def readByte(): Int = {
+  private[this] def readByte(): Int = {
     if (lenBuffer == -1) throw new InputMismatchException
     if (ptrBuffer >= lenBuffer) {
       ptrBuffer = 0
@@ -71,9 +71,9 @@ object aBeautifulWord {
     })
   }
 
-  private def isSpaceChar(c: Int) = !(c >= 33 && c <= 126)
+  private[this] def isSpaceChar(c: Int) = !(c >= 33 && c <= 126)
 
-  private def skip = {
+  private[this] def skip = {
     var b = 0
     while ( {
       b = readByte()
@@ -82,7 +82,7 @@ object aBeautifulWord {
     b
   }
 
-  private def nextString: String = {
+  private[this] def nextString: String = {
     var b = skip
     val sb = new java.lang.StringBuilder
     while (!isSpaceChar(b)) { // when nextLine, (isSpaceChar(b) && b != ' ')
@@ -92,7 +92,7 @@ object aBeautifulWord {
     sb.toString
   }
 
-  private def print(o: AnyRef*): Unit = {
+  private[this] def print(o: AnyRef*): Unit = {
     println(java.util.Arrays.deepToString(o.toArray))
   }
 }

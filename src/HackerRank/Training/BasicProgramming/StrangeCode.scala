@@ -12,19 +12,19 @@ import scala.language.higherKinds
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 6/8/2017
   */
 object StrangeCode {
-  private val INPUT = "100000000000000"
+  private[this] val INPUT = "100000000000000"
 
   //------------------------------------------------------------------------------------------//
   // Solution                                                                
   //------------------------------------------------------------------------------------------//
-  private def solve(): Unit = {
+  private[this] def solve(): Unit = {
     val t = nextLong()
     //    println(((3 * Math.pow(2, (Math.log((t + 2) / 3) / Math.log(2)).toLong) - 1) * 2 - t).toLong)
     println(strangeCounter(t, 3))
   }
 
   @tailrec
-  private def strangeCounter(time: Long, startValue: Long): Long = {
+  private[this] def strangeCounter(time: Long, startValue: Long): Long = {
     if (time > startValue) {
       strangeCounter(time - startValue, 2 * startValue)
     } else {
@@ -35,10 +35,10 @@ object StrangeCode {
   //------------------------------------------------------------------------------------------//
   // Input-Output                                                                 
   //------------------------------------------------------------------------------------------//
-  private var in: java.io.InputStream = _
-  private var out: java.io.PrintWriter = _
+  private[this] var in: java.io.InputStream = _
+  private[this] var out: java.io.PrintWriter = _
 
-  private def println(x: Any) = out.println(x)
+  private[this] def println(x: Any) = out.println(x)
 
   @throws[Exception]
   def main(args: Array[String]): Unit = {
@@ -56,7 +56,7 @@ object StrangeCode {
     if (!INPUT.isEmpty) System.out.println(System.currentTimeMillis - s + "ms")
   }
 
-  private def nextLong(): Long = {
+  private[this] def nextLong(): Long = {
     var num = 0L
     var b = 0
     var minus = false
@@ -79,11 +79,11 @@ object StrangeCode {
     throw new IOException("Read Long")
   }
 
-  private val inputBuffer = new Array[Byte](1024)
+  private[this] val inputBuffer = new Array[Byte](1024)
   var lenBuffer = 0
   var ptrBuffer = 0
 
-  private def readByte(): Int = {
+  private[this] def readByte(): Int = {
     if (lenBuffer == -1) throw new InputMismatchException
     if (ptrBuffer >= lenBuffer) {
       ptrBuffer = 0

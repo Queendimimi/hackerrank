@@ -13,25 +13,25 @@ import scala.language.higherKinds
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 4/18/2017
   */
 object MarcsCakewalk {
-  private val INPUT = ""
+  private[this] val INPUT = ""
 
   //------------------------------------------------------------------------------------------//
   // Solution                                                                
   //------------------------------------------------------------------------------------------//
-  private def solve(): Unit = {
+  private[this] def solve(): Unit = {
     val n = nextInt()
     val cakes = nextLong[Vector](n)
     println(mustWalk(cakes))
   }
 
-  private def mustWalk(cakes: Seq[Long]) = {
+  private[this] def mustWalk(cakes: Seq[Long]) = {
     cakes.sortBy(-_).zipWithIndex.foldLeft(0L) { (result, current) =>
       val (calories, index) = current
       result + calories * power(2L, index)
     }
   }
 
-  private def power(n: Long, i: Int): Long = {
+  private[this] def power(n: Long, i: Int): Long = {
     @tailrec
     def _power(n: Long, i: Int, current: Long): Long = {
       if (i == 1) {
@@ -47,10 +47,10 @@ object MarcsCakewalk {
   //------------------------------------------------------------------------------------------//
   // Input-Output
   //------------------------------------------------------------------------------------------//
-  private var in: java.io.InputStream = _
-  private var out: java.io.PrintWriter = _
+  private[this] var in: java.io.InputStream = _
+  private[this] var out: java.io.PrintWriter = _
 
-  private def println(x: Any) = out.println(x)
+  private[this] def println(x: Any) = out.println(x)
 
   @throws[Exception]
   def main(args: Array[String]): Unit = {
@@ -68,11 +68,11 @@ object MarcsCakewalk {
     if (!INPUT.isEmpty) print(System.currentTimeMillis - s + "ms")
   }
 
-  private val inputBuffer = new Array[Byte](1024)
+  private[this] val inputBuffer = new Array[Byte](1024)
   var lenBuffer = 0
   var ptrBuffer = 0
 
-  private def readByte(): Int = {
+  private[this] def readByte(): Int = {
     if (lenBuffer == -1) throw new InputMismatchException
     if (ptrBuffer >= lenBuffer) {
       ptrBuffer = 0
@@ -90,7 +90,7 @@ object MarcsCakewalk {
     })
   }
 
-  private def nextLong[Coll[Long]]
+  private[this] def nextLong[Coll[Long]]
   (n: Int)(implicit cbf: CanBuildFrom[Coll[Long], Long, Coll[Long]]): Coll[Long] = {
     val builder = cbf()
     builder.sizeHint(n)
@@ -100,7 +100,7 @@ object MarcsCakewalk {
     builder.result()
   }
 
-  private def nextInt(): Int = {
+  private[this] def nextInt(): Int = {
     var num = 0
     var b = 0
     var minus = false
@@ -124,7 +124,7 @@ object MarcsCakewalk {
     throw new IOException("Read Int")
   }
 
-  private def nextLong(): Long = {
+  private[this] def nextLong(): Long = {
     var num = 0
     var b = 0
     var minus = false
@@ -148,7 +148,7 @@ object MarcsCakewalk {
     throw new IOException("Read Long")
   }
 
-  private def print(o: AnyRef*): Unit = {
+  private[this] def print(o: AnyRef*): Unit = {
     println(java.util.Arrays.deepToString(o.toArray))
   }
 }

@@ -12,25 +12,25 @@ import scala.language.higherKinds
   *
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 6/17/2017
   */
-private object SubstringSearching {
-  private val INPUT = ""
+private[this] object SubstringSearching {
+  private[this] val INPUT = ""
 
   //------------------------------------------------------------------------------------------//
   // Solution                                                                
   //------------------------------------------------------------------------------------------//
-  private def solve(): Unit = {
+  private[this] def solve(): Unit = {
 
   }
 
   //------------------------------------------------------------------------------------------//
   // Input-Output                                                                 
   //------------------------------------------------------------------------------------------//
-  private var in: java.io.InputStream = _
-  private var out: java.io.PrintWriter = _
+  private[this] var in: java.io.InputStream = _
+  private[this] var out: java.io.PrintWriter = _
 
-  private def println(x: Any) = out.println(x)
+  private[this] def println(x: Any) = out.println(x)
 
-  private def print(x: Any) = out.print(x)
+  private[this] def print(x: Any) = out.print(x)
 
   @throws[Exception]
   def main(args: Array[String]): Unit = {
@@ -38,7 +38,7 @@ private object SubstringSearching {
   }
 
   @throws[Exception]
-  private def run(): Unit = {
+  private[this] def run(): Unit = {
     in = if (INPUT.isEmpty) System.in else new ByteArrayInputStream(INPUT.getBytes)
     out = new PrintWriter(System.out)
 
@@ -48,7 +48,7 @@ private object SubstringSearching {
     if (!INPUT.isEmpty) System.out.println(System.currentTimeMillis - s + "ms")
   }
 
-  private def nextSeq[T, Coll[_]](reader: => Seq[T], n: Int)
+  private[this] def nextSeq[T, Coll[_]](reader: => Seq[T], n: Int)
                                  (implicit cbf: CanBuildFrom[Coll[T], T, Coll[T]]): Coll[T] = {
     val builder = cbf()
     builder.sizeHint(n)
@@ -58,7 +58,7 @@ private object SubstringSearching {
     builder.result()
   }
 
-  private def next[T, Coll[_]](reader: => T, n: Int)
+  private[this] def next[T, Coll[_]](reader: => T, n: Int)
                               (implicit cbf: CanBuildFrom[Coll[T], T, Coll[T]]): Coll[T] = {
     val builder = cbf()
     builder.sizeHint(n)
@@ -68,7 +68,7 @@ private object SubstringSearching {
     builder.result()
   }
 
-  private def nextWithIndex[T, Coll[_]](reader: => T, n: Int)
+  private[this] def nextWithIndex[T, Coll[_]](reader: => T, n: Int)
                                        (implicit cbf: CanBuildFrom[Coll[(T, Int)], (T, Int), Coll[(T, Int)]]): Coll[(T, Int)] = {
     val builder = cbf()
     builder.sizeHint(n)
@@ -78,7 +78,7 @@ private object SubstringSearching {
     builder.result()
   }
 
-  private def nextDouble[Coll[Double]]
+  private[this] def nextDouble[Coll[Double]]
   (n: Int)(implicit cbf: CanBuildFrom[Coll[Double], Double, Coll[Double]]): Coll[Double] = {
     val builder = cbf()
     builder.sizeHint(n)
@@ -88,7 +88,7 @@ private object SubstringSearching {
     builder.result()
   }
 
-  private def nextDoubleWithIndex[Coll[_]]
+  private[this] def nextDoubleWithIndex[Coll[_]]
   (n: Int)(implicit cbf: CanBuildFrom[Coll[(Double, Int)], (Double, Int), Coll[(Double, Int)]]): Coll[(Double, Int)] = {
     val builder = cbf()
     builder.sizeHint(n)
@@ -98,7 +98,7 @@ private object SubstringSearching {
     builder.result()
   }
 
-  private def nextChar[Coll[_]]
+  private[this] def nextChar[Coll[_]]
   (n: Int)(implicit cbf: CanBuildFrom[Coll[Char], Char, Coll[Char]]): Coll[Char] = {
     val builder = cbf()
     builder.sizeHint(n)
@@ -112,7 +112,7 @@ private object SubstringSearching {
     builder.result()
   }
 
-  private def nextCharWithIndex[Coll[_]]
+  private[this] def nextCharWithIndex[Coll[_]]
   (n: Int)(implicit cbf: CanBuildFrom[Coll[(Char, Int)], (Char, Int), Coll[(Char, Int)]]): Coll[(Char, Int)] = {
     val builder = cbf()
     builder.sizeHint(n)
@@ -126,7 +126,7 @@ private object SubstringSearching {
     builder.result()
   }
 
-  private def nextInt[Coll[_]]
+  private[this] def nextInt[Coll[_]]
   (n: Int)(implicit cbf: CanBuildFrom[Coll[Int], Int, Coll[Int]]): Coll[Int] = {
     val builder = cbf()
     builder.sizeHint(n)
@@ -136,7 +136,7 @@ private object SubstringSearching {
     builder.result()
   }
 
-  private def nextIntWithIndex[Coll[_]]
+  private[this] def nextIntWithIndex[Coll[_]]
   (n: Int)(implicit cbf: CanBuildFrom[Coll[(Int, Int)], (Int, Int), Coll[(Int, Int)]]): Coll[(Int, Int)] = {
     val builder = cbf()
     builder.sizeHint(n)
@@ -146,7 +146,7 @@ private object SubstringSearching {
     builder.result()
   }
 
-  private def nextLong[Coll[_]]
+  private[this] def nextLong[Coll[_]]
   (n: Int)(implicit cbf: CanBuildFrom[Coll[Long], Long, Coll[Long]]): Coll[Long] = {
     val builder = cbf()
     builder.sizeHint(n)
@@ -156,7 +156,7 @@ private object SubstringSearching {
     builder.result()
   }
 
-  private def nextLongWithIndex[Coll[_]]
+  private[this] def nextLongWithIndex[Coll[_]]
   (n: Int)(implicit cbf: CanBuildFrom[Coll[(Long, Int)], (Long, Int), Coll[(Long, Int)]]): Coll[(Long, Int)] = {
     val builder = cbf()
     builder.sizeHint(n)
@@ -166,7 +166,7 @@ private object SubstringSearching {
     builder.result()
   }
 
-  private def nextString[Coll[_]]
+  private[this] def nextString[Coll[_]]
   (n: Int)(implicit cbf: CanBuildFrom[Coll[String], String, Coll[String]]): Coll[String] = {
     val builder = cbf()
     builder.sizeHint(n)
@@ -176,7 +176,7 @@ private object SubstringSearching {
     builder.result()
   }
 
-  private def nextStringWithIndex[Coll[_]]
+  private[this] def nextStringWithIndex[Coll[_]]
   (n: Int)(implicit cbf: CanBuildFrom[Coll[(String, Int)], (String, Int), Coll[(String, Int)]]): Coll[(String, Int)] = {
     val builder = cbf()
     builder.sizeHint(n)
@@ -186,7 +186,7 @@ private object SubstringSearching {
     builder.result()
   }
 
-  private def nextMultiLine(n: Int, m: Int): Array[Array[Char]] = {
+  private[this] def nextMultiLine(n: Int, m: Int): Array[Array[Char]] = {
     val map = new Array[Array[Char]](n)
     var i = 0
     while (i < n) {
@@ -196,11 +196,11 @@ private object SubstringSearching {
     map
   }
 
-  private def nextDouble(): Double = nextString().toDouble
+  private[this] def nextDouble(): Double = nextString().toDouble
 
-  private def nextChar(): Char = skip.toChar
+  private[this] def nextChar(): Char = skip.toChar
 
-  private def nextString(): String = {
+  private[this] def nextString(): String = {
     var b = skip
     val sb = new java.lang.StringBuilder
     while (!isSpaceChar(b)) {
@@ -210,7 +210,7 @@ private object SubstringSearching {
     sb.toString
   }
 
-  private def nextInt(): Int = {
+  private[this] def nextInt(): Int = {
     var num = 0
     var b = 0
     var minus = false
@@ -233,7 +233,7 @@ private object SubstringSearching {
     throw new IOException("Read Int")
   }
 
-  private def nextLong(): Long = {
+  private[this] def nextLong(): Long = {
     var num = 0L
     var b = 0
     var minus = false
@@ -256,11 +256,11 @@ private object SubstringSearching {
     throw new IOException("Read Long")
   }
 
-  private val inputBuffer = new Array[Byte](1024)
-  private var lenBuffer = 0
-  private var ptrBuffer = 0
+  private[this] val inputBuffer = new Array[Byte](1024)
+  private[this] var lenBuffer = 0
+  private[this] var ptrBuffer = 0
 
-  private def readByte(): Int = {
+  private[this] def readByte(): Int = {
     if (lenBuffer == -1) throw new InputMismatchException
     if (ptrBuffer >= lenBuffer) {
       ptrBuffer = 0
@@ -278,9 +278,9 @@ private object SubstringSearching {
     })
   }
 
-  private def isSpaceChar(c: Int) = !(c >= 33 && c <= 126)
+  private[this] def isSpaceChar(c: Int) = !(c >= 33 && c <= 126)
 
-  private def skip = {
+  private[this] def skip = {
     var b = 0
     while ( {
       b = readByte()

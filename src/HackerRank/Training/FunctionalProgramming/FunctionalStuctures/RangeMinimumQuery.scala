@@ -12,13 +12,13 @@ import scala.util.control.TailCalls._
   *
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 6/16/2017
   */
-private object RangeMinimumQuery {
-  private val INPUT = ""
+private[this] object RangeMinimumQuery {
+  private[this] val INPUT = ""
 
   //------------------------------------------------------------------------------------------//
   // Solution                                                                
   //------------------------------------------------------------------------------------------//
-  private def solve(): Unit = {
+  private[this] def solve(): Unit = {
     val n = nextInt()
     val m = nextInt()
 
@@ -69,9 +69,9 @@ private object RangeMinimumQuery {
     //------------------------------------------------------------------------------------------//
     // Private
     //------------------------------------------------------------------------------------------//
-    private def mid(l: Int, r: Int): Int = (l + r) / 2
+    private[this] def mid(l: Int, r: Int): Int = (l + r) / 2
 
-    private def initTree(rootNode: Node[T], points: Seq[T], f: (T, T) => T): Node[T] = {
+    private[this] def initTree(rootNode: Node[T], points: Seq[T], f: (T, T) => T): Node[T] = {
       var root = rootNode
       for ((p, idx) <- points.zipWithIndex) {
         root = insertPoint(root, idx, p, f).result._1
@@ -79,7 +79,7 @@ private object RangeMinimumQuery {
       root
     }
 
-    private def buildTree(l: Int, r: Int, default: T): TailRec[Node[T]] = {
+    private[this] def buildTree(l: Int, r: Int, default: T): TailRec[Node[T]] = {
       if (l != r)
         done(InnerNode(
           l,
@@ -92,7 +92,7 @@ private object RangeMinimumQuery {
         done(Leaf(l, default))
     }
 
-    private def insertPoint(rootNode: Node[T],
+    private[this] def insertPoint(rootNode: Node[T],
                             idx: Int,
                             value: T,
                             g: (T, T) => T): TailRec[(Node[T], T)] = {
@@ -117,10 +117,10 @@ private object RangeMinimumQuery {
   //------------------------------------------------------------------------------------------//
   // Input-Output                                                                 
   //------------------------------------------------------------------------------------------//
-  private var in: java.io.InputStream = _
-  private var out: java.io.PrintWriter = _
+  private[this] var in: java.io.InputStream = _
+  private[this] var out: java.io.PrintWriter = _
 
-  private def println(x: Any) = out.println(x)
+  private[this] def println(x: Any) = out.println(x)
 
   @throws[Exception]
   def main(args: Array[String]): Unit = {
@@ -128,7 +128,7 @@ private object RangeMinimumQuery {
   }
 
   @throws[Exception]
-  private def run(): Unit = {
+  private[this] def run(): Unit = {
     in = if (INPUT.isEmpty) System.in else new ByteArrayInputStream(INPUT.getBytes)
     out = new PrintWriter(System.out)
 
@@ -138,7 +138,7 @@ private object RangeMinimumQuery {
     if (!INPUT.isEmpty) System.out.println(System.currentTimeMillis - s + "ms")
   }
 
-  private def next[T, Coll[_]](reader: => T, n: Int)
+  private[this] def next[T, Coll[_]](reader: => T, n: Int)
                               (implicit cbf: CanBuildFrom[Coll[T], T, Coll[T]]): Coll[T] = {
     val builder = cbf()
     builder.sizeHint(n)
@@ -148,7 +148,7 @@ private object RangeMinimumQuery {
     builder.result()
   }
 
-  private def nextInt[Coll[_]]
+  private[this] def nextInt[Coll[_]]
   (n: Int)(implicit cbf: CanBuildFrom[Coll[Int], Int, Coll[Int]]): Coll[Int] = {
     val builder = cbf()
     builder.sizeHint(n)
@@ -158,7 +158,7 @@ private object RangeMinimumQuery {
     builder.result()
   }
 
-  private def nextInt(): Int = {
+  private[this] def nextInt(): Int = {
     var num = 0
     var b = 0
     var minus = false
@@ -181,11 +181,11 @@ private object RangeMinimumQuery {
     throw new IOException("Read Int")
   }
 
-  private val inputBuffer = new Array[Byte](1024)
-  private var lenBuffer = 0
-  private var ptrBuffer = 0
+  private[this] val inputBuffer = new Array[Byte](1024)
+  private[this] var lenBuffer = 0
+  private[this] var ptrBuffer = 0
 
-  private def readByte(): Int = {
+  private[this] def readByte(): Int = {
     if (lenBuffer == -1) throw new InputMismatchException
     if (ptrBuffer >= lenBuffer) {
       ptrBuffer = 0

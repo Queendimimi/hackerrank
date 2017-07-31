@@ -12,13 +12,13 @@ import scala.language.higherKinds
   *
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 6/15/2017
   */
-private object ThePowerSum {
-  private val INPUT = ""
+private[this] object ThePowerSum {
+  private[this] val INPUT = ""
 
   //------------------------------------------------------------------------------------------//
   // Solution                                                                
   //------------------------------------------------------------------------------------------//
-  private def solve(): Unit = {
+  private[this] def solve(): Unit = {
     val x = nextInt()
     val n = nextInt()
 
@@ -27,7 +27,7 @@ private object ThePowerSum {
     println(countWays(x, bases)(x))
   }
 
-  private def nthRoot(n: Int, a: Double): Double = {
+  private[this] def nthRoot(n: Int, a: Double): Double = {
     @tailrec
     def loop(x0: Double): Double = {
       val x1 = 1.0d / n * ((n - 1) * x0 + a / power(x0, n - 1))
@@ -45,7 +45,7 @@ private object ThePowerSum {
     nthRootMemo(a / 2)
   }
 
-  private def power(n: Double, i: Int): Double = {
+  private[this] def power(n: Double, i: Int): Double = {
     @tailrec
     def loop(n: Double, i: Int, current: Double): Double = {
       if (i == 1) {
@@ -64,7 +64,7 @@ private object ThePowerSum {
   }
 
   //bounded by 1 coin Change
-  private def countWays(amount: Int, coins: Vector[Int]) = {
+  private[this] def countWays(amount: Int, coins: Vector[Int]) = {
     val cache = Array.fill[Int](amount + 1)(0)
     cache(0) = 1
 
@@ -82,7 +82,7 @@ private object ThePowerSum {
     type Input = I
     type Key = K
     type Output = O
-    private val cache: mutable.Map[K, O] = mutable.Map.empty[K, O]
+    private[this] val cache: mutable.Map[K, O] = mutable.Map.empty[K, O]
 
     override def apply(x: I): O = cache getOrElseUpdate(x, f(x))
   }
@@ -90,10 +90,10 @@ private object ThePowerSum {
   //------------------------------------------------------------------------------------------//
   // Input-Output                                                                 
   //------------------------------------------------------------------------------------------//
-  private var in: java.io.InputStream = _
-  private var out: java.io.PrintWriter = _
+  private[this] var in: java.io.InputStream = _
+  private[this] var out: java.io.PrintWriter = _
 
-  private def println(x: Any) = out.println(x)
+  private[this] def println(x: Any) = out.println(x)
 
   @throws[Exception]
   def main(args: Array[String]): Unit = {
@@ -101,7 +101,7 @@ private object ThePowerSum {
   }
 
   @throws[Exception]
-  private def run(): Unit = {
+  private[this] def run(): Unit = {
     in = if (INPUT.isEmpty) System.in else new ByteArrayInputStream(INPUT.getBytes)
     out = new PrintWriter(System.out)
 
@@ -111,7 +111,7 @@ private object ThePowerSum {
     if (!INPUT.isEmpty) System.out.println(System.currentTimeMillis - s + "ms")
   }
 
-  private def nextInt(): Int = {
+  private[this] def nextInt(): Int = {
     var num = 0
     var b = 0
     var minus = false
@@ -134,11 +134,11 @@ private object ThePowerSum {
     throw new IOException("Read Int")
   }
 
-  private val inputBuffer = new Array[Byte](1024)
-  private var lenBuffer = 0
-  private var ptrBuffer = 0
+  private[this] val inputBuffer = new Array[Byte](1024)
+  private[this] var lenBuffer = 0
+  private[this] var ptrBuffer = 0
 
-  private def readByte(): Int = {
+  private[this] def readByte(): Int = {
     if (lenBuffer == -1) throw new InputMismatchException
     if (ptrBuffer >= lenBuffer) {
       ptrBuffer = 0

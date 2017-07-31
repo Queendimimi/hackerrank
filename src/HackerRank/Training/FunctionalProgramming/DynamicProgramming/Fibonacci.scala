@@ -14,18 +14,18 @@ import scala.math.BigInt
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 6/13/2017
   */
 object Fibonacci {
-//  private val INPUT = "1\n100"
-    private val INPUT = ""
+//  private[this] val INPUT = "1\n100"
+    private[this] val INPUT = ""
 
   //------------------------------------------------------------------------------------------//
   // Solution                                                                
   //------------------------------------------------------------------------------------------//
-  private def solve(): Unit = {
+  private[this] def solve(): Unit = {
     val t = nextInt()
     nextInt[Vector](t).foreach(x => println(fibonacci(x) % BigInt(100000007)))
   }
 
-  private def fibonacciForSuperHighNumbers(n: BigInt, mod: BigInt) = {
+  private[this] def fibonacciForSuperHighNumbers(n: BigInt, mod: BigInt) = {
     val fibonacciMatrix: Matrix = Matrix(Vector.tabulate(2, 2)((row, col) =>
       if (row == 1 && col == 1) 0 else 1
     ))
@@ -36,7 +36,7 @@ object Fibonacci {
     )(0)(1)
   }
 
-  private final case class Matrix(matrix: Vector[Vector[BigInt]]) {
+  private[this] final case class Matrix(matrix: Vector[Vector[BigInt]]) {
     val m: Int = matrix.size
     val n: Int = matrix.map(_.size).head
 
@@ -73,7 +73,7 @@ object Fibonacci {
     }
   }
 
-  private final object fibonacci extends Memo[BigInt, BigInt, BigInt, (BigInt, BigInt)] {
+  private[this] final object fibonacci extends Memo[BigInt, BigInt, BigInt, (BigInt, BigInt)] {
 
     //  F(2n-1) = F(n)^2 + F(n-1)^2
     //  F(2n) = (2F(n-1) + F(n))*F(n)
@@ -99,9 +99,9 @@ object Fibonacci {
   }
 
   abstract class Memo[I, K, O, M](implicit ev$1: I => K) extends (I => O) {
-    private type Input = I
-    private type Output = O
-    private type Memory = M
+    private[this] type Input = I
+    private[this] type Output = O
+    private[this] type Memory = M
     protected val cache: mutable.Map[K, M] = mutable.Map.empty[K, M]
 
     override def apply(v1: I): O
@@ -112,10 +112,10 @@ object Fibonacci {
   //------------------------------------------------------------------------------------------//
   // Input-Output
   //------------------------------------------------------------------------------------------//
-  private var in: java.io.InputStream = _
-  private var out: java.io.PrintWriter = _
+  private[this] var in: java.io.InputStream = _
+  private[this] var out: java.io.PrintWriter = _
 
-  private def println(x: Any) = out.println(x)
+  private[this] def println(x: Any) = out.println(x)
 
   @throws[Exception]
   def main(args: Array[String]): Unit = {
@@ -133,7 +133,7 @@ object Fibonacci {
     if (!INPUT.isEmpty) System.out.println(System.currentTimeMillis - s + "ms")
   }
 
-  private def nextInt[Coll[_]]
+  private[this] def nextInt[Coll[_]]
   (n: Int)(implicit cbf: CanBuildFrom[Coll[Int], Int, Coll[Int]]): Coll[Int] = {
     val builder = cbf()
     builder.sizeHint(n)
@@ -143,7 +143,7 @@ object Fibonacci {
     builder.result()
   }
 
-  private def nextInt(): Int = {
+  private[this] def nextInt(): Int = {
     var num = 0
     var b = 0
     var minus = false
@@ -167,11 +167,11 @@ object Fibonacci {
     throw new IOException("Read Int")
   }
 
-  private val inputBuffer = new Array[Byte](1024)
+  private[this] val inputBuffer = new Array[Byte](1024)
   var lenBuffer = 0
   var ptrBuffer = 0
 
-  private def readByte(): Int = {
+  private[this] def readByte(): Int = {
     if (lenBuffer == -1) throw new InputMismatchException
     if (ptrBuffer >= lenBuffer) {
       ptrBuffer = 0

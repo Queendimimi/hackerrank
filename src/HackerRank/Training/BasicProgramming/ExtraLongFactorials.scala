@@ -14,32 +14,32 @@ import scala.util.control.TailCalls._
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 5/31/2017
   */
 object ExtraLongFactorials {
-  private val INPUT = "99000"
+  private[this] val INPUT = "99000"
 
   //------------------------------------------------------------------------------------------//
   // Solution                                                                
   //------------------------------------------------------------------------------------------//
-  private def solve(): Unit = {
+  private[this] def solve(): Unit = {
     val input = BigInt(nextString())
     println(factorial(input))
   }
 
-  private def trampolinedFactorial(n: BigInt, accumulator: BigInt = 1): TailRec[BigInt] = {
+  private[this] def trampolinedFactorial(n: BigInt, accumulator: BigInt = 1): TailRec[BigInt] = {
     if (n == 1) done(accumulator) else tailcall(trampolinedFactorial(n - 1, n * accumulator))
   }
 
   @tailrec
-  private def factorial(n: BigInt, accumulator: BigInt = 1): BigInt = {
+  private[this] def factorial(n: BigInt, accumulator: BigInt = 1): BigInt = {
     if (n == 1) accumulator else factorial(n - 1, accumulator * n)
   }
 
   //------------------------------------------------------------------------------------------//
   // Input-Output                                                                 
   //------------------------------------------------------------------------------------------//
-  private var in: java.io.InputStream = _
-  private var out: java.io.PrintWriter = _
+  private[this] var in: java.io.InputStream = _
+  private[this] var out: java.io.PrintWriter = _
 
-  private def println(x: Any) = out.println(x)
+  private[this] def println(x: Any) = out.println(x)
 
   @throws[Exception]
   def main(args: Array[String]): Unit = {
@@ -57,7 +57,7 @@ object ExtraLongFactorials {
     if (!INPUT.isEmpty) System.out.println(System.currentTimeMillis - s + "ms")
   }
 
-  private def nextString(): String = {
+  private[this] def nextString(): String = {
     var b = skip
     val sb = new java.lang.StringBuilder
     while (!isSpaceChar(b)) {
@@ -67,11 +67,11 @@ object ExtraLongFactorials {
     sb.toString
   }
 
-  private val inputBuffer = new Array[Byte](1024)
+  private[this] val inputBuffer = new Array[Byte](1024)
   var lenBuffer = 0
   var ptrBuffer = 0
 
-  private def readByte(): Int = {
+  private[this] def readByte(): Int = {
     if (lenBuffer == -1) throw new InputMismatchException
     if (ptrBuffer >= lenBuffer) {
       ptrBuffer = 0
@@ -89,9 +89,9 @@ object ExtraLongFactorials {
     })
   }
 
-  private def isSpaceChar(c: Int) = !(c >= 33 && c <= 126)
+  private[this] def isSpaceChar(c: Int) = !(c >= 33 && c <= 126)
 
-  private def skip = {
+  private[this] def skip = {
     var b = 0
     while ( {
       b = readByte()

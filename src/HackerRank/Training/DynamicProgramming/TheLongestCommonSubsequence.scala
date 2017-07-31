@@ -12,13 +12,13 @@ import scala.language.higherKinds
   *
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 6/15/2017
   */
-private object TheLongestCommonSubsequence {
-  private val INPUT = ""
+private[this] object TheLongestCommonSubsequence {
+  private[this] val INPUT = ""
 
   //------------------------------------------------------------------------------------------//
   // Solution                                                                
   //------------------------------------------------------------------------------------------//
-  private def solve(): Unit = {
+  private[this] def solve(): Unit = {
     val m = nextInt()
     val n = nextInt()
     val a = nextInt[Vector](m)
@@ -27,7 +27,7 @@ private object TheLongestCommonSubsequence {
     out.println(longestCommonSubsequence(a, b).mkString(" "))
   }
 
-  private def longestCommonSubsequence(a: Vector[Int], b: Vector[Int]) = {
+  private[this] def longestCommonSubsequence(a: Vector[Int], b: Vector[Int]) = {
     lazy val lcsMemo: (Int, Int) ==> Int = Memo {
       case (m, n) if m == 0 || n == 0 => 0
       case (m, n) if a(m - 1) == b(n - 1) => 1 + lcsMemo(m - 1, n - 1)
@@ -60,7 +60,7 @@ private object TheLongestCommonSubsequence {
     type Input = I
     type Key = K
     type Output = O
-    private val cache: mutable.Map[K, O] = mutable.Map.empty[K, O]
+    private[this] val cache: mutable.Map[K, O] = mutable.Map.empty[K, O]
 
     override def apply(x: I): O = cache getOrElseUpdate(x, f(x))
   }
@@ -70,8 +70,8 @@ private object TheLongestCommonSubsequence {
   //------------------------------------------------------------------------------------------//
   // Input-Output                                                                 
   //------------------------------------------------------------------------------------------//
-  private var in: java.io.InputStream = _
-  private var out: java.io.PrintWriter = _
+  private[this] var in: java.io.InputStream = _
+  private[this] var out: java.io.PrintWriter = _
 
   @throws[Exception]
   def main(args: Array[String]): Unit = {
@@ -79,7 +79,7 @@ private object TheLongestCommonSubsequence {
   }
 
   @throws[Exception]
-  private def run(): Unit = {
+  private[this] def run(): Unit = {
     in = if (INPUT.isEmpty) System.in else new ByteArrayInputStream(INPUT.getBytes)
     out = new PrintWriter(System.out)
 
@@ -89,7 +89,7 @@ private object TheLongestCommonSubsequence {
     if (!INPUT.isEmpty) System.out.println(System.currentTimeMillis - s + "ms")
   }
 
-  private def nextInt[Coll[_]]
+  private[this] def nextInt[Coll[_]]
   (n: Int)(implicit cbf: CanBuildFrom[Coll[Int], Int, Coll[Int]]): Coll[Int] = {
     val builder = cbf()
     builder.sizeHint(n)
@@ -99,7 +99,7 @@ private object TheLongestCommonSubsequence {
     builder.result()
   }
 
-  private def nextInt(): Int = {
+  private[this] def nextInt(): Int = {
     var num = 0
     var b = 0
     var minus = false
@@ -122,11 +122,11 @@ private object TheLongestCommonSubsequence {
     throw new IOException("Read Int")
   }
 
-  private val inputBuffer = new Array[Byte](1024)
-  private var lenBuffer = 0
-  private var ptrBuffer = 0
+  private[this] val inputBuffer = new Array[Byte](1024)
+  private[this] var lenBuffer = 0
+  private[this] var ptrBuffer = 0
 
-  private def readByte(): Int = {
+  private[this] def readByte(): Int = {
     if (lenBuffer == -1) throw new InputMismatchException
     if (ptrBuffer >= lenBuffer) {
       ptrBuffer = 0

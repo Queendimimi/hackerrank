@@ -11,7 +11,7 @@ import scala.language.higherKinds
   *
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 4/23/2017
   */
-object Euler009SpecialPythagoreanTriplet {
+private[this] object Euler009SpecialPythagoreanTriplet {
 
   import Reader._
   import Writer._

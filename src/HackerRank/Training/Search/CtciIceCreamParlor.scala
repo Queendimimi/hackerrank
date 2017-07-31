@@ -12,7 +12,7 @@ import scala.language.higherKinds
   *
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 4/20/2017
   */
-object CtciIceCreamParlor {
+private[this] object CtciIceCreamParlor {
 
   import Reader._
   import Writer._

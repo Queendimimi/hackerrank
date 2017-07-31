@@ -11,7 +11,7 @@ import scala.language.higherKinds
   *
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 5/28/2017
   */
-object ServiceLane {
+private[this] object ServiceLane {
 
   import Reader._
   import Writer._

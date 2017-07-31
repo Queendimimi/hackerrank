@@ -12,7 +12,7 @@ import scala.language.higherKinds
   *
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 6/13/2017
   */
-object DifferentWays {
+private[this] object DifferentWays {
 
   import Reader._
   import Writer._

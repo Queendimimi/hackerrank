@@ -11,7 +11,7 @@ import scala.language.higherKinds
   *
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 6/6/2017
   */
-object RepeatedString {
+private[this] object RepeatedString {
 
   import Reader._
   import Writer._

@@ -5,10 +5,9 @@ import java.util.InputMismatchException
 
 import scala.collection.generic.CanBuildFrom
 
-/**
-  * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 4/16/2017
+/** @author A. Roberto Fischer <a.robertofischer@gmail.com> on 4/16/2017
   */
-object gSplitPlane {
+private[this] object gSplitPlane {
 
   import Reader._
   import Writer._

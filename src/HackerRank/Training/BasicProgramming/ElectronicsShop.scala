@@ -11,7 +11,7 @@ import scala.language.higherKinds
   *
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 5/21/2017
   */
-object ElectronicsShop {
+private[this] object ElectronicsShop {
 
   import Reader._
   import Writer._

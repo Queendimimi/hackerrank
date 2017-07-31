@@ -6,12 +6,7 @@ import java.util.InputMismatchException
 import scala.collection.generic.CanBuildFrom
 import scala.language.higherKinds
 
-/**
-  * Copyright (c) 2017 A. Roberto Fischer
-  *
-  * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 4/28/2017
-  */
-object RewardPoints {
+private[this] object RewardPoints {
 
   import Reader._
   import Writer._

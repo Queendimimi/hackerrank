@@ -13,7 +13,7 @@ import scala.language.higherKinds
   *
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 4/17/2017
   */
-object cZeroOneGame {
+private[this] object cZeroOneGame {
 
   import Reader._
   import Writer._

@@ -11,7 +11,7 @@ import scala.language.higherKinds
   *
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 6/4/2017
   */
-object DesignerPdfViewer {
+private[this] object DesignerPdfViewer {
 
   import Reader._
   import Writer._

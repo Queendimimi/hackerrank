@@ -11,13 +11,12 @@ import scala.language.higherKinds
   *
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 4/23/2017
   */
-object Euler007BigPrimes {
+private[this] object Euler007BigPrimes {
 
   import Reader._
   import Writer._
 
   private[this] val TEST_INPUT: Option[String] = None
-
 
   //------------------------------------------------------------------------------------------//
   // Solution                                                                

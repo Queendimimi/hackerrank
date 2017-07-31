@@ -11,7 +11,7 @@ import scala.language.higherKinds
   *
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 4/25/2017
   */
-object DivisibleSumPairs {
+private[this] object DivisibleSumPairs {
 
   import Reader._
   import Writer._

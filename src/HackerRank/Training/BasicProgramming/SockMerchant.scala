@@ -12,7 +12,7 @@ import scala.language.higherKinds
   *
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 5/4/2017
   */
-object SockMerchant {
+private[this] object SockMerchant {
 
   import Reader._
   import Writer._

@@ -11,7 +11,7 @@ import scala.language.higherKinds
   *
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 4/19/2017
   */
-object TwoArraysPermutationZip {
+private[this] object TwoArraysPermutationZip {
 
   import Reader._
   import Writer._

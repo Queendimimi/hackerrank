@@ -12,7 +12,7 @@ import scala.language.higherKinds
   *
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 5/9/2017
   */
-object Day4BinomialDistribution1 {
+private[this] object Day4BinomialDistribution1 {
 
   import Reader._
   import Writer._

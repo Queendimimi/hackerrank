@@ -12,7 +12,7 @@ import scala.language.higherKinds
   *
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 4/18/2017
   */
-object MarcsCakewalk {
+private[this] object MarcsCakewalk {
 
   import Reader._
   import Writer._

@@ -11,7 +11,7 @@ import scala.language.higherKinds
   *
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 5/5/2017
   */
-object BetweenTwoSets {
+private[this] object BetweenTwoSets {
 
   import Reader._
   import Writer._

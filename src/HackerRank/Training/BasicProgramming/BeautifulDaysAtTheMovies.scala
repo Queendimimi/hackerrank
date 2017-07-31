@@ -11,7 +11,7 @@ import scala.language.higherKinds
   *
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 5/20/2017
   */
-object BeautifulDaysAtTheMovies {
+private[this] object BeautifulDaysAtTheMovies {
 
   import Reader._
   import Writer._

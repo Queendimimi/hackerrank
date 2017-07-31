@@ -11,7 +11,7 @@ import scala.language.higherKinds
   *
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 4/27/2017
   */
-object Day1StandardDeviation {
+private[this] object Day1StandardDeviation {
 
   import Reader._
   import Writer._

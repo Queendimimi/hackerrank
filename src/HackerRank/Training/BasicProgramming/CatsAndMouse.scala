@@ -11,7 +11,7 @@ import scala.language.higherKinds
   *
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 5/23/2017
   */
-object CatsAndMouse {
+private[this] object CatsAndMouse {
 
   import Reader._
   import Writer._

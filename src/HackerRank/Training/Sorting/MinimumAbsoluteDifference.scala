@@ -11,7 +11,7 @@ import scala.language.higherKinds
   *
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 4/18/2017
   */
-object MinimumAbsoluteDifference {
+private[this] object MinimumAbsoluteDifference {
 
   import Reader._
   import Writer._

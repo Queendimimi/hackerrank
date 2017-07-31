@@ -13,7 +13,7 @@ import scala.language.higherKinds
   *
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 4/29/2017
   */
-object LongestIncreasingSubsequence {
+private[this] object LongestIncreasingSubsequence {
 
   import Reader._
   import Writer._

@@ -14,7 +14,7 @@ import scala.util.control.TailCalls._
   *
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 5/31/2017
   */
-object ExtraLongFactorials {
+private[this] object ExtraLongFactorials {
 
   import Reader._
   import Writer._

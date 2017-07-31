@@ -12,7 +12,7 @@ import scala.language.higherKinds
   *
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 6/3/2017
   */
-object EqualityInAnArray {
+private[this] object EqualityInAnArray {
 
   import Reader._
   import Writer._

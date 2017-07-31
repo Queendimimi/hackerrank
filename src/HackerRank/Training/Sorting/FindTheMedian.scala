@@ -11,7 +11,7 @@ import scala.language.higherKinds
   *
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 4/20/2017
   */
-object FindTheMedian {
+private[this] object FindTheMedian {
 
   import Reader._
   import Writer._

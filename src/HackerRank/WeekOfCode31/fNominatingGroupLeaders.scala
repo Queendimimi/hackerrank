@@ -12,7 +12,7 @@ import scala.language.higherKinds
   *
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 4/17/2017
   */
-object fNominatingGroupLeaders {
+private[this] object fNominatingGroupLeaders {
 
   import Reader._
   import Writer._

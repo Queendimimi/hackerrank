@@ -13,7 +13,7 @@ import scala.language.higherKinds
   *
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 6/12/2017
   */
-object ConvexHull {
+private[this] object ConvexHull {
 
   import Reader._
   import Writer._

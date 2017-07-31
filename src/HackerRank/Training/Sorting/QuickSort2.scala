@@ -12,7 +12,7 @@ import scala.language.higherKinds
   *
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 4/23/2017
   */
-object QuickSort2 {
+private[this] object QuickSort2 {
 
   import Reader._
   import Writer._

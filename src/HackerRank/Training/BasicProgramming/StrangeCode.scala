@@ -12,7 +12,7 @@ import scala.language.higherKinds
   *
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 6/8/2017
   */
-object StrangeCode {
+private[this] object StrangeCode {
 
   import Reader._
   import Writer._

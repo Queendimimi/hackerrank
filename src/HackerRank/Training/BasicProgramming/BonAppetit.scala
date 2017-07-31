@@ -11,7 +11,7 @@ import scala.language.higherKinds
   *
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 5/2/2017
   */
-object BonAppetit {
+private[this] object BonAppetit {
 
   import Reader._
   import Writer._

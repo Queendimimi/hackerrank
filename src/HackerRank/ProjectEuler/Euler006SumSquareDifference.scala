@@ -11,7 +11,7 @@ import scala.language.higherKinds
   *
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 4/22/2017
   */
-object Euler006SumSquareDifference {
+private[this] object Euler006SumSquareDifference {
 
   import Reader._
   import Writer._
@@ -27,7 +27,7 @@ object Euler006SumSquareDifference {
     nextLong[Array](t).foreach(x => println(difference(x)))
   }
 
-  def difference(n: Long): Long = {
+  private[this] def difference(n: Long): Long = {
     val sum = (n * (n + 1)) >> 1
     val sumOfSquares = (n * (n + 1) * (2 * n + 1)) / 6
     sum * sum - sumOfSquares

@@ -11,7 +11,7 @@ import scala.language.higherKinds
   *
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 6/9/2017
   */
-object HappyLadybugs {
+private[this] object HappyLadybugs {
 
   import Reader._
   import Writer._

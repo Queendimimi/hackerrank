@@ -11,7 +11,7 @@ import scala.language.higherKinds
   *
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 5/24/2017
   */
-object ACircleAndASquare {
+private[this] object ACircleAndASquare {
 
   import Reader._
   import Writer._

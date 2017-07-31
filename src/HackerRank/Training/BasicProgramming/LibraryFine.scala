@@ -11,7 +11,7 @@ import scala.language.higherKinds
   *
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 5/11/2017
   */
-object LibraryFine {
+private[this] object LibraryFine {
 
   import Reader._
   import Writer._

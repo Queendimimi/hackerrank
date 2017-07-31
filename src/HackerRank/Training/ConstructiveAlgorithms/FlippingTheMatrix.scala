@@ -11,7 +11,7 @@ import scala.language.higherKinds
   *
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 6/7/2017
   */
-object FlippingTheMatrix {
+private[this] object FlippingTheMatrix {
 
   import Reader._
   import Writer._

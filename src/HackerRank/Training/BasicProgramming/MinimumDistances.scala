@@ -12,7 +12,7 @@ import scala.language.higherKinds
   *
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 5/31/2017
   */
-object MinimumDistances {
+private[this] object MinimumDistances {
 
   import Reader._
   import Writer._

@@ -44,14 +44,14 @@ private[this] object Euler031CoinSums {
     cache.toVector
   }
 
-  lazy val _countWays: (Int, Vector[Int]) ==> BigInt = Memo {
+  private[this] lazy val _countWays: (Int, Vector[Int]) ==> BigInt = Memo {
     case (0, _) => 1
     case (amount, coins) if amount > 0 && coins.nonEmpty =>
       _countWays(amount - coins.head, coins) + _countWays(amount, coins.tail)
     case _ => 0
   }
 
-  type ==>[I, O] = Memo[I, I, O]
+  private[this] type ==>[I, O] = Memo[I, I, O]
 
   final case class Memo[I, K, O](f: I => O)(implicit ev$1: I => K) extends (I => O) {
     type Input = I

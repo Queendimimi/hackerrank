@@ -12,7 +12,7 @@ import scala.language.higherKinds
   *
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 6/14/2017
   */
-object PentagonalNumbers {
+private[this] object PentagonalNumbers {
 
   import Reader._
   import Writer._

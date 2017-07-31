@@ -11,7 +11,7 @@ import scala.language.higherKinds
   *
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 5/30/2017
   */
-object SherlockAndSquares {
+private[this] object SherlockAndSquares {
 
   import Reader._
   import Writer._

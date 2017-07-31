@@ -1,9 +1,8 @@
 package HackerRank.Training
 
-/**
-  * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 3/23/2017
+/** @author A. Roberto Fischer <a.robertofischer@gmail.com> on 3/23/2017
   */
-object insertionsortEnglish2 {
+private[this] object insertionsortEnglish2 {
 
   import java.net.URL
   import java.util.Scanner

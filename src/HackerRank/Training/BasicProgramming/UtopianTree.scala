@@ -12,7 +12,7 @@ import scala.language.higherKinds
   *
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 5/27/2017
   */
-object UtopianTree {
+private[this] object UtopianTree {
 
   import Reader._
   import Writer._

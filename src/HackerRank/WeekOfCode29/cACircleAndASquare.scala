@@ -10,7 +10,7 @@ import scala.collection.generic.CanBuildFrom
   *
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 4/17/2017
   */
-object cACircleAndASquare {
+private[this] object cACircleAndASquare {
 
   import Reader._
   import Writer._

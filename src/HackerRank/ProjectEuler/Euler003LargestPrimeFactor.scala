@@ -11,7 +11,7 @@ import scala.language.higherKinds
   *
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 4/22/2017
   */
-object Euler003LargestPrimeFactor {
+private[this] object Euler003LargestPrimeFactor {
 
   import Reader._
   import Writer._

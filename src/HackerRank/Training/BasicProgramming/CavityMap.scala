@@ -11,7 +11,7 @@ import scala.language.higherKinds
   *
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 6/11/2017
   */
-object CavityMap {
+private[this] object CavityMap {
 
   import Reader._
   import Writer._

@@ -11,7 +11,7 @@ import scala.language.higherKinds
   *
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 5/18/2017
   */
-object ViralAdvertising {
+private[this] object ViralAdvertising {
 
   import Reader._
   import Writer._

@@ -12,7 +12,7 @@ import scala.language.higherKinds
   *
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 6/1/2017
   */
-object BeautifulTriplets {
+private[this] object BeautifulTriplets {
 
   import Reader._
   import Writer._

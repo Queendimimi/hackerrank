@@ -13,7 +13,7 @@ import scala.language.higherKinds
   *
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 4/22/2017
   */
-object Euler002EvenFibonacciNumbers {
+private[this] object Euler002EvenFibonacciNumbers {
 
   import Reader._
   import Writer._

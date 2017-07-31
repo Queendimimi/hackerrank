@@ -11,7 +11,7 @@ import scala.language.higherKinds
   *
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 4/21/2017
   */
-object Euler013LargeSum {
+private[this] object Euler013LargeSum {
 
   import Reader._
   import Writer._

@@ -11,7 +11,7 @@ import scala.language.higherKinds
   *
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 6/10/2017
   */
-object TheGridSearch {
+private[this] object TheGridSearch {
 
   import Reader._
   import Writer._

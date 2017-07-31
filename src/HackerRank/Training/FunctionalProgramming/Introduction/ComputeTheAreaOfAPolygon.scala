@@ -11,7 +11,7 @@ import scala.language.higherKinds
   *
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 6/2/2017
   */
-object ComputeTheAreaOfAPolygon {
+private[this] object ComputeTheAreaOfAPolygon {
 
   import Reader._
   import Writer._

@@ -11,7 +11,7 @@ import scala.language.higherKinds
   *
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 6/13/2017
   */
-object ComputeThePerimeterOfaPolygon {
+private[this] object ComputeThePerimeterOfaPolygon {
 
   import Reader._
   import Writer._

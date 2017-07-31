@@ -11,7 +11,7 @@ import scala.language.higherKinds
   *
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 5/14/2017
   */
-object CountingValleys {
+private[this] object CountingValleys {
 
   import Reader._
   import Writer._

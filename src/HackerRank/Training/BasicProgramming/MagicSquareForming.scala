@@ -11,7 +11,7 @@ import scala.language.higherKinds
   *
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 6/5/2017
   */
-object MagicSquareForming {
+private[this] object MagicSquareForming {
 
   import Reader._
   import Writer._

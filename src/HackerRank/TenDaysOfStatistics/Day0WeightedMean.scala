@@ -11,7 +11,7 @@ import scala.language.higherKinds
   *
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 4/26/2017
   */
-object Day0WeightedMean {
+private[this] object Day0WeightedMean {
 
   import Reader._
   import Writer._

@@ -11,7 +11,7 @@ import scala.language.higherKinds
   *
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 4/22/2017
   */
-object Euler001MutliplesOf3And5 {
+private[this] object Euler001MutliplesOf3And5 {
 
   import Reader._
   import Writer._

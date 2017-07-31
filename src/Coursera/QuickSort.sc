@@ -4,7 +4,6 @@ import scala.collection.mutable.ListBuffer
 import scala.io.Source
 
 
-
 def quickSort[T, Col](xs: Col)
                      (implicit c2s: Col <:< SeqLike[T, Col],
                       cbf: CanBuildFrom[Col, T, Col],

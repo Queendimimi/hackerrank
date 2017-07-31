@@ -28,7 +28,7 @@ def isBigger(a: String, b: String): Boolean = {
       .map(x => (x._1.asDigit, x._2.asDigit))
       .find(x => x._1 != x._2)
       .getOrElse((0, 1))
-    if(firstTwoDifferentDigits._1 > firstTwoDifferentDigits._2) {
+    if (firstTwoDifferentDigits._1 > firstTwoDifferentDigits._2) {
       true
     } else {
       false

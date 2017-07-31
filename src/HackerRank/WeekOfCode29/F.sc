@@ -48,14 +48,14 @@ for (x <- 0 to 12; y <- 1 to 12;
      a <- x to 12; b <- y to 12;
      c <- a to 12; d <- b to 12;
      e <- c to 12; f <- d to 12) {
-//     hackerEarth.a <- 1 to 12; b <- 0 to 12;
-//     hackerEarth.a <- 0 to 12; b <- 0 to 12;
-//     hackerEarth.a <- 0 to 12; b <- 0 to 12;
-//     hackerEarth.a <- 0 to 12; b <- 0 to 12;
-//     hackerEarth.a <- 0 to 12; b <- 0 to 12;
-//     hackerEarth.a <- 0 to 12; b <- 0 to 12;
-//     hackerEarth.a <- 0 to 12; b <- 0 to 12;
-//     hackerEarth.a <- 0 to 12; b <- 0 to 12
+  //     hackerEarth.a <- 1 to 12; b <- 0 to 12;
+  //     hackerEarth.a <- 0 to 12; b <- 0 to 12;
+  //     hackerEarth.a <- 0 to 12; b <- 0 to 12;
+  //     hackerEarth.a <- 0 to 12; b <- 0 to 12;
+  //     hackerEarth.a <- 0 to 12; b <- 0 to 12;
+  //     hackerEarth.a <- 0 to 12; b <- 0 to 12;
+  //     hackerEarth.a <- 0 to 12; b <- 0 to 12;
+  //     hackerEarth.a <- 0 to 12; b <- 0 to 12
 
   val plane = Plane()
   plane.addPoint(Point(a, b))

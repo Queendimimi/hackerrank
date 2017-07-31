@@ -128,4 +128,4 @@ def sievePrimses(lb: Int, ub: Int): ArrayBuffer[Int] = {
   primes
 }
 
-println(sievePrimes(1,100).size)
+println(sievePrimes(1, 100).size)

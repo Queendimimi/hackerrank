@@ -54,7 +54,7 @@ def monteCarloMinCut(graph: mutable.Map[Int, Array[Int]]): Int = {
   var minCut = Integer.MAX_VALUE
   for (_ <- 1 to 1000) {
     val temp = kragerMinCut(graph)
-    if(temp < minCut) {
+    if (temp < minCut) {
       minCut = temp
     }
   }

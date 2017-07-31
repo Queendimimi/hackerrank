@@ -41,7 +41,7 @@ def generateMelodiousPasswords(n: Int): Unit = {
     for (i <- current.indices; j <- newChars.indices) {
       val res = current(i) + newChars(j)
       builder += res
-      if(n == k) {
+      if (n == k) {
         println(res)
       }
     }

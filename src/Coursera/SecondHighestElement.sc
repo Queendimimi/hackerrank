@@ -33,7 +33,7 @@ def secondHighest(input: Vector[Integer]): Integer = {
       }).toBuffer)
     }
   }
-  
+
   var highestValue = highest(adjustedInput)
   if (highestValue < input.last) {
     secondHighest = highestValue

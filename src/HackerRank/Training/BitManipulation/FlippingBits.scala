@@ -4,7 +4,6 @@ import java.io.{ByteArrayInputStream, IOException, PrintWriter}
 import java.util.InputMismatchException
 
 import scala.collection.generic.CanBuildFrom
-import scala.collection.mutable
 import scala.language.higherKinds
 
 /**
@@ -24,12 +23,12 @@ private[this] object FlippingBits {
   //------------------------------------------------------------------------------------------//
   private[this] def solve(): Unit = {
     val t = nextInt()
-    next[BigInt, Vector](BigInt(nextLong()),t).foreach(x => println(flipBits(x)))
+    nextLong[Vector](t).foreach(x => println(flipBits(x)))
   }
 
-  private[this] def flipBits(n: BigInt) = {
+  private[this] def flipBits[T: Integral](n: T, bits: Int = 32) = {
     BigInt(
-      String.format("%32s", n.toString(2)).replace(' ', '0')
+      String.format(s"%${bits}s", BigInt(n.toString).toString(2)).replace(' ', '0')
         .map {
           case '0' => '1'
           case '1' => '0'

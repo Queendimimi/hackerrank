@@ -4,7 +4,6 @@ import java.io.{ByteArrayInputStream, IOException, PrintWriter}
 import java.util.InputMismatchException
 
 import scala.collection.generic.CanBuildFrom
-import scala.collection.mutable
 import scala.language.higherKinds
 
 /**
@@ -23,7 +22,42 @@ private[this] object GameOfTwoStacks {
   // Solution
   //------------------------------------------------------------------------------------------//
   private[this] def solve(): Unit = {
-    println(nextInt())
+    (0 until nextInt()).foreach { _ =>
+      val (n, m, x) = (nextInt(), nextInt(), nextInt())
+
+      val game = new TwoStackGame[Int](nextInt[Vector](n), nextInt[Vector](m))
+      println(game.maxScore(identity[Int], x))
+    }
+  }
+
+  private[this] class TwoStackGame[T](a: Seq[T], b: Seq[T]) {
+
+    def maxScore[B: Numeric](f: T => B, max: B): Int = {
+      import Numeric.Implicits._
+      import Ordering.Implicits._
+
+      val aAsNumber = a.map(f)
+
+      val aSumUntilMax = aAsNumber.toStream
+        .scan(implicitly[Numeric[B]].zero)(_ + _)
+        .takeWhile(x => x <= max)
+        .drop(1)
+
+      var sum = aSumUntilMax.lastOption.getOrElse(implicitly[Numeric[B]].zero)
+      var i = aSumUntilMax.size
+      var count = aSumUntilMax.size
+
+      b.map(f).zipWithIndex.foreach { case (x, index) =>
+        sum += x
+        while (sum > max && i > 0) {
+          i -= 1
+          sum -= aAsNumber(i)
+        }
+        if (sum <= max && i + index + 1 > count) count = i + index + 1
+      }
+
+      count
+    }
   }
 
   //------------------------------------------------------------------------------------------//

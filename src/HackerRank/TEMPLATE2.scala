@@ -3,8 +3,6 @@ package HackerRank
 import java.io.{ByteArrayInputStream, IOException, PrintWriter}
 import java.util.InputMismatchException
 
-import HackerRank.Training.DataStructures.Stacks.SimpleTextEditor.TEST_INPUT
-
 import scala.collection.generic.CanBuildFrom
 import scala.language.higherKinds
 import scala.reflect.ClassTag

@@ -98,22 +98,22 @@ private[this] object LargestRectangle {
 
     private[this] implicit val in = TEST_INPUT.fold(System.in)(s => new ByteArrayInputStream(s.getBytes))
 
-    def next[T, Coll[_]](reader: () => T, n: Int)
+    def next[T, Coll[_]](reader: => T, n: Int)
                         (implicit cbf: CanBuildFrom[Coll[T], T, Coll[T]]): Coll[T] = {
       val builder = cbf()
       builder.sizeHint(n)
       for (_ <- 0 until n) {
-        builder += reader()
+        builder += reader
       }
       builder.result()
     }
 
-    def nextWithIndex[T, Coll[_]](reader: () => T, n: Int)
+    def nextWithIndex[T, Coll[_]](reader: => T, n: Int)
                                  (implicit cbf: CanBuildFrom[Coll[(T, Int)], (T, Int), Coll[(T, Int)]]): Coll[(T, Int)] = {
       val builder = cbf()
       builder.sizeHint(n)
       for (i <- 0 until n) {
-        builder += ((reader(), i))
+        builder += ((reader, i))
       }
       builder.result()
     }

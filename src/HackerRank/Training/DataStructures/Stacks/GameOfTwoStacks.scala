@@ -26,13 +26,14 @@ private[this] object GameOfTwoStacks {
       val (n, m, x) = (nextInt(), nextInt(), nextInt())
 
       val game = new TwoStackGame[Int](nextInt[Vector](n), nextInt[Vector](m))
-      println(game.maxScore(identity[Int], x))
+      println(game.maxScoreBy(identity[Int], x))
     }
   }
 
   private[this] class TwoStackGame[T](a: Seq[T], b: Seq[T]) {
 
-    def maxScore[B: Numeric](f: T => B, max: B): Int = {
+    //todo T:Numeric?
+    def maxScoreBy[B: Numeric](f: T => B, max: B): Int = {
       import Numeric.Implicits._
       import Ordering.Implicits._
 

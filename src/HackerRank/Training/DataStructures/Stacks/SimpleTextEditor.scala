@@ -58,9 +58,7 @@ private[this] object SimpleTextEditor {
   private[this] final case class AppendEvent(s: String) extends Event with Inverse[AppendEvent, DeleteEvent] {
     override def inverse = DeleteEvent(s)
   }
-
-  //  private[this] final abstract class Appendd(s: String) extends Inverse[Appendd, DeleteEvent]
-
+  
   private[this] final case class Delete(k: Int) extends Operation with Executable
 
   private[this] final case class DeleteEvent(s: String) extends Event with Inverse[DeleteEvent, AppendEvent] {

@@ -12,7 +12,7 @@ import scala.reflect.ClassTag
   *
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 7/21/2017
   */
-private[this] object TEMPLATE2{
+private[this] object TEMPLATE2 {
 
   import Reader._
   import Writer._
@@ -23,7 +23,7 @@ private[this] object TEMPLATE2{
   // Solution
   //------------------------------------------------------------------------------------------//
   private[this] def solve(): Unit = {
-    println(nextInt())
+    println(next[BigInt, Vector](9))
   }
 
   //------------------------------------------------------------------------------------------//
@@ -43,6 +43,19 @@ private[this] object TEMPLATE2{
   private[this] final object Reader {
 
     private[this] implicit val in = TEST_INPUT.fold(System.in)(s => new ByteArrayInputStream(s.getBytes))
+
+    def next[T: ClassTag](): T = {
+      implicitly[ClassTag[T]].runtimeClass match {
+        case java.lang.Integer.TYPE => nextInt().asInstanceOf[T]
+        case java.lang.Long.TYPE => nextLong().asInstanceOf[T]
+        case java.lang.Double.TYPE => nextDouble().asInstanceOf[T]
+        case java.lang.Character.TYPE => nextChar().asInstanceOf[T]
+        case s if Class.forName("java.lang.String") == s => nextString().asInstanceOf[T]
+        case b if Class.forName("scala.math.BigInt") == b => BigInt(nextString()).asInstanceOf[T]
+        case b if Class.forName("scala.math.BigDecimal") == b => BigDecimal(nextString()).asInstanceOf[T]
+        case _ => throw new RuntimeException("Unsupported input type.")
+      }
+    }
 
     def next[T, Coll[_]](reader: => T, n: Int)
                         (implicit cbf: CanBuildFrom[Coll[T], T, Coll[T]]): Coll[T] = {
@@ -94,11 +107,11 @@ private[this] object TEMPLATE2{
       map.result()
     }
 
-    def nextDouble(): Double = nextString().toDouble
+    private[this] def nextDouble(): Double = nextString().toDouble
 
-    def nextChar(): Char = skip.toChar
+    private[this] def nextChar(): Char = skip.toChar
 
-    def nextString(): String = {
+    private[this] def nextString(): String = {
       var b = skip
       val sb = new java.lang.StringBuilder
       while (!isSpaceChar(b)) {
@@ -108,7 +121,7 @@ private[this] object TEMPLATE2{
       sb.toString
     }
 
-    def nextInt(): Int = {
+    private[this] def nextInt(): Int = {
       var num = 0
       var b = 0
       var minus = false
@@ -131,7 +144,7 @@ private[this] object TEMPLATE2{
       throw new IOException("Read Int")
     }
 
-    def nextLong(): Long = {
+    private[this] def nextLong(): Long = {
       var num = 0L
       var b = 0
       var minus = false
@@ -152,17 +165,6 @@ private[this] object TEMPLATE2{
         b = readByte()
       }
       throw new IOException("Read Long")
-    }
-
-    private[this] def next[T: ClassTag](): T = {
-      implicitly[ClassTag[T]].runtimeClass match {
-        case java.lang.Integer.TYPE => nextInt().asInstanceOf[T]
-        case java.lang.Long.TYPE => nextLong().asInstanceOf[T]
-        case java.lang.Double.TYPE => nextDouble().asInstanceOf[T]
-        case java.lang.Character.TYPE => nextChar().asInstanceOf[T]
-        case s if Class.forName("java.lang.String") == s => nextString().asInstanceOf[T]
-        case _ => throw new RuntimeException("Unsupported input type.")
-      }
     }
 
     private[this] val inputBuffer = new Array[Byte](1024)

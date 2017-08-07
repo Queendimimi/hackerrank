@@ -44,9 +44,9 @@ private[this] object SimpleTextEditor {
 
   private[this] sealed trait Event
 
-  private[this] sealed trait Inverse[A, B] {
+  private[this] sealed trait Inverse[A <: Inverse[A, B], B <: Inverse[B, A]] {
     self: A =>
-    def inverse: Inverse[B, A]
+    def inverse: B
   }
 
   private[this] final case object Undo extends Operation with Executable
@@ -58,7 +58,7 @@ private[this] object SimpleTextEditor {
   private[this] final case class AppendEvent(s: String) extends Event with Inverse[AppendEvent, DeleteEvent] {
     override def inverse = DeleteEvent(s)
   }
-  
+
   private[this] final case class Delete(k: Int) extends Operation with Executable
 
   private[this] final case class DeleteEvent(s: String) extends Event with Inverse[DeleteEvent, AppendEvent] {

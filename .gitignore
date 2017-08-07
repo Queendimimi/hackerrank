@@ -13,6 +13,6 @@ dist
 /.project
 /RUNNING_PID
 /.settings
-*.pdf
+#*.pdf
     
 java_pid108420\.hprof

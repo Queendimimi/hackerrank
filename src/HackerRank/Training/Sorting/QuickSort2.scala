@@ -29,19 +29,19 @@ private[this] object QuickSort2 {
     quickSort(array)
   }
 
-  def quickSort[T, Coll](xs: Coll)
-                        (implicit c2s: Coll <:< SeqLike[T, Coll],
-                         cbf: CanBuildFrom[Coll, T, Coll],
-                         ordering: Ordering[T]): Coll = {
-    import ordering._
+  def quickSort[T: Ordering, Coll](xs: Coll)
+                                  (implicit c2s: Coll <:< SeqLike[T, Coll],
+                                   cbf: CanBuildFrom[Coll, T, Coll]): Coll = {
+    import Ordering.Implicits._
+
     if (xs.length <= 1) {
       xs
     } else {
       def pivot(list: Coll): (Coll, T, Coll) = {
         val (left, middle, right) = list.tail.foldLeft((cbf(), list.head, cbf())) {
-          (result, item) =>
+          (result, current) =>
             val (left, pivot, right) = result
-            if (item < pivot) (left += item, pivot, right) else (left, pivot, right += item)
+            if (current < pivot) (left += current, pivot, right) else (left, pivot, right += current)
         }
         (left.result(), middle, right.result())
       }

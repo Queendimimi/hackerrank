@@ -29,10 +29,11 @@ private[this] object QuickSort2 {
     quickSort(array)
   }
 
-  def quickSort[T: Ordering, Coll](xs: Coll)
-                                  (implicit c2s: Coll <:< SeqLike[T, Coll],
-                                   cbf: CanBuildFrom[Coll, T, Coll]): Coll = {
-    import Ordering.Implicits._
+  def quickSort[T, Coll](xs: Coll)
+                        (implicit c2s: Coll <:< SeqLike[T, Coll],
+                         cbf: CanBuildFrom[Coll, T, Coll],
+                         ordering: Ordering[T]): Coll = {
+    import ordering._
 
     if (xs.length <= 1) {
       xs

@@ -62,6 +62,11 @@ private[this] object GridLandMetro {
     def collapse: Seq[NumericRange[T]] =
       list.sortBy(_.start)
         .foldLeft(List.empty[NumericRange[T]]) { (accumulator, range) =>
+          assume(
+            range.step == implicitly[Integral[T]].one,
+            "Inorder to collapse al list of ranges, all ranges must have step size one"
+          )
+
           accumulator match {
             //completely contained => don't do anything
             case head :: tail if head.includes(range) => head :: tail

@@ -1,6 +1,6 @@
 package HackerRank.Training.DataStructures.Stacks
 
-import java.io.{ByteArrayInputStream, IOException, PrintWriter}
+import java.io.{ByteArrayInputStream, IOException, InputStream, PrintWriter}
 import java.util.InputMismatchException
 
 import scala.annotation.tailrec
@@ -38,7 +38,7 @@ private[this] object LargestRectangle {
       val stack = new mutable.ArrayStack[Int]()
       var maxArea = implicitly[Numeric[T]].zero
 
-      def area(right: Int, stack: mutable.ArrayStack[Int] = stack) = {
+      def area(right: Int, stack: mutable.ArrayStack[Int] = stack): Unit = {
         val left = stack.pop()
         val smallestBar = histogramWithWidthOne(left)
         val boxWidth = if (stack.isEmpty) right else right - stack.head - 1
@@ -96,7 +96,7 @@ private[this] object LargestRectangle {
   //------------------------------------------------------------------------------------------//
   private[this] final object Reader {
 
-    private[this] implicit val in = TEST_INPUT.fold(System.in)(s => new ByteArrayInputStream(s.getBytes))
+    private[this] implicit val in: InputStream = TEST_INPUT.fold(System.in)(s => new ByteArrayInputStream(s.getBytes))
 
     def next[T, Coll[_]](reader: => T, n: Int)
                         (implicit cbf: CanBuildFrom[Coll[T], T, Coll[T]]): Coll[T] = {

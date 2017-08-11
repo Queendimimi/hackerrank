@@ -9,11 +9,11 @@ def kragerMinCut(graph: mutable.Map[Int, Array[Int]]): Int = {
     case (vertex, edges) => vertex -> edges.toBuffer
   }
 
-  def mergeVertices(x: (Int, Int)) = {
+  def mergeVertices(x: (Int, Int)): Unit = {
     val (vertexA, vertexB) = x
     //    println(vertexA + "   " + vertexB)
 
-    def removeSelfEdges() = {
+    def removeSelfEdges(): Unit = {
       val edges = mutableGraph.getOrElse(vertexA, throw new RuntimeException)
       while (edges.contains(vertexA)) {
         edges -= vertexA

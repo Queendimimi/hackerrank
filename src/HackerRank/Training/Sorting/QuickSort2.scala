@@ -1,6 +1,6 @@
 package HackerRank.Training.Sorting
 
-import java.io.{ByteArrayInputStream, IOException, PrintWriter}
+import java.io.{ByteArrayInputStream, IOException, InputStream, PrintWriter}
 import java.util.InputMismatchException
 
 import scala.collection.SeqLike
@@ -73,7 +73,7 @@ private[this] object QuickSort2 {
   //------------------------------------------------------------------------------------------//
   private[this] final object Reader {
 
-    private[this] implicit val in = TEST_INPUT.fold(System.in)(s => new ByteArrayInputStream(s.getBytes))
+    private[this] implicit val in: InputStream = TEST_INPUT.fold(System.in)(s => new ByteArrayInputStream(s.getBytes))
 
     def nextSeq[T, Coll[_]](reader: => Seq[T], n: Int)
                            (implicit cbf: CanBuildFrom[Coll[T], T, Coll[T]]): Coll[T] = {

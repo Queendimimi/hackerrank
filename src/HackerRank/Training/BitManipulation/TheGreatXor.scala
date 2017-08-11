@@ -1,6 +1,6 @@
 package HackerRank.Training.BitManipulation
 
-import java.io.{ByteArrayInputStream, IOException, PrintWriter}
+import java.io.{ByteArrayInputStream, IOException, InputStream, PrintWriter}
 import java.util.InputMismatchException
 
 import scala.collection.generic.CanBuildFrom
@@ -33,9 +33,9 @@ private[this] object TheGreatXor {
 
   private[this] final implicit class ExtendedRichLong(val self: Long)
     extends AnyVal with IntegralProxy[Long] {
-    protected def num = scala.math.Numeric.LongIsIntegral
+    protected def num: Numeric.LongIsIntegral.type = scala.math.Numeric.LongIsIntegral
 
-    protected def ord = scala.math.Ordering.Long
+    protected def ord: Ordering.Long.type = scala.math.Ordering.Long
 
     def numberOfZeros: Int = highestOneBit.numberOfTrailingZeros + 1 - bitCount
 
@@ -66,7 +66,7 @@ private[this] object TheGreatXor {
   //------------------------------------------------------------------------------------------//
   private[this] final object Reader {
 
-    private[this] implicit val in = TEST_INPUT.fold(System.in)(s => new ByteArrayInputStream(s.getBytes))
+    private[this] implicit val in: InputStream = TEST_INPUT.fold(System.in)(s => new ByteArrayInputStream(s.getBytes))
 
     def next[T: ClassTag](): T = {
       implicitly[ClassTag[T]].runtimeClass match {

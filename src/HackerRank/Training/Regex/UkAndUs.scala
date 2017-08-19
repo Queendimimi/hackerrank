@@ -61,7 +61,7 @@ private[this] object UkAndUs {
     def nextLine(): String = {
       val builder = StringBuilder.newBuilder
       var char = next[Char]()
-      while (char != '\n') {
+      while (char != '\n' && char != 65535) {
         builder += char
         char = next[Char]()
       }

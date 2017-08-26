@@ -18,13 +18,12 @@ private[this] object FindAWord {
   import Writer._
 
   private[this] val TEST_INPUT: Option[String] = None
-
   //------------------------------------------------------------------------------------------//
   // Solution
   //------------------------------------------------------------------------------------------//
   private[this] def solve(): Unit = {
     val n = next[Int]()
-    val sentences = next[String, Vector](nextLine(), n).reduce(_ + _)
+    val sentences = next[String, Vector](nextLine(), n).reduce(_ + "\n" + _)
     val t = next[Int]()
     next[String, Vector](nextLine(), t)
       .map(x => s"\\b$x\\b".r.findAllIn(sentences).length)

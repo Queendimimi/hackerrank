@@ -18,7 +18,7 @@ private[this] object Waiter {
   import Reader._
   import Writer._
 
-  private[this] val TEST_INPUT: Option[String] = Some("5 1\n3 4 7 6 5")
+  private[this] val TEST_INPUT: Option[String] = None
 
   //------------------------------------------------------------------------------------------//
   // Solution
@@ -26,9 +26,29 @@ private[this] object Waiter {
   private[this] def solve(): Unit = {
     val n = next[Int]()
     val q = next[Int]()
-    val plates = next[Int, mutable.ArrayStack](n)
-    println(plates)
+    val a = Vector(next[Int, mutable.ArrayStack](n).reverse) ++
+      Vector.fill(q)(mutable.ArrayStack.newBuilder[Int].result())
+    val b = Vector.fill(q + 1)(mutable.ArrayStack.newBuilder[Int].result())
+    val first1200Primes = primes.take(1200).toVector
+
+    for (i <- 1 to q) {
+      for (top <- a(i - 1)) {
+        a(i - 1).pop()
+        if (top % first1200Primes(i - 1) == 0) {
+          b(i).push(top)
+        } else {
+          a(i).push(top)
+        }
+      }
+    }
+
+    println((b.tail.flatten ++ a(q)).mkString("\n"))
   }
+
+  private[this] val primes = 2 #:: Stream.from(3, 2).filter(isPrime)
+
+  private[this] def isPrime(n: Int): Boolean =
+    primes.takeWhile(p => p * p <= n).forall(n % _ != 0)
 
   //------------------------------------------------------------------------------------------//
   // Run

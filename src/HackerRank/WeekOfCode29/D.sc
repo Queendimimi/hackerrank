@@ -92,7 +92,7 @@ def sievePrimes(lowerBound: Long, upperBound: Long): Vector[Long] = {
 import scala.collection.mutable
 import scala.collection.mutable.ArrayBuffer
 
-def sievePrimses(lb: Int, ub: Int): ArrayBuffer[Int] = {
+def sievePrimes(lb: Int, ub: Int): ArrayBuffer[Int] = {
   val sieve = mutable.IndexedSeq.fill[Boolean](ub + 1)(false)
   val primes = ArrayBuffer[Int]()
   val limit = Math.sqrt(ub).toInt

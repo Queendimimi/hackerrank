@@ -46,7 +46,7 @@ private[this] object IceCreamParlor {
           left += 1
         }
       }
-      Vector(sortedFlavorCosts(left)._2 + 1, sortedFlavorCosts(right)._2 + 1)
+      Vector(sortedFlavorCosts(left)._2 + 1, sortedFlavorCosts(right)._2 + 1).sorted
     }
   }
 

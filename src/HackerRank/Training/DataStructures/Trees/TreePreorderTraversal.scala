@@ -8,6 +8,7 @@ import scala.collection.generic.CanBuildFrom
 import scala.language.higherKinds
 
 /**
+  * See https://gist.github.com/dholbrook/2967371
   * Copyright (c) 2017 A. Roberto Fischer
   *
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 8/2/2017

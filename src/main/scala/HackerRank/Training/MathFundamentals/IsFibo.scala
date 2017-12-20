@@ -13,7 +13,7 @@ import scala.util.control.TailCalls.{TailRec, done, tailcall}
   * Copyright (c) 2017 A. Roberto Fischer
   *
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 6/28/2017
-  */
+*/
 private[this] object IsFibo {
 
   import Reader._
@@ -67,14 +67,10 @@ private[this] object IsFibo {
     }
   }
 
-  trait Memo[I, K, O, M] extends (I => O) {
-    private[this] type Input = I
-    private[this] type Key = K
-    private[this] type Output = O
-    private[this] type Memory = M
-    val cache: mutable.Map[K, M] = mutable.Map.empty[K, M]
+  trait Memo[Input, Key, Output, Memory] extends (Input => Output) {
+    val cache: mutable.Map[Key, Memory] = mutable.Map.empty[Key, Memory]
 
-    override def apply(v1: I): O
+    override def apply(v1: Input): Output
   }
 
   type ==>[I, M] = Memo[I, I, I, M]
@@ -128,7 +124,7 @@ private[this] object IsFibo {
       builder.result()
     }
 
-    def nextDouble[Coll[Double]]
+    def nextDouble[Coll[_]]
     (n: Int)(implicit cbf: CanBuildFrom[Coll[Double], Double, Coll[Double]]): Coll[Double] = {
       val builder = cbf()
       builder.sizeHint(n)
@@ -157,7 +153,7 @@ private[this] object IsFibo {
       while (p < n && !isSpaceChar(b)) {
         builder += b.toChar
         p += 1
-        b = readByte()
+        b = readByte().toInt
       }
       builder.result()
     }
@@ -171,7 +167,7 @@ private[this] object IsFibo {
       while (p < n && !isSpaceChar(b)) {
         builder += ((b.toChar, p))
         p += 1
-        b = readByte()
+        b = readByte().toInt
       }
       builder.result()
     }
@@ -255,7 +251,7 @@ private[this] object IsFibo {
       val sb = new java.lang.StringBuilder
       while (!isSpaceChar(b)) {
         sb.appendCodePoint(b)
-        b = readByte()
+        b = readByte().toInt
       }
       sb.toString
     }
@@ -265,12 +261,12 @@ private[this] object IsFibo {
       var b = 0
       var minus = false
       while ( {
-        b = readByte()
+        b = readByte().toInt
         b != -1 && !((b >= '0' && b <= '9') || b == '-')
       }) {}
       if (b == '-') {
         minus = true
-        b = readByte()
+        b = readByte().toInt
       }
       while (true) {
         if (b >= '0' && b <= '9') {
@@ -278,7 +274,7 @@ private[this] object IsFibo {
         } else {
           if (minus) return -num else return num
         }
-        b = readByte()
+        b = readByte().toInt
       }
       throw new IOException("Read Int")
     }
@@ -288,12 +284,12 @@ private[this] object IsFibo {
       var b = 0
       var minus = false
       while ( {
-        b = readByte()
+        b = readByte().toInt
         b != -1 && !((b >= '0' && b <= '9') || b == '-')
       }) {}
       if (b == '-') {
         minus = true
-        b = readByte()
+        b = readByte().toInt
       }
       while (true) {
         if (b >= '0' && b <= '9') {
@@ -301,7 +297,7 @@ private[this] object IsFibo {
         } else {
           if (minus) return -num else return num
         }
-        b = readByte()
+        b = readByte().toInt
       }
       throw new IOException("Read Long")
     }
@@ -310,7 +306,7 @@ private[this] object IsFibo {
     private[this] var lenBuffer = 0
     private[this] var ptrBuffer = 0
 
-    private[this] def readByte()(implicit in: java.io.InputStream): Int = {
+    private[this] def readByte()(implicit in: java.io.InputStream): Byte = {
       if (lenBuffer == -1) throw new InputMismatchException
       if (ptrBuffer >= lenBuffer) {
         ptrBuffer = 0
@@ -333,7 +329,7 @@ private[this] object IsFibo {
     private[this] def skip = {
       var b = 0
       while ( {
-        b = readByte()
+        b = readByte().toInt
         b != -1 && isSpaceChar(b)
       }) {}
       b

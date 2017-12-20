@@ -11,7 +11,7 @@ import scala.language.higherKinds
   * Copyright (c) 2017 A. Roberto Fischer
   *
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 4/22/2017
-  */
+*/
 private[this] object SparseArrays {
 
   import Reader._
@@ -85,7 +85,7 @@ private[this] object SparseArrays {
       builder.result()
     }
 
-    def nextDouble[Coll[Double]]
+    def nextDouble[Coll[_]]
     (n: Int)(implicit cbf: CanBuildFrom[Coll[Double], Double, Coll[Double]]): Coll[Double] = {
       val builder = cbf()
       builder.sizeHint(n)
@@ -114,7 +114,7 @@ private[this] object SparseArrays {
       while (p < n && !isSpaceChar(b)) {
         builder += b.toChar
         p += 1
-        b = readByte()
+        b = readByte().toInt
       }
       builder.result()
     }
@@ -128,7 +128,7 @@ private[this] object SparseArrays {
       while (p < n && !isSpaceChar(b)) {
         builder += ((b.toChar, p))
         p += 1
-        b = readByte()
+        b = readByte().toInt
       }
       builder.result()
     }
@@ -212,7 +212,7 @@ private[this] object SparseArrays {
       val sb = new java.lang.StringBuilder
       while (!isSpaceChar(b)) {
         sb.appendCodePoint(b)
-        b = readByte()
+        b = readByte().toInt
       }
       sb.toString
     }
@@ -222,12 +222,12 @@ private[this] object SparseArrays {
       var b = 0
       var minus = false
       while ( {
-        b = readByte()
+        b = readByte().toInt
         b != -1 && !((b >= '0' && b <= '9') || b == '-')
       }) {}
       if (b == '-') {
         minus = true
-        b = readByte()
+        b = readByte().toInt
       }
       while (true) {
         if (b >= '0' && b <= '9') {
@@ -235,7 +235,7 @@ private[this] object SparseArrays {
         } else {
           if (minus) return -num else return num
         }
-        b = readByte()
+        b = readByte().toInt
       }
       throw new IOException("Read Int")
     }
@@ -245,12 +245,12 @@ private[this] object SparseArrays {
       var b = 0
       var minus = false
       while ( {
-        b = readByte()
+        b = readByte().toInt
         b != -1 && !((b >= '0' && b <= '9') || b == '-')
       }) {}
       if (b == '-') {
         minus = true
-        b = readByte()
+        b = readByte().toInt
       }
       while (true) {
         if (b >= '0' && b <= '9') {
@@ -258,7 +258,7 @@ private[this] object SparseArrays {
         } else {
           if (minus) return -num else return num
         }
-        b = readByte()
+        b = readByte().toInt
       }
       throw new IOException("Read Long")
     }
@@ -267,7 +267,7 @@ private[this] object SparseArrays {
     private[this] var lenBuffer = 0
     private[this] var ptrBuffer = 0
 
-    private[this] def readByte()(implicit in: java.io.InputStream): Int = {
+    private[this] def readByte()(implicit in: java.io.InputStream): Byte = {
       if (lenBuffer == -1) throw new InputMismatchException
       if (ptrBuffer >= lenBuffer) {
         ptrBuffer = 0
@@ -290,7 +290,7 @@ private[this] object SparseArrays {
     private[this] def skip = {
       var b = 0
       while ( {
-        b = readByte()
+        b = readByte().toInt
         b != -1 && isSpaceChar(b)
       }) {}
       b

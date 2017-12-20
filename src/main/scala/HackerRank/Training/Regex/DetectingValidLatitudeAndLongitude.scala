@@ -11,7 +11,7 @@ import scala.reflect.ClassTag
   * Copyright (c) 2017 A. Roberto Fischer
   *
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 8/27/2017
-  */
+*/
 private[this] object DetectingValidLatitudeAndLongitude {
 
   import Reader._
@@ -133,7 +133,7 @@ private[this] object DetectingValidLatitudeAndLongitude {
       val sb = new java.lang.StringBuilder
       while (!isSpaceChar(b)) {
         sb.appendCodePoint(b)
-        b = readByte()
+        b = readByte().toInt
       }
       sb.toString
     }
@@ -143,12 +143,12 @@ private[this] object DetectingValidLatitudeAndLongitude {
       var b = 0
       var minus = false
       while ( {
-        b = readByte()
+        b = readByte().toInt
         b != -1 && !((b >= '0' && b <= '9') || b == '-')
       }) {}
       if (b == '-') {
         minus = true
-        b = readByte()
+        b = readByte().toInt
       }
       while (true) {
         if (b >= '0' && b <= '9') {
@@ -156,7 +156,7 @@ private[this] object DetectingValidLatitudeAndLongitude {
         } else {
           if (minus) return -num else return num
         }
-        b = readByte()
+        b = readByte().toInt
       }
       throw new IOException("Read Int")
     }
@@ -166,12 +166,12 @@ private[this] object DetectingValidLatitudeAndLongitude {
       var b = 0
       var minus = false
       while ( {
-        b = readByte()
+        b = readByte().toInt
         b != -1 && !((b >= '0' && b <= '9') || b == '-')
       }) {}
       if (b == '-') {
         minus = true
-        b = readByte()
+        b = readByte().toInt
       }
       while (true) {
         if (b >= '0' && b <= '9') {
@@ -179,7 +179,7 @@ private[this] object DetectingValidLatitudeAndLongitude {
         } else {
           if (minus) return -num else return num
         }
-        b = readByte()
+        b = readByte().toInt
       }
       throw new IOException("Read Long")
     }
@@ -188,7 +188,7 @@ private[this] object DetectingValidLatitudeAndLongitude {
     private[this] var lenBuffer = 0
     private[this] var ptrBuffer = 0
 
-    private[this] def readByte()(implicit in: java.io.InputStream): Int = {
+    private[this] def readByte()(implicit in: java.io.InputStream): Byte = {
       if (lenBuffer == -1) throw new InputMismatchException
       if (ptrBuffer >= lenBuffer) {
         ptrBuffer = 0
@@ -211,7 +211,7 @@ private[this] object DetectingValidLatitudeAndLongitude {
     private[this] def skip = {
       var b = 0
       while ( {
-        b = readByte()
+        b = readByte().toInt
         b != -1 && isSpaceChar(b)
       }) {}
       b

@@ -1,7 +1,7 @@
 package HackerRank.WeekOfCode30
 
 /** @author A. Roberto Fischer <a.robertofischer@gmail.com> on 3/17/2017
-  */
+*/
 private[this] object E {
 
   import java.util.concurrent.TimeUnit

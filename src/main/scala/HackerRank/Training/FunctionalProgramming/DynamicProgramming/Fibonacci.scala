@@ -5,14 +5,14 @@ import java.util.InputMismatchException
 
 import scala.collection.generic.CanBuildFrom
 import scala.collection.mutable
-import scala.language.{higherKinds, implicitConversions}
+import scala.language.higherKinds
 import scala.math.BigInt
 
 /**
   * Copyright (c) 2017 A. Roberto Fischer
   *
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 6/13/2017
-  */
+*/
 private[this] object Fibonacci {
 
   import Reader._
@@ -101,10 +101,7 @@ private[this] object Fibonacci {
 
   }
 
-  abstract class Memo[I, K, O, M](implicit ev$1: I => K) extends (I => O) {
-    private[this] type Input = I
-    private[this] type Output = O
-    private[this] type Memory = M
+  abstract class Memo[I, K, O, M] extends (I => O) {
     protected val cache: mutable.Map[K, M] = mutable.Map.empty[K, M]
 
     override def apply(v1: I): O
@@ -160,7 +157,7 @@ private[this] object Fibonacci {
       builder.result()
     }
 
-    def nextDouble[Coll[Double]]
+    def nextDouble[Coll[_]]
     (n: Int)(implicit cbf: CanBuildFrom[Coll[Double], Double, Coll[Double]]): Coll[Double] = {
       val builder = cbf()
       builder.sizeHint(n)
@@ -189,7 +186,7 @@ private[this] object Fibonacci {
       while (p < n && !isSpaceChar(b)) {
         builder += b.toChar
         p += 1
-        b = readByte()
+        b = readByte().toInt
       }
       builder.result()
     }
@@ -203,7 +200,7 @@ private[this] object Fibonacci {
       while (p < n && !isSpaceChar(b)) {
         builder += ((b.toChar, p))
         p += 1
-        b = readByte()
+        b = readByte().toInt
       }
       builder.result()
     }
@@ -287,7 +284,7 @@ private[this] object Fibonacci {
       val sb = new java.lang.StringBuilder
       while (!isSpaceChar(b)) {
         sb.appendCodePoint(b)
-        b = readByte()
+        b = readByte().toInt
       }
       sb.toString
     }
@@ -297,12 +294,12 @@ private[this] object Fibonacci {
       var b = 0
       var minus = false
       while ( {
-        b = readByte()
+        b = readByte().toInt
         b != -1 && !((b >= '0' && b <= '9') || b == '-')
       }) {}
       if (b == '-') {
         minus = true
-        b = readByte()
+        b = readByte().toInt
       }
       while (true) {
         if (b >= '0' && b <= '9') {
@@ -310,7 +307,7 @@ private[this] object Fibonacci {
         } else {
           if (minus) return -num else return num
         }
-        b = readByte()
+        b = readByte().toInt
       }
       throw new IOException("Read Int")
     }
@@ -320,12 +317,12 @@ private[this] object Fibonacci {
       var b = 0
       var minus = false
       while ( {
-        b = readByte()
+        b = readByte().toInt
         b != -1 && !((b >= '0' && b <= '9') || b == '-')
       }) {}
       if (b == '-') {
         minus = true
-        b = readByte()
+        b = readByte().toInt
       }
       while (true) {
         if (b >= '0' && b <= '9') {
@@ -333,7 +330,7 @@ private[this] object Fibonacci {
         } else {
           if (minus) return -num else return num
         }
-        b = readByte()
+        b = readByte().toInt
       }
       throw new IOException("Read Long")
     }
@@ -342,7 +339,7 @@ private[this] object Fibonacci {
     private[this] var lenBuffer = 0
     private[this] var ptrBuffer = 0
 
-    private[this] def readByte()(implicit in: java.io.InputStream): Int = {
+    private[this] def readByte()(implicit in: java.io.InputStream): Byte = {
       if (lenBuffer == -1) throw new InputMismatchException
       if (ptrBuffer >= lenBuffer) {
         ptrBuffer = 0
@@ -365,7 +362,7 @@ private[this] object Fibonacci {
     private[this] def skip = {
       var b = 0
       while ( {
-        b = readByte()
+        b = readByte().toInt
         b != -1 && isSpaceChar(b)
       }) {}
       b

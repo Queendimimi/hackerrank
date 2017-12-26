@@ -52,6 +52,3 @@ scalacOptions ++= Seq(
 //  "-Ywarn-value-discard"               // Warn when non-Unit expression results are unused.
 )
 
-libraryDependencies ++= Seq(
-  "org.typelevel" %% "cats-core" % "1.0.0-MF",
-)

@@ -10,14 +10,13 @@ import scala.language.higherKinds
   * Copyright (c) 2017 A. Roberto Fischer
   *
   * @author A. Roberto Fischer <a.robertofischer@gmail.com> on 4/26/2017
-*/
+  */
 private[this] object KruskalMST {
 
   import Reader._
   import Writer._
 
   private[this] val TEST_INPUT: Option[String] = None
-
 
   //------------------------------------------------------------------------------------------//
   // Solution                                                                
@@ -29,12 +28,12 @@ private[this] object KruskalMST {
       val u = nextInt() - 1
       val v = nextInt() - 1
       val weight = nextInt()
-      Vector(Edge(u, v, weight), Edge(v, u, weight))
+      Vector(new Edge(u, v, weight), new Edge(v, u, weight))
     }, m)
     println(kruskalMST(edges, UnionFind(n)))
   }
 
-  case class Edge(u: Int, v: Int, weight: Double)
+  class Edge(val u: Int, val v: Int, val weight: Double)
 
   def kruskalMST[T <: Edge, Coll](edges: Coll, unionFind: UnionFind)
                                  (implicit c2s: Coll => Seq[T]): Int = {
@@ -51,7 +50,7 @@ private[this] object KruskalMST {
     sum.toInt
   }
 
-  case class UnionFind(size: Int, lazyConstruct: Boolean = false)
+  final case class UnionFind(size: Int, lazyConstruct: Boolean = false)
     extends PartialFunction[Int, Int] with Growable[Int] {
     private[this] type Rank = Int
     private[this] type Node = Int

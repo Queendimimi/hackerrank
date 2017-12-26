@@ -25,7 +25,7 @@ object Graph {
           private val visited = Array.fill(numberOfNodes)(false)
           private val q = new mutable.Queue[N]
           private var n = 0
-          private var disconnectedNodeIterator: Option[Iterator[N]] = None[Iterator[N]]
+          private var disconnectedNodeIterator: Option[Iterator[N]] = None
 
           visited(startId) = true
           q.enqueue(node)

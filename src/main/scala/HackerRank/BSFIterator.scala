@@ -12,7 +12,7 @@ final case class BSFIterator[E <: Edge[N, E], N <: Node](graph: ImmutableGraph[E
   private val visited = Array.fill(graph.numberOfNodes)(false)
   private val q = new mutable.Queue[N]
   private var n = 0
-  private var disconnectedNodeIterator: Option[Iterator[N]] = None[Iterator[N]]
+  private var disconnectedNodeIterator: Option[Iterator[N]] = None
 
   visited(graph.nodeId(start).get) = true
   q.enqueue(start)

@@ -4,6 +4,7 @@ import java.io.{ByteArrayInputStream, IOException, InputStream, PrintWriter}
 import java.util.InputMismatchException
 
 import scala.collection.generic.CanBuildFrom
+import scala.collection.mutable
 import scala.language.higherKinds
 import scala.reflect.ClassTag
 
@@ -17,14 +18,76 @@ private[this] object KnightlOnChessboard {
   import Reader._
   import Writer._
 
-  private[this] val TEST_INPUT: Option[String] = None
+  private[this] val TEST_INPUT: Option[String] = Some("5")
 
   //------------------------------------------------------------------------------------------//
   // Solution
   //------------------------------------------------------------------------------------------//
   private[this] def solve(): Unit = {
-    println(next[Int]())
+    val n = next[Int]()
+    val board = SquareBoard(n)
+    for (i <- 1 until n) {
+      val moves = Vector.newBuilder[Int]
+      for (j <- 1 until n) {
+        moves += board.breadthFirst(Knight(i, j), Coordinate(n - 1, n - 1))
+      }
+      println(moves.result().mkString(" "))
+    }
   }
+
+  private[this] final case class SquareBoard(boardSize: Int) {
+    def breadthFirst(knight: Knight,
+                     targetNode: Coordinate,
+                     startNode: Coordinate = Coordinate(0, 0)): Int = {
+      type Depth = Int
+      val visited = mutable.Map[Coordinate, Boolean]().withDefaultValue(false)
+      val q = new mutable.Queue[(Coordinate, Depth)]
+      var res: (Coordinate, Depth) = (startNode, 0)
+
+      visited += startNode -> true
+      q.enqueue((startNode, 0))
+
+      while (q.nonEmpty && res._1 != targetNode) {
+        res = q.dequeue()
+        for (i <- getValidMoves(knight, res._1.x, res._1.y)) {
+          if (!visited(i)) {
+            visited += i -> true
+            q.enqueue((i, res._2 + 1))
+          }
+        }
+      }
+      if (res._1 == targetNode) res._2 else -1
+    }
+
+    def getValidMoves(piece: Piece, currentX: Int, currentY: Int): Set[Coordinate] = {
+      piece match {
+        case Knight(x, y) => Set(
+          Coordinate(currentX + x, currentY + y),
+          Coordinate(currentX - x, currentY + y),
+          Coordinate(currentX + x, currentY - y),
+          Coordinate(currentX - x, currentY - y),
+          Coordinate(currentX + y, currentY + x),
+          Coordinate(currentX - y, currentY + x),
+          Coordinate(currentX + y, currentY - x),
+          Coordinate(currentX - y, currentY - x)
+        ).filter(isOnBoard)
+      }
+    }
+
+    def isOnBoard(c: Coordinate): Boolean = {
+      c.x >= 0 && c.x < boardSize && c.y >= 0 && c.y < boardSize
+    }
+  }
+
+  private[this] case class Coordinate(underlying: (Int, Int)) extends AnyVal {
+    def x: Int = underlying._1
+
+    def y: Int = underlying._2
+  }
+
+  private[this] sealed trait Piece
+
+  private[this] case class Knight(x: Int, y: Int) extends Piece
 
   //------------------------------------------------------------------------------------------//
   // Run
@@ -116,7 +179,7 @@ private[this] object KnightlOnChessboard {
       val sb = new java.lang.StringBuilder
       while (!isSpaceChar(b)) {
         sb.appendCodePoint(b)
-        b = readByte()
+        b = readByte().toInt
       }
       sb.toString
     }
@@ -126,12 +189,12 @@ private[this] object KnightlOnChessboard {
       var b = 0
       var minus = false
       while ( {
-        b = readByte()
+        b = readByte().toInt
         b != -1 && !((b >= '0' && b <= '9') || b == '-')
       }) {}
       if (b == '-') {
         minus = true
-        b = readByte()
+        b = readByte().toInt
       }
       while (true) {
         if (b >= '0' && b <= '9') {
@@ -139,7 +202,7 @@ private[this] object KnightlOnChessboard {
         } else {
           if (minus) return -num else return num
         }
-        b = readByte()
+        b = readByte().toInt
       }
       throw new IOException("Read Int")
     }
@@ -149,12 +212,12 @@ private[this] object KnightlOnChessboard {
       var b = 0
       var minus = false
       while ( {
-        b = readByte()
+        b = readByte().toInt
         b != -1 && !((b >= '0' && b <= '9') || b == '-')
       }) {}
       if (b == '-') {
         minus = true
-        b = readByte()
+        b = readByte().toInt
       }
       while (true) {
         if (b >= '0' && b <= '9') {
@@ -162,7 +225,7 @@ private[this] object KnightlOnChessboard {
         } else {
           if (minus) return -num else return num
         }
-        b = readByte()
+        b = readByte().toInt
       }
       throw new IOException("Read Long")
     }
@@ -171,7 +234,7 @@ private[this] object KnightlOnChessboard {
     private[this] var lenBuffer = 0
     private[this] var ptrBuffer = 0
 
-    private[this] def readByte()(implicit in: java.io.InputStream): Int = {
+    private[this] def readByte()(implicit in: java.io.InputStream): Byte = {
       if (lenBuffer == -1) throw new InputMismatchException
       if (ptrBuffer >= lenBuffer) {
         ptrBuffer = 0
@@ -194,7 +257,7 @@ private[this] object KnightlOnChessboard {
     private[this] def skip = {
       var b = 0
       while ( {
-        b = readByte()
+        b = readByte().toInt
         b != -1 && isSpaceChar(b)
       }) {}
       b

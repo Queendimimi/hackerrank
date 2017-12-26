@@ -19,55 +19,9 @@ object Graph {
       nodeMap.view.map(_._1).toSet
     }
 
-    def breadthFirst(node: N): Option[Iterator[N]] = {
-      nodeId(node).map { startId =>
-        new Iterator[N] {
-          private val visited = Array.fill(numberOfNodes)(false)
-          private val q = new mutable.Queue[N]
-          private var n = 0
-          private var disconnectedNodeIterator: Option[Iterator[N]] = None
-
-          visited(startId) = true
-          q.enqueue(node)
-
-          private def bsf() = {
-            val res = q.dequeue()
-            n += 1
-            for (i <- adjacencyList(nodeId(res).get)) {
-              if (!visited(nodeId(i._2.end).get)) {
-                visited(nodeId(i._2.end).get) = true
-                q.enqueue(i._2.end)
-              }
-            }
-            res
-          }
-
-          private def disconnectedIterator() = {
-            n += 1
-            disconnectedNodeIterator.fold {
-              disconnectedNodeIterator = Some(
-                visited
-                  .view
-                  .zipWithIndex
-                  .filter(_._1)
-                  .map(x => invertedNodeMap(x._2))
-                  .toIterator)
-              disconnectedNodeIterator.get.next()
-            }(_.next())
-          }
-
-          override def hasNext: Boolean = {
-            n < numberOfNodes
-          }
-
-          override def next(): N = {
-            if (q.nonEmpty) {
-              bsf()
-            } else {
-              disconnectedIterator()
-            }
-          }
-        }
+    def breadthFirst(node: N): Option[Iterator[(N, BSFIterator[E, N]#Depth)]] = {
+      nodeId(node).map { _ =>
+        BSFIterator(this, node)
       }
     }
 

@@ -18,7 +18,7 @@ private[this] object KnightlOnChessboard {
   import Reader._
   import Writer._
 
-  private[this] val TEST_INPUT: Option[String] = Some("5")
+  private[this] val TEST_INPUT: Option[String] = None
 
   //------------------------------------------------------------------------------------------//
   // Solution

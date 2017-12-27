@@ -19,9 +19,15 @@ object Graph {
       nodeMap.view.map(_._1).toSet
     }
 
-    def breadthFirst(node: N): Option[Iterator[(N, BSFIterator[E, N]#Depth)]] = {
+    def breadthFirst(node: N): Option[Iterator[(N, BFSIterator[E, N]#Depth)]] = {
       nodeId(node).map { _ =>
-        BSFIterator(this, node)
+        BFSIterator(this, node)
+      }
+    }
+
+    def depthFirst(node: N): Option[Iterator[(N, DFSIterator[E, N]#Depth)]] = {
+      nodeId(node).map { _ =>
+        DFSIterator(this, node)
       }
     }
 

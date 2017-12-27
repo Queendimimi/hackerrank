@@ -1,13 +1,14 @@
 package HackerRank
 
+import scala.annotation.tailrec
 import scala.collection.generic.{Clearable, Growable, Shrinkable}
-import scala.collection.mutable
+import scala.collection.{TraversableOnce, mutable}
 
 object Graph {
 
   trait Graph[E <: Edge[N, E], N <: Node] extends Serializable {
-    protected val adjacencyList: scala.collection.Seq[scala.collection.Seq[(Int, E)]]
-    protected val nodeMap: scala.collection.Map[N, Int]
+    protected val adjacencyList: collection.Seq[scala.collection.Seq[(Int, E)]]
+    protected val nodeMap: collection.Map[N, Int]
 
     protected def invertedNodeMap: scala.collection.Map[Int, N] = nodeMap.map(_.swap)
 
@@ -21,13 +22,13 @@ object Graph {
 
     def breadthFirst(node: N): Option[Iterator[(N, BFSIterator[E, N]#Depth)]] = {
       nodeId(node).map { _ =>
-        BFSIterator(this, node)
+        BFSIterator[E, N](this, node)
       }
     }
 
     def depthFirst(node: N): Option[Iterator[(N, DFSIterator[E, N]#Depth)]] = {
       nodeId(node).map { _ =>
-        DFSIterator(this, node)
+        DFSIterator[E, N](this, node)
       }
     }
 
@@ -63,30 +64,6 @@ object Graph {
     extends Graph[E, N] {
     override lazy val invertedNodeMap: Map[Int, N] = {
       nodeMap.map(_.swap)
-    }
-  }
-
-  class DirectedMutableGraph[E <: Edge[N, E], N <: Node] extends MutableGraph[E, N] {
-    override def -=(node: N): DirectedMutableGraph.this.type = {
-      //undirected
-      nodeMap.get(node).foreach(nodeIdx => {
-        // remove all incoming edges
-        adjacencyList(nodeIdx).view
-          .foreach { case (idx, _) =>
-            adjacencyList(idx)
-              .view
-              .zipWithIndex
-              .find(_._1._1 == nodeIdx)
-              .map(_._2)
-              .foreach(adjacencyList(idx).remove)
-          }
-        // remove all outgoing edges
-        adjacencyList.remove(nodeIdx)
-
-        //remove node
-        nodeMap.remove(node)
-      })
-      this
     }
   }
 
@@ -130,6 +107,21 @@ object Graph {
       if (!nodeMap.isDefinedAt(node)) {
         nodeMap += ((node, nodeMap.size))
         adjacencyList += mutable.ArrayBuffer.empty
+      }
+      this
+    }
+
+    def ++=(xs: TraversableOnce[N]): this.type = {
+      @tailrec def loop(xs: scala.collection.LinearSeq[N]): Unit = {
+        if (xs.nonEmpty) {
+          this += xs.head
+          loop(xs.tail)
+        }
+      }
+
+      xs match {
+        case xs: scala.collection.LinearSeq[N] => loop(xs)
+        case _ => xs foreach +=
       }
       this
     }
@@ -236,5 +228,29 @@ object Graph {
   final case class DefaultNode(name: Int) extends Node {
     override def toString: String = name.toString
   }
+
+  //  class UndirectedMutableGraph[E <: Edge[N, E], N <: Node] extends MutableGraph[E, N] {
+  //    override def -=(node: N): DirectedMutableGraph.this.type = {
+  //      //undirected
+  //      nodeMap.get(node).foreach(nodeIdx => {
+  //        // remove all incoming edges
+  //        adjacencyList(nodeIdx).view
+  //          .foreach { case (idx, _) =>
+  //            adjacencyList(idx)
+  //              .view
+  //              .zipWithIndex
+  //              .find(_._1._1 == nodeIdx)
+  //              .map(_._2)
+  //              .foreach(adjacencyList(idx).remove)
+  //          }
+  //        // remove all outgoing edges
+  //        adjacencyList.remove(nodeIdx)
+  //
+  //        //remove node
+  //        nodeMap.remove(node)
+  //      })
+  //      this
+  //    }
+  //  }
 
 }

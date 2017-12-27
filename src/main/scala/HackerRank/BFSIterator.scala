@@ -13,7 +13,7 @@ final case class BFSIterator[E <: Edge[N, E], N <: Node](graph: Graph[E, N], sta
   private val visited = mutable.Map[N, Boolean]().withDefaultValue(false)
   private val q = new mutable.Queue[(N, Depth)]
 
-  visited += start -> true
+  visited(start) = true
   q.enqueue((start, 0))
 
   override def hasNext: Boolean = {

@@ -21,6 +21,8 @@ final case class BFSIterator[E <: Edge[N, E], N <: Node](graph: Graph[E, N], sta
   }
 
   override def next(): (N, Depth) = {
+    if (!hasNext) throw new NoSuchElementException
+
     val res = q.dequeue()
     for (i <- graph.outgoingEdges(res._1)) {
       if (!visited(i.end)) {

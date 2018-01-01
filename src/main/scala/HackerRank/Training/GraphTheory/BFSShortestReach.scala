@@ -31,8 +31,8 @@ private[this] object BFSShortestReach {
       val edgeCount = next[Int]()
       val graph = new MutableGraph[DefaultEdge, DefaultNode]()
       graph ++= (0 until nodeCount).view.map(DefaultNode)
-      graph ++= next[(Int, Int), Vector]((next[Int](), next[Int]()), edgeCount)
-        .map(x => DefaultEdge(x._1, x._2))
+      graph ++= next[DefaultEdge, Vector](DefaultEdge(next[Int](), next[Int]()), edgeCount)
+
       val start = next[Int]()
       val reachableCosts = graph.breadthFirst(start).get.map(x => (x._1.name, x._2 * 6)).toMap
       val costs = (1 to nodeCount)

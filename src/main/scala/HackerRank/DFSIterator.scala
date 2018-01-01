@@ -25,6 +25,8 @@ final case class DFSIterator[E <: Edge[N, E], N <: Node](graph: Graph[E, N], sta
   }
 
   override def next(): (N, Depth) = {
+    if (!hasNext) throw new NoSuchElementException
+
     val res = stack.pop
     visited += res._1 -> true
     for (i <- graph.outgoingEdges(res._1)) {

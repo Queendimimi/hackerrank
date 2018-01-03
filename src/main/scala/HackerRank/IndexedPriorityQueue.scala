@@ -44,30 +44,40 @@ object IndexedPriorityQueue {
       insert(value.hashCode(), value)
     }
 
-    def dequeue(): A = {
-      require(nonEmpty)
-
-      val minNode = nodes(firstIndex())
-
-      if (size > 1) {
-        swap(nodes(firstIndex()), nodes(lastIndex()))
+    override def head: A = {
+      if (nonEmpty) {
+        nodes(firstIndex())
+      } else {
+        throw new NoSuchElementException("queue is empty")
       }
+    }
 
-      nodes.remove(lastIndex())
-      indices.remove(minNode.hashCode())
+    def dequeue(): Option[A] = {
+      if (nonEmpty) {
+        val minNode = nodes(firstIndex())
+
+        if (size > 1) {
+          swap(nodes(firstIndex()), nodes(lastIndex()))
+        }
+
+        nodes.remove(lastIndex())
+        indices.remove(minNode.hashCode())
 
 
-      if (size > 1) {
-        fixDown(firstIndex(), nodes(firstIndex()))
+        if (size > 1) {
+          fixDown(firstIndex(), nodes(firstIndex()))
+        }
+
+        Option(minNode)
+      } else {
+        None
       }
-
-      minNode
     }
 
     def dequeueAll[A1 >: A, That](implicit bf: CanBuildFrom[_, A1, That]): That = {
       val b = bf.apply()
       while (nonEmpty) {
-        b += dequeue()
+        b += dequeue().get
       }
       b.result()
     }
